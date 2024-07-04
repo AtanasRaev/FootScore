@@ -1,18 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/commons::head"></head>
+
 <body>
 <header th:replace="fragments/commons::nav"></header>
 <section class="hero">
     <div class="login-page">
         <div class="form">
             <span class="login-span">Register</span>
-            <form class="login-form">
-                <input type="text" placeholder="first name"/>
-                <input type="text" placeholder="last name"/>
-                <input type="email" placeholder="email"/>
-                <input type="text" placeholder="username"/>
-                <input type="password" placeholder="password"/>
+            <form   th:method="post"
+                    th:action="@{/register}"
+                    th:object="${registerData}"
+                    class="login-form">
+                <input th:field="*{firstName}"
+                        type="text"
+                       placeholder="first name"/>
+                <input th:field="*{lastName}"
+                        type="text"
+                        placeholder="last name"/>
+                <input th:field="*{email}"
+                        type="email"
+                        placeholder="email"/>
+                <input th:field="*{username}"
+                        type="text"
+                        placeholder="username"/>
+                <input th:field="*{password}"
+                        type="password"
+                        placeholder="password"/>
+                <input th:field="*{confirmPassword}"
+                        type="password"
+                        placeholder="confirm password"/>
                 <button>Register</button>
             </form>
         </div>
