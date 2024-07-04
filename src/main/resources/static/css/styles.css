@@ -1,0 +1,163 @@
+/* Resetting body margin and padding to 0 */
+body {
+    font-family: 'PT Sans Caption', "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+    font-size: 3vh;
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    overflow-x: hidden; /* Hide horizontal scrollbar */
+}
+
+/* Adjusting header styles */
+#navbar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0.5em; /* Adjust padding */
+    background-color: #2d2d32; /* Semi-transparent background color */
+    color: white; /* Text color */
+    list-style-type: none; /* Remove bullets */
+    margin: 0; /* Remove margin */
+    position: fixed; /* Fixed position */
+    width: 100%; /* Full width */
+    top: 0; /* Align to the top */
+    z-index: 1000; /* Ensure it's above other content */
+}
+
+#navbar li {
+    margin: 0 0.5em; /* Adjust spacing between nav items */
+}
+
+#navbar a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 2vh; /* Adjust font size */
+}
+
+/* Adjusting hero section styles */
+.hero {
+    position: relative; /* Ensure relative positioning for absolute centering */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
+    height: 100vh;
+    padding: 1em;
+    box-sizing: border-box;
+    color: white;
+    background: url('/images/background.jpg') center center no-repeat;
+    background-size: cover;
+    margin: 0; /* Remove margin */
+    overflow: hidden; /* Hide overflow to prevent scrollbar */
+}
+
+.login-span {
+    color: white;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: 7em;
+    width: 40em;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 2em;
+    border-radius: 0.7em;
+}
+
+.container p {
+    margin-bottom: 0.5em; /* Add space between elements */
+}
+.container a {
+    text-decoration: none;
+    color: white;
+    background-color: #3b4f29;
+    padding: 0.3em;
+    border-radius: 0.2em;
+}
+
+.hero-title {
+    font-size: 12vh;
+    font-weight: bold;
+    line-height: 1; /* Adjust line height as needed */
+    text-align: center; /* Center align text */
+    position: absolute;
+    left: 50%; /* Align the left of the title at the horizontal center */
+    transform: translate(-50%, -50%); /* Move title back by half its own size */
+    margin-bottom: 0.1em;
+}
+
+@media only screen and (min-width: 32em) {
+    .hero-title {
+        font-size: 16vh;
+    }
+}
+
+.hero-footer {
+    display: flex;
+    font-size: 0.6em;
+    justify-content: center;
+    background-color: #2d2d32; /* Semi-transparent background color */
+    color: white; /* Text color */
+    margin-top: auto; /* Push to the bottom */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+
+.login-page {
+    width: 360px;
+    padding: 8% 0 0;
+    margin: auto;
+}
+.form {
+    position: relative;
+    z-index: 1;
+    background: #2d2d32;
+    max-width: 360px;
+    margin: 0 auto 100px;
+    padding: 45px;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.form input {
+    font-family: "Roboto", sans-serif;
+    outline: 0;
+    background: #cccccc;
+    width: 100%;
+    border: 0;
+    margin: 0 0 15px;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+.form button {
+    font-family: "Roboto", sans-serif;
+    text-transform: uppercase;
+    outline: 0;
+    background: #3b4f29;
+    width: 100%;
+    border: 0;
+    padding: 15px;
+    color: #FFFFFF;
+    font-size: 14px;
+    cursor: pointer;
+}
+.form button:hover,.form button:active,.form button:focus {
+    background: #3b4f29;
+}
+.form .message {
+    margin: 15px 0 0;
+    color: #b3b3b3;
+    font-size: 12px;
+}
+.form .message a {
+    color: #4d6c38;
+    text-decoration: none;
+}
+.form .register-form {
+    display: none;
+}

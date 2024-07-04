@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/commons::head"></head>
+<body>
+<header th:replace="fragments/commons::nav"></header>
+<section class="hero">
+    <div class="login-page">
+        <div class="form">
+            <span class="login-span">Register</span>
+            <form class="login-form">
+                <input type="text" placeholder="first name"/>
+                <input type="text" placeholder="last name"/>
+                <input type="email" placeholder="email"/>
+                <input type="text" placeholder="username"/>
+                <input type="password" placeholder="password"/>
+                <button>Register</button>
+            </form>
+        </div>
+    </div>
+</section>
+<footer th:replace="fragments/commons::footer"></footer>
+</body>
+</html>
