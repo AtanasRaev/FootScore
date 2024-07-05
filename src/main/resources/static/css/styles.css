@@ -1,54 +1,69 @@
-/* Resetting body margin and padding to 0 */
 body {
     font-family: 'PT Sans Caption', "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
     font-size: 3vh;
-    margin: 0; /* Remove default margin */
-    padding: 0; /* Remove default padding */
-    overflow-x: hidden; /* Hide horizontal scrollbar */
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
 }
 
-/* Adjusting header styles */
 #navbar {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 0.5em; /* Adjust padding */
-    background-color: #2d2d32; /* Semi-transparent background color */
-    color: white; /* Text color */
-    list-style-type: none; /* Remove bullets */
-    margin: 0; /* Remove margin */
-    position: fixed; /* Fixed position */
-    width: 100%; /* Full width */
-    top: 0; /* Align to the top */
-    z-index: 1000; /* Ensure it's above other content */
+    padding: 0.5em;
+    background-color: #2d2d32;
+    color: white;
+    list-style-type: none;
+    margin: 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
 }
 
 #navbar li {
-    margin: 0 0.5em; /* Adjust spacing between nav items */
+    margin: 0 0.5em;
 }
 
 #navbar a {
     text-decoration: none;
     color: white;
     font-weight: bold;
-    font-size: 2vh; /* Adjust font size */
+    font-size: 2vh;
 }
 
-/* Adjusting hero section styles */
+.logout-form {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+.logout-button {
+    background: none;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 2vh;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+}
+
 .hero {
-    position: relative; /* Ensure relative positioning for absolute centering */
+    position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Center vertically */
-    align-items: center; /* Center horizontally */
+    justify-content: center;
+    align-items: center;
     height: 100vh;
     padding: 1em;
     box-sizing: border-box;
     color: white;
     background: url('/images/background.jpg') center center no-repeat;
     background-size: cover;
-    margin: 0; /* Remove margin */
-    overflow: hidden; /* Hide overflow to prevent scrollbar */
+    margin: 0;
+    overflow: hidden;
 }
 
 .login-span {
@@ -68,7 +83,7 @@ body {
 }
 
 .container p {
-    margin-bottom: 0.5em; /* Add space between elements */
+    margin-bottom: 0.5em;
 }
 .container a {
     text-decoration: none;
@@ -81,11 +96,11 @@ body {
 .hero-title {
     font-size: 12vh;
     font-weight: bold;
-    line-height: 1; /* Adjust line height as needed */
-    text-align: center; /* Center align text */
+    line-height: 1;
+    text-align: center;
     position: absolute;
-    left: 50%; /* Align the left of the title at the horizontal center */
-    transform: translate(-50%, -50%); /* Move title back by half its own size */
+    left: 50%;
+    transform: translate(-50%, -50%);
     margin-bottom: 0.1em;
 }
 
@@ -99,20 +114,20 @@ body {
     display: flex;
     font-size: 0.6em;
     justify-content: center;
-    background-color: #2d2d32; /* Semi-transparent background color */
-    color: white; /* Text color */
-    margin-top: auto; /* Push to the bottom */
+    background-color: #2d2d32;
+    color: white;
+    margin-top: auto;
     position: absolute;
     bottom: 0;
     width: 100%;
 }
-
 
 .login-page {
     width: 360px;
     padding: 8% 0 0;
     margin: auto;
 }
+
 .form {
     position: relative;
     z-index: 1;
@@ -123,6 +138,7 @@ body {
     text-align: center;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
+
 .form input {
     font-family: "Roboto", sans-serif;
     outline: 0;
@@ -134,6 +150,7 @@ body {
     box-sizing: border-box;
     font-size: 14px;
 }
+
 .form button {
     font-family: "Roboto", sans-serif;
     text-transform: uppercase;
@@ -146,18 +163,136 @@ body {
     font-size: 14px;
     cursor: pointer;
 }
-.form button:hover,.form button:active,.form button:focus {
+
+.form button:hover,
+.form button:active,
+.form button:focus {
     background: #3b4f29;
 }
+
 .form .message {
     margin: 15px 0 0;
     color: #b3b3b3;
     font-size: 12px;
 }
+
 .form .message a {
     color: #4d6c38;
     text-decoration: none;
 }
+
 .form .register-form {
     display: none;
 }
+.about-body {
+    background-color: #f0f0f0;
+    color: #333;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.about-container {
+    max-width: 30em;
+    margin: 2.1em auto 0;
+    padding: 1em;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.about-title {
+    color: #3b4f29;
+}
+
+.about-text {
+    line-height: 1.6;
+    margin-bottom: 1em;
+}
+
+.about-list {
+    list-style-type: disc;
+    margin-left: 2em;
+}
+
+.about-link {
+    color: #3b4f29;
+    text-decoration: none;
+}
+
+.about-section {
+    padding: 20px 0;
+}
+
+/* Header Styles */
+.about-header {
+    background-color: #3b4f29;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.about-footer {
+    display: flex;
+    font-size: 0.6em;
+    justify-content: center;
+    background-color: #2d2d32;
+    color: white;
+    margin-top: auto;
+    position: absolute;
+    width: 100%;
+}
+
+/* Global styles */
+.leagues-body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.leagues-container {
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 60em;
+}
+
+.leagues-section {
+    padding: 20px 0;
+}
+
+.league-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.league-box {
+    flex-basis: calc(30%); /* Adjust width for 3 boxes per row */
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.league-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.league-title {
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+    color: #3b4f29; /* Example color */
+}
+
+.league-country {
+    margin-bottom: 0;
+    color: #666; /* Example color */
+}
+

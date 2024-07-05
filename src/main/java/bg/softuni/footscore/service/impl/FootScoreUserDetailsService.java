@@ -20,7 +20,6 @@ public class FootScoreUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
         return userEntityRepository
                 .findByUsername(username)
                 .map(FootScoreUserDetailsService::map)

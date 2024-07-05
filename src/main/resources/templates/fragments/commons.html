@@ -6,19 +6,44 @@
     <title>Home - Football Info</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
+<div th:fragment="navbar(activeLink)">
 <header>
     <nav>
         <ul id="navbar">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="leagues.html">Leagues</a></li>
-            <li sec:authorize="!isAuthenticated()"><a href="login.html">Login</a></li>
-            <li sec:authorize="!isAuthenticated()"><a href="register.html">Register</a></li>
-            <li sec:authorize="isAuthenticated()"><a href="profile.html">Profile</a></li>
+            <li>
+                <a href="/">Home</a>
+            </li>
+
+            <li>
+                <a href="/about">About</a>
+            </li>
+
+            <li><a href="/leagues">Leagues</a></li>
+
+            <li sec:authorize="!isAuthenticated()">
+                <a href="/login"
+                   th:classappend="${activeLink == 'login'}? 'active'">Login</a>
+            </li>
+
+            <li sec:authorize="!isAuthenticated()">
+                <a href="/register"
+                   th:classappend="${activeLink == 'register'}? 'active'">Register</a>
+            </li>
+
+            <li sec:authorize="isAuthenticated()">
+                <a href="/profile">Profile</a>
+            </li>
+
+            <li sec:authorize="isAuthenticated()">
+                <form th:action="@{/logout}" method="post" class="logout-form">
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
+            </li>
         </ul>
     </nav>
 </header>
+</div>
 <footer class="hero-footer">
-    <p>&copy; 2024 Foot Score</p>
+    <p>&copy; 2024 Foot Score. All rights reserved.</p>
 </footer>
 </html>
