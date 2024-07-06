@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<body class="leagues-body">
+<!-- Include the header -->
+<head th:replace="fragments/commons::head"></head>
+<header th:replace="fragments/commons::nav"></header>
+
+<!-- Main Content -->
+<section class="leagues-section">
+    <div class="leagues-container">
+        <h1>Football Leagues</h1>
+        <div class="league-list">
+            <a href="league_details.html" class="league-box">
+                <h2 class="league-title">Premier League</h2>
+                <img src="images/premier-league-logo.png" alt="Premier League Logo" class="league-logo">
+                <p class="league-country">England</p>
+            </a>
+            <a href="league_details.html" class="league-box">
+                <h2 class="league-title">La Liga</h2>
+                <img src="images/premier-league-logo.png" alt="Premier League Logo" class="league-logo">
+                <p class="league-country">Spain</p>
+            </a>
+            <a href="league_details.html" class="league-box">
+                <h2 class="league-title">Bundesliga</h2>
+                <img src="images/premier-league-logo.png" alt="Premier League Logo" class="league-logo">
+                <p class="league-country">Germany</p>
+            </a>
+            <a href="league_details.html" class="league-box">
+                <h2 class="league-title">Serie A</h2>
+                <img src="images/premier-league-logo.png" alt="Premier League Logo" class="league-logo">
+                <p class="league-country">Italy</p>
+            </a>
+            <a href="league_details.html" class="league-box">
+                <h2 class="league-title">Ligue 1</h2>
+                <img src="images/premier-league-logo.png" alt="Premier League Logo" class="league-logo">
+                <p class="league-country">France</p>
+            </a>
+
+            <!-- Add more league boxes as needed -->
+        </div>
+    </div>
+</section>
+
+<footer th:replace="fragments/commons::footer"></footer>
+</body>
+</html>
