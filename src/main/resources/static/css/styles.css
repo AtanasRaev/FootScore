@@ -295,4 +295,96 @@ body {
     margin-bottom: 0;
     color: #666; /* Example color */
 }
+/* Global styles */
+.add-league-body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.add-league-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.add-league-section {
+    padding: 20px 0;
+}
+
+/* Form styles */
+.add-league-form {
+    margin-bottom: 20px;
+}
+
+.add-league-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.add-league-form input[type=text] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.add-league-form button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+.add-league-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Leagues list styles */
+.add-league-list {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.add-league-box {
+    margin-bottom: 10px;
+}
+
+.add-league-box label {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+.add-league-box input[type=checkbox] {
+    margin-right: 10px;
+}
+
+/* Footer styles */
+.add-league-footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .add-league-container {
+        padding: 10px;
+    }
+}
 

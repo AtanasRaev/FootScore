@@ -2,6 +2,7 @@ package bg.softuni.footscore.model.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,6 +32,11 @@ public class UserEntity {
 
     @OneToMany
     private List<Player> favouritePlayers;
+
+    public UserEntity() {
+        this.favouriteTeams = new ArrayList<>();
+        this.favouritePlayers = new ArrayList<>();
+    }
 
     public List<Team> getFavouriteTeams() {
         return favouriteTeams;
