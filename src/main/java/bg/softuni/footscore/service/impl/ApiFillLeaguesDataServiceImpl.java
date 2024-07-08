@@ -4,8 +4,7 @@ import bg.softuni.footscore.config.ApiConfig;
 import bg.softuni.footscore.model.dto.ApiResponseCountryLeagueDto;
 import bg.softuni.footscore.model.entity.Country;
 import bg.softuni.footscore.model.entity.League;
-import bg.softuni.footscore.repository.CountryRepository;
-import bg.softuni.footscore.repository.LeaguesRepository;
+import bg.softuni.footscore.repository.LeagueRepository;
 import bg.softuni.footscore.service.ApiFillLeaguesDataService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -17,14 +16,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class ApiFillLeaguesDataServiceImpl implements ApiFillLeaguesDataService {
-    private final LeaguesRepository leaguesRepository;
+    private final LeagueRepository leagueRepository;
     private final RestTemplate restTemplate;
     private final ApiConfig apiConfig;
     private final ModelMapper modelMapper;
     private final ApiFillCountryDataImpl fillCountryDataImpl;
 
-    public ApiFillLeaguesDataServiceImpl(LeaguesRepository leaguesRepository, RestTemplate restTemplate, ApiConfig apiConfig, ModelMapper modelMapper, ApiFillCountryDataImpl fillCountryDataImpl) {
-        this.leaguesRepository = leaguesRepository;
+    public ApiFillLeaguesDataServiceImpl(LeagueRepository leaguesRepository, RestTemplate restTemplate, ApiConfig apiConfig, ModelMapper modelMapper, ApiFillCountryDataImpl fillCountryDataImpl) {
+        this.leagueRepository = leaguesRepository;
         this.restTemplate = restTemplate;
         this.apiConfig = apiConfig;
         this.modelMapper = modelMapper;
@@ -33,7 +32,7 @@ public class ApiFillLeaguesDataServiceImpl implements ApiFillLeaguesDataService 
 
     @Override
     public boolean hasData() {
-        return this.leaguesRepository.count() > 0;
+        return this.leagueRepository.count() > 0;
     }
 
 
@@ -48,11 +47,12 @@ public class ApiFillLeaguesDataServiceImpl implements ApiFillLeaguesDataService 
                 .map(dto -> {
                     League league = this.modelMapper.map(dto.getLeague(), League.class);
                     league.setCountry(country);
+                    league.setSelected(false);
                     country.getLeagues().add(league);
                     return league;
                 })
                 .collect(Collectors.toList());
 
-        this.leaguesRepository.saveAll(leagues);
+        this.leagueRepository.saveAll(leagues);
     }
 }

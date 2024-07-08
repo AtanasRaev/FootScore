@@ -65,6 +65,7 @@ public class ApiFillCountryDataImpl implements ApiFillCountryData {
 
 
     @Override
+    @Transactional
     public void saveCountry(String name) {
         ApiResponseCountryLeagueDto response = getDto(name);
 

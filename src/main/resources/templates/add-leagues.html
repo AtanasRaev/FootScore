@@ -1,35 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Add Leagues</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Link your CSS file -->
 </head>
 <body class="add-league-body">
-<header th:replace="fragments/commons::navbar('add-leagues')"></header>
+<header th:replace="~{fragments/commons::navbar(activeLink=${''})}"></header><!-- Navbar inclusion -->
 <section class="add-league-section">
     <div class="add-league-container">
-        <h1>Add Leagues</h1>
-        <form class="add-league-form" id="country-form" method="post" action="/fetch-leagues">
-            <label for="country">Country Name:</label>
-            <input type="text" id="country" name="country" required>
-            <button type="submit">Fetch Leagues</button>
+        <h1>Select Leagues</h1>
+        <form id="country-form" th:method="get" th:action="@{/leagues/add}">
+            <label for="country">Country:</label>
+            <select id="country" name="countryName" th:onchange="this.form.submit()">
+                <option value="" disabled selected>Select</option>
+                <option th:each="country : ${countries}" th:value="${country}" th:text="${country}"
+                        th:selected="${country == countryName}"></option>
+            </select>
         </form>
-        <div class="add-league-list" id="leagues-section">
-            <!-- This section will be dynamically populated with leagues based on the country -->
-            <!-- This will be replaced with actual content by the server-side logic -->
-            <div th:if="${leagues != null}">
-                <form class="add-league-form" id="add-leagues-form" method="post" action="/save-leagues">
+
+        <!-- Leagues display -->
+        <div th:if="${leagues != null} and ${#lists.size(leagues) > 0}">
+            <form id="league-form" th:method="post" th:action="@{/leagues/saveSelected}">
+                <div class="add-leagues-list">
+                    <h2 th:if="${countryName != null}">Leagues in <span id="selected-country"
+                                                                        th:text="${countryName}"></span>:</h2>
                     <div th:each="league : ${leagues}" class="add-league-box">
-                        <input type="checkbox" th:id="${league.id}" th:name="leagues" th:value="${league.id}">
-                        <label th:for="${league.id}" th:text="${league.name} + ' (' + ${league.country} + ')'"></label>
+                        <input type="checkbox" th:id="${league.id}" th:name="leagueIds" th:value="${league.id}"
+                               th:checked="${league.selected}">
+                        <label th:for="${league.id}" th:text="${league.name}"></label>
                     </div>
-                    <button type="submit">Add Selected Leagues</button>
-                </form>
-            </div>
+                </div>
+                <input type="submit" value="Save Selected Leagues">
+            </form>
         </div>
     </div>
 </section>
-<footer class="add-league-footer" th:replace="fragments/commons::footer"></footer>
+<footer class="add-league-footer" th:replace="fragments/commons::footer"></footer> <!-- Footer inclusion -->
 </body>
 </html>

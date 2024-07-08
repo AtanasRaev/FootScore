@@ -15,7 +15,6 @@ public class Country {
     private String name;
     @Column
     private String flag;
-
     //TODO:
     @OneToMany(mappedBy = "country")
     private List<League> leagues;

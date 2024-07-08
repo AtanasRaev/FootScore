@@ -19,6 +19,9 @@ public class League {
     @JoinColumn(name = "country_id", referencedColumnName = "id")
     private Country country;
 
+    @Column
+    private boolean selected;
+
     public League() {}
 
     public long getId() {
@@ -51,5 +54,13 @@ public class League {
 
     public void setCountry(Country country) {
         this.country = country;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

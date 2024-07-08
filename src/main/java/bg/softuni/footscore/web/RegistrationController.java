@@ -2,6 +2,7 @@ package bg.softuni.footscore.web;
 
 import bg.softuni.footscore.model.dto.RegisterUserDto;
 import bg.softuni.footscore.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class RegistrationController {
     }
 
     @PostMapping("register")
-    public String register(RegisterUserDto registerData) {
+    public String register(@Valid RegisterUserDto registerData) {
 
         this.userService.registerUser(registerData);
 

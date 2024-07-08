@@ -32,4 +32,3 @@ forex:
   api:
     key: ${FOREX_API_KEY}
     url: "https://v3.football.api-sports.io/"
-

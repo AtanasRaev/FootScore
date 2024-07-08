@@ -27,6 +27,7 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
 
+
     @OneToMany
     private List<Team> favouriteTeams;
 

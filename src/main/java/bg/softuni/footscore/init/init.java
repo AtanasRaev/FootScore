@@ -1,13 +1,10 @@
 package bg.softuni.footscore.init;
 
-import bg.softuni.footscore.model.entity.Country;
 import bg.softuni.footscore.service.impl.ApiFillCountryDataImpl;
 import bg.softuni.footscore.service.impl.ApiFillLeaguesDataServiceImpl;
 import jakarta.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 public class init implements CommandLineRunner {
