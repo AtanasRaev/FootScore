@@ -13,4 +13,7 @@ public interface ApiFillCountryData {
     void saveCountry(String name);
 
     Optional<Country> getCountry(String name);
+
+    boolean isEmpty();
+
 }

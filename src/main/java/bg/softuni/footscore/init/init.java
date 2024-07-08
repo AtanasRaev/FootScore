@@ -20,6 +20,9 @@ public class init implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
+        if (!this.apiFillCountryDataService.isEmpty()) {
+            return;
+        }
         String[] countriesNames = {"england", "germany", "bulgaria", "spain"};
         for (String name : countriesNames) {
             if (this.apiFillCountryDataService.getCountry(name).isEmpty()) {

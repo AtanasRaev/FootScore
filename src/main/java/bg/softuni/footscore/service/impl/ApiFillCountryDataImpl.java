@@ -63,6 +63,11 @@ public class ApiFillCountryDataImpl implements ApiFillCountryData {
         return this.countryRepository.findByName(name);
     }
 
+    @Override
+    public boolean isEmpty() {
+        return this.countryRepository.count() == 0;
+    }
+
 
     @Override
     @Transactional
