@@ -6,9 +6,8 @@ import bg.softuni.footscore.model.entity.Country;
 import java.util.Optional;
 
 public interface ApiFillCountryData {
-    boolean hasData();
 
-    ApiResponseCountryLeagueDto getDto(String name);
+    ApiResponseCountryLeagueDto getResponse(String name);
 
     void saveCountry(String name);
 

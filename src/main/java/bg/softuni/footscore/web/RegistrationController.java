@@ -29,6 +29,6 @@ public class RegistrationController {
 
         this.userService.registerUser(registerData);
 
-        return "redirect:/";
+        return "redirect:/login";
     }
 }

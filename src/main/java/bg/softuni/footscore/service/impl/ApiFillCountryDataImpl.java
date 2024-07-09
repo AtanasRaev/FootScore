@@ -9,12 +9,8 @@ import bg.softuni.footscore.repository.CountryRepository;
 import bg.softuni.footscore.service.ApiFillCountryData;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 import java.util.Optional;
 
@@ -22,39 +18,27 @@ import java.util.Optional;
 public class ApiFillCountryDataImpl implements ApiFillCountryData {
     private final CountryRepository countryRepository;
     private final ApiConfig apiConfig;
-    private final RestTemplate restTemplate;
+    private final RestClient restClient;
     private final ModelMapper modelMapper;
 
-    public ApiFillCountryDataImpl(CountryRepository countryRepository, ApiConfig apiConfig, RestTemplate restTemplate, ModelMapper modelMapper) {
+    public ApiFillCountryDataImpl(CountryRepository countryRepository, ApiConfig apiConfig, RestClient restClient, ModelMapper modelMapper) {
         this.countryRepository = countryRepository;
         this.apiConfig = apiConfig;
-        this.restTemplate = restTemplate;
+        this.restClient = restClient;
         this.modelMapper = modelMapper;
     }
 
     @Override
-    public boolean hasData() {
-        return this.countryRepository.count() > 0;
-    }
-
-    @Override
-    public ApiResponseCountryLeagueDto getDto(String name) {
+    public ApiResponseCountryLeagueDto getResponse(String name) {
         String url = this.apiConfig.getUrl() + "leagues?country=" + name;
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("x-rapidapi-key", this.apiConfig.getKey());
-        headers.set("x-rapidapi-host", this.apiConfig.getUrl());
-
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        ResponseEntity<ApiResponseCountryLeagueDto> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                entity,
-                ApiResponseCountryLeagueDto.class
-        );
-
-        return response.getBody();
+        return this.restClient
+                .get()
+                .uri(url)
+                .header("x-rapidapi-key", this.apiConfig.getKey())
+                .header("x-rapidapi-host", this.apiConfig.getUrl())
+                .retrieve()
+                .body(ApiResponseCountryLeagueDto.class);
     }
 
     @Override
@@ -68,11 +52,10 @@ public class ApiFillCountryDataImpl implements ApiFillCountryData {
         return this.countryRepository.count() == 0;
     }
 
-
     @Override
     @Transactional
     public void saveCountry(String name) {
-        ApiResponseCountryLeagueDto response = getDto(name);
+        ApiResponseCountryLeagueDto response = getResponse(name);
 
         ApiCountryDto countryDto = response.getResponse().stream().findFirst()
                 .map(ApiLeagueCountryDto::getCountry)

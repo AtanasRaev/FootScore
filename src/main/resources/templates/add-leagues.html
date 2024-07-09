@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Leagues</title>
-    <link rel="stylesheet" href="/css/styles.css"> <!-- Link your CSS file -->
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body class="add-league-body">
-<header th:replace="~{fragments/commons::navbar(activeLink=${''})}"></header><!-- Navbar inclusion -->
+<header th:replace="~{fragments/commons::navbar(activeLink=${''})}"></header>
 <section class="add-league-section">
     <div class="add-league-container">
         <h1>Select Leagues</h1>
@@ -20,22 +20,29 @@
         </form>
 
         <!-- Leagues display -->
-        <div th:if="${leagues != null} and ${#lists.size(leagues) > 0}">
-            <form id="league-form" th:method="post" th:action="@{/leagues/saveSelected}">
-                <div class="add-leagues-list">
-                    <h2 th:if="${countryName != null}">Leagues in <span id="selected-country"
-                                                                        th:text="${countryName}"></span>:</h2>
-                    <div th:each="league : ${leagues}" class="add-league-box">
-                        <input type="checkbox" th:id="${league.id}" th:name="leagueIds" th:value="${league.id}"
-                               th:checked="${league.selected}">
-                        <label th:for="${league.id}" th:text="${league.name}"></label>
+        <div th:if="${leagues != null}">
+            <div th:if="${#lists.size(leagues) > 0}">
+                <form id="league-form" th:method="post" th:action="@{/leagues/preview}">
+                    <div class="add-leagues-list">
+                        <h2 th:if="${countryName != null}">Leagues in
+                            <span id="selected-country" th:text="${countryName}"></span>:
+                        </h2>
+                        <div th:each="league : ${leagues}" class="add-league-box">
+                            <input type="checkbox" th:id="${league.id}" th:name="leagueIds" th:value="${league.id}"
+                                   th:checked="${league.selected}">
+                            <label th:for="${league.id}" th:text="${league.name}"></label>
+                        </div>
                     </div>
-                </div>
-                <input type="submit" value="Save Selected Leagues">
-            </form>
+                    <input type="submit" value="Save Selected Leagues">
+                    <button type="reset">Clear All</button>
+                </form>
+            </div>
+            <div th:unless="${#lists.size(leagues) > 0}">
+                <h2> All leagues from <span th:text="${countryName}"></span> are added.</h2>
+            </div>
         </div>
     </div>
 </section>
-<footer class="add-league-footer" th:replace="fragments/commons::footer"></footer> <!-- Footer inclusion -->
+<footer class="add-league-footer"><p>&copy; 2024 Foot Score. All rights reserved.</p></footer>
 </body>
 </html>

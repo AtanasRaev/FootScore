@@ -117,8 +117,8 @@ body {
     background-color: #2d2d32;
     color: white;
     margin-top: auto;
-    position: absolute;
     bottom: 0;
+    position: absolute;
     width: 100%;
 }
 
@@ -296,24 +296,29 @@ body {
     color: #666; /* Example color */
 }
 /* General styling */
-.add-league-body body{
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+body.add-league-body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: #e9ecef;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .add-league-container {
     max-width: 800px;
-    margin: 0 auto;
+    margin: 3em auto;
     padding: 20px;
-    background-color: #fff;
+    background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
 .add-league-container h1 {
-    font-size: 24px;
+    font-size: 28px;
+    color: #333;
     margin-bottom: 20px;
 }
 
@@ -325,11 +330,19 @@ body {
 /* Dropdown styling */
 .add-league-container #country {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     font-size: 16px;
-    border: 1px solid #ccc;
+    border: 1px solid #ced4da;
     border-radius: 4px;
     box-sizing: border-box;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    transition: border-color 0.2s;
+}
+
+.add-league-container #country:focus {
+    border-color: #80bdff;
+    outline: 0;
 }
 
 /* Leagues display */
@@ -338,33 +351,107 @@ body {
 }
 
 .add-league-box {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.add-league-box input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
 }
 
 .add-league-box label {
-    margin-left: 10px;
+    font-size: 16px;
+    color: #555;
 }
 
 /* Submit button */
-.add-league-container input[type="submit"] {
+.add-league-container input[type="submit"],
+.add-league-container button[type="reset"] {
     margin-top: 20px;
-    padding: 10px 20px;
+    padding: 12px 30px;
     background-color: #007bff;
-    color: #fff;
+    color: #ffffff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 18px;
+    transition: background-color 0.3s;
 }
 
-.add-league-container input[type="submit"]:hover {
+.add-league-container input[type="submit"]:hover,
+.add-league-container button[type="reset"]:hover {
     background-color: #0056b3;
+}
+
+/* Confirm leagues list */
+.confirm-leagues-list {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.confirm-league-box {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Cancel button */
+.cancel-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 30px;
+    background-color: #6c757d;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 18px;
+    transition: background-color 0.3s;
+}
+
+.cancel-button:hover {
+    background-color: #5a6268;
 }
 
 /* Footer */
 .add-league-footer {
+    display: flex;
+    font-size: 0.6em;
+    justify-content: center;
+    background-color: #2d2d32;
+    color: white;
     margin-top: auto;
-    text-align: center;
-    padding: 10px;
+    bottom: 0;
+    width: 100%;
 }
 
+@media (max-width: 768px) {
+    .add-league-container {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    .add-league-container h1 {
+        font-size: 24px;
+    }
+
+    .add-league-box label {
+        font-size: 14px;
+    }
+
+    .add-league-box input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+    }
+
+    .add-league-container input[type="submit"],
+    .add-league-container button[type="reset"],
+    .cancel-button {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+}

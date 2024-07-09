@@ -11,14 +11,12 @@
     <nav>
         <ul id="navbar">
             <li>
-                <a href="/">Home</a>
+                <a th:href="@{/}">Home</a>
             </li>
 
             <li>
-                <a href="/about">About</a>
+                <a th:href="@{/about}">About</a>
             </li>
-
-            <li><a href="/leagues">Leagues</a></li>
 
             <li sec:authorize="!isAuthenticated()">
                 <a href="/login"
@@ -26,12 +24,12 @@
             </li>
 
             <li sec:authorize="!isAuthenticated()">
-                <a href="/register"
+                <a th:href="@{/register}"
                    th:classappend="${activeLink == 'register'}? 'active'">Register</a>
             </li>
 
             <li sec:authorize="isAuthenticated()">
-                <a href="/profile">Profile</a>
+                <a th:href="@{/profile}">Profile</a>
             </li>
 
             <li sec:authorize="isAuthenticated()">

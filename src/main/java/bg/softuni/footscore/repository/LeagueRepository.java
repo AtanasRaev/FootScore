@@ -15,6 +15,8 @@ public interface LeagueRepository extends JpaRepository<League, Long> {
 
     List<League> findByCountryName(String name);
 
+    List<League> findByCountryNameAndSelectedNot(String name, boolean selected);
+
     @Modifying
     @Query("UPDATE League l SET l.selected = :selected WHERE l.name = :name")
     void updateLeagueBySelectedStatusByName(@Param("name") String name, @Param("selected") boolean selected);

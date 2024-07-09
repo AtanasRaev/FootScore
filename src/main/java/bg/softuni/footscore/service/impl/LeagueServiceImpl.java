@@ -7,7 +7,9 @@ import bg.softuni.footscore.service.LeagueService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LeagueServiceImpl implements LeagueService {
@@ -21,22 +23,52 @@ public class LeagueServiceImpl implements LeagueService {
 
     @Override
     public List<AddLeagueDto> getAllLeaguesByCountry(String name) {
-        return map(this.leagueRepository.findByCountryName(name));
+        List<League> leagues = leagueRepository.findByCountryName(name);
+        return mapToDtoList(leagues);
+    }
+
+    @Override
+    public List<AddLeagueDto> getAllNotSelectedLeaguesByCountry(String name) {
+        List<League> leagues = leagueRepository.findByCountryNameAndSelectedNot(name, true);
+        return mapToDtoList(leagues);
     }
 
     @Override
     public List<AddLeagueDto> getSelectedLeagues() {
-        return map(this.leagueRepository.findBySelected(true));
+        List<League> leagues = leagueRepository.findBySelected(true);
+        return mapToDtoList(leagues);
     }
 
     @Override
     public void updateLeagues(String name, boolean selected) {
-        this.leagueRepository.updateLeagueBySelectedStatusByName(name, selected);
+        leagueRepository.updateLeagueBySelectedStatusByName(name, selected);
     }
 
-    private List<AddLeagueDto> map (List<League> leagues) {
-        return leagues.stream()
-                .map(l -> this.modelMapper.map(l, AddLeagueDto.class))
-                .toList();
+    @Override
+    public List<AddLeagueDto> getLeaguesByIds(List<Long> leagueIds) {
+        List<AddLeagueDto> selectedLeagues = new ArrayList<>();
+        leagueIds.forEach(id -> {
+            Optional<League> league = leagueRepository.findById(id);
+            selectedLeagues.add(modelMapper.map(league.get(), AddLeagueDto.class));
+        });
+        return selectedLeagues;
+    }
+
+    @Override
+    public void saveSelectedLeagues(List<Long> leagueIds) {
+        List<League> leaguesToSave = new ArrayList<>();
+        leagueIds.forEach(id -> {
+            Optional<League> league = leagueRepository.findById(id);
+            league.get().setSelected(true);
+            leaguesToSave.add(league.get());
+        });
+        leagueRepository.saveAll(leaguesToSave);
+    }
+
+    private List<AddLeagueDto> mapToDtoList(List<League> leagues) {
+        List<AddLeagueDto> dtoList = new ArrayList<>();
+        leagues.forEach(league -> dtoList.add(modelMapper.map(league, AddLeagueDto.class)));
+        return dtoList;
     }
 }
+
