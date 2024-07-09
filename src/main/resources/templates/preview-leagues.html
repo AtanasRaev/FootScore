@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Leagues</title>
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Link your CSS file -->
+</head>
+<body class="add-league-body">
+<header th:replace="~{fragments/commons::navbar(activeLink=${''})}"></header><!-- Navbar inclusion -->
+<section class="add-league-section">
+    <div class="add-league-container">
+        <h1>Confirm Selected Leagues</h1>
+        <form id="confirm-form" th:method="post" th:action="@{/leagues/saveSelected}">
+            <div class="confirm-leagues-list">
+                <h2>Selected Leagues:</h2>
+                <div th:each="league : ${selectedLeagues}" class="confirm-league-box">
+                    <p th:text="${league.name}"></p>
+                    <input type="hidden" th:name="leagueIds" th:value="${league.id}">
+                </div>
+            </div>
+            <input type="submit" value="Confirm">
+            <a th:href="@{/leagues/add}" class="cancel-button">Cancel</a>
+        </form>
+    </div>
+</section>
+<footer class="add-league-footer"><p>&copy; 2024 Foot Score. All rights reserved.</p></footer> <!-- Footer inclusion -->
+</body>
+</html>
