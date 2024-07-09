@@ -4,7 +4,9 @@ import bg.softuni.footscore.model.dto.RegisterUserDto;
 import bg.softuni.footscore.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class RegistrationController {
@@ -14,21 +16,15 @@ public class RegistrationController {
     public RegistrationController(UserService userService) {
         this.userService = userService;
     }
-    @ModelAttribute("registerData")
-    public RegisterUserDto registerUserDto() {
-        return new RegisterUserDto();
-    }
 
     @GetMapping("/register")
-    public String register() {
+    public String register(@ModelAttribute("registerData") RegisterUserDto registerData) {
         return "register";
     }
 
-    @PostMapping("register")
-    public String register(@Valid RegisterUserDto registerData) {
-
+    @PostMapping("/register")
+    public String doRegister(@Valid RegisterUserDto registerData) {
         this.userService.registerUser(registerData);
-
         return "redirect:/login";
     }
 }
