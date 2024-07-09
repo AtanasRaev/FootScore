@@ -35,11 +35,11 @@ public class LeagueController {
 
     @GetMapping("/leagues/add")
     public String getLeaguesByCountry(@ModelAttribute("countryName") String countryName, Model model) {
-        List<String> countries = countryService.getAllCountriesNames();
+        List<String> countries = this.countryService.getAllCountriesNames();
         List<AddLeagueDto> leagues = new ArrayList<>();
 
         if (countryName != null && !countryName.isEmpty()) {
-            leagues = leagueService.getAllNotSelectedLeaguesByCountry(countryName);
+            leagues = this.leagueService.getAllNotSelectedLeaguesByCountry(countryName);
         }
 
         model.addAttribute("countries", countries);
@@ -56,7 +56,7 @@ public class LeagueController {
 
     @PostMapping("/leagues/saveSelected")
     public String saveSelectedLeagues(@RequestParam List<Long> leagueIds) {
-        leagueService.saveSelectedLeagues(leagueIds);
-        return "redirect:/leagues/add";
+        this.leagueService.saveSelectedLeagues(leagueIds);
+        return "redirect:/leagues";
     }
 }

@@ -10,19 +10,22 @@
 <section class="add-league-section">
     <div class="add-league-container">
         <h1>Select Leagues</h1>
-        <form id="country-form" th:method="get" th:action="@{/leagues/add}">
-            <label for="country">Country:</label>
-            <select id="country" name="countryName" th:onchange="this.form.submit()">
+        <form id="country-form"
+              th:method="get"
+              th:action="@{/leagues/add}">
+            <label th:for="country">Country:</label>
+            <select th:id="country" th:name="countryName" th:onchange="this.form.submit()">
                 <option value="" disabled selected>Select</option>
                 <option th:each="country : ${countries}" th:value="${country}" th:text="${country}"
                         th:selected="${country == countryName}"></option>
             </select>
         </form>
 
-        <!-- Leagues display -->
         <div th:if="${leagues != null}">
             <div th:if="${#lists.size(leagues) > 0}">
-                <form id="league-form" th:method="post" th:action="@{/leagues/preview}">
+                <form id="league-form"
+                      th:method="post"
+                      th:action="@{/leagues/preview}">
                     <div class="add-leagues-list">
                         <h2 th:if="${countryName != null}">Leagues in
                             <span id="selected-country" th:text="${countryName}"></span>:
@@ -38,7 +41,9 @@
                 </form>
             </div>
             <div th:unless="${#lists.size(leagues) > 0}">
-                <h2> All leagues from <span th:text="${countryName}"></span> are added.</h2>
+                <div th:if="${countryName != ''}">
+                    <h2> All leagues from <span th:text="${countryName}"></span> are added.</h2>
+                </div>
             </div>
         </div>
     </div>
