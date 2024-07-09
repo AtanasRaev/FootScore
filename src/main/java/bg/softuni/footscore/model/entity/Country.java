@@ -11,10 +11,13 @@ public class Country {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @Column(unique = true, nullable = false)
     private String name;
+
     @Column
     private String flag;
+
     //TODO:
     @OneToMany(mappedBy = "country")
     private List<League> leagues;

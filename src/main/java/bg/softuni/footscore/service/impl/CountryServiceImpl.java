@@ -1,6 +1,5 @@
 package bg.softuni.footscore.service.impl;
 
-import bg.softuni.footscore.model.entity.Country;
 import bg.softuni.footscore.repository.CountryRepository;
 import bg.softuni.footscore.service.CountryService;
 import org.springframework.stereotype.Service;
