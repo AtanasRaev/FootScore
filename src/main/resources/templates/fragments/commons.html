@@ -18,6 +18,10 @@
                 <a th:href="@{/about}">About</a>
             </li>
 
+            <li>
+                <a th:href="@{/leagues}">Leagues</a>
+            </li>
+
             <li sec:authorize="!isAuthenticated()">
                 <a href="/login"
                    th:classappend="${activeLink == 'login'}? 'active'">Login</a>

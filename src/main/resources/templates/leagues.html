@@ -15,11 +15,18 @@
                         th:selected="${country == countryName}"></option>
             </select>
         </form>
-        <form   sec:authorize="hasRole('ADMIN')"
-                th:mthod="get"
-                th:action="@{/leagues/add}">
-            <button class="add-leagues-button">Add Leagues</button>
-        </form>
+        <div class="leagues-button-admin">
+            <form sec:authorize="hasRole('ADMIN')"
+                  th:mthod="get"
+                  th:action="@{/leagues/add}">
+                <button class="add-leagues-button">Add Leagues</button>
+            </form>
+            <form sec:authorize="hasRole('ADMIN')"
+                  th:mthod="get"
+                  th:action="@{/leagues/remove}">
+                <button class="add-leagues-button">Remove Leagues</button>
+            </form>
+        </div>
         <div class="league-list">
             <a th:href="@{/league_details}" class="league-box" th:each="league : ${leaguesList}">
                 <h2 class="league-title"><span th:text="${league.name}"></span></h2>

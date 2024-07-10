@@ -1,6 +1,7 @@
 package bg.softuni.footscore.model.dto;
 
 public class LeaguesPageDto {
+    private long id;
     private String name;
     private String logo;
     private String countryName;
@@ -30,5 +31,13 @@ public class LeaguesPageDto {
 
     public void setCountryName(String countryName) {
         this.countryName = countryName;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

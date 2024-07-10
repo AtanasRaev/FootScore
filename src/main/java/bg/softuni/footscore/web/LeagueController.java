@@ -21,8 +21,7 @@ public class LeagueController {
         this.leagueService = leagueService;
         this.countryService = countryService;
     }
-
-    @GetMapping()
+    @GetMapping
     public String league(@ModelAttribute("countryName") String countryName, Model model) {
         //todo: error handling
         List<String> countries = this.countryService.getAllCountriesNames();
@@ -31,7 +30,7 @@ public class LeagueController {
             return "redirect:/leagues/error";
         }
 
-        List<LeaguesPageDto> allSelectedLeagues = countryName.equals("all countries") ?
+        List<LeaguesPageDto> allSelectedLeagues = countryName.equals("all countries") || countryName.isEmpty() ?
                 this.leagueService.getAllSelectedLeagues() :
                 this.leagueService.getAllSelectedLeaguesByCountry(countryName, false);
         model.addAttribute("countriesList", countries);
@@ -39,6 +38,8 @@ public class LeagueController {
 
         return "leagues";
     }
+
+
 
     @GetMapping("/add")
     public String getLeaguesByCountry(@ModelAttribute("countryName") String countryName, Model model) {

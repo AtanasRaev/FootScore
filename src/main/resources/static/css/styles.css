@@ -351,6 +351,29 @@ body.leagues-body {
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     outline: none;
 }
+/*button.remove-league-button {*/
+/*    background-color: #dc3545; !* Red color *!*/
+/*    color: white;*/
+/*    border: none;*/
+/*    padding: 8px 16px;*/
+/*    text-align: center;*/
+/*    text-decoration: none;*/
+/*    display: inline-block;*/
+/*    font-size: 14px;*/
+/*    cursor: pointer;*/
+/*    border-radius: 4px;*/
+/*}*/
+
+/*button.remove-league-button:hover {*/
+/*    background-color: #c82333; !* Darker red on hover *!*/
+/*}*/
+
+
+.leagues-button-admin {
+    display: flex;
+    justify-content: center;
+    gap: 0.3em;
+}
 
 .add-leagues-button {
     display: inline-block;
