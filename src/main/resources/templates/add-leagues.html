@@ -23,7 +23,7 @@
 
         <div th:if="${leagues != null}">
             <div th:if="${#lists.size(leagues) > 0}">
-                <form id="league-form"
+                <form id="add-league-form"
                       th:method="post"
                       th:action="@{/leagues/preview}">
                     <div class="add-leagues-list">

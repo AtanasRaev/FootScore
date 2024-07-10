@@ -1,7 +1,11 @@
 package bg.softuni.footscore.service.impl;
 
 import bg.softuni.footscore.model.entity.UserEntity;
+import bg.softuni.footscore.model.enums.RoleEnum;
+import bg.softuni.footscore.model.user.FootScoreUserDetails;
 import bg.softuni.footscore.repository.UserEntityRepository;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,11 +33,17 @@ public class FootScoreUserDetailsService implements UserDetailsService {
     }
 
     private static UserDetails map(UserEntity user) {
-        return User
-                .withUsername(user.getUsername())
-                .password(user.getPassword())
-                .authorities(List.of())
-                .disabled(false)
-                .build();
+        return new FootScoreUserDetails(
+                user.getEmail(),
+                user.getPassword(),
+                List.of(map(user.getRole().getRole())),
+                user.getFirstName(),
+                user.getLastName());
+    }
+
+    private static GrantedAuthority map(RoleEnum role) {
+        return new SimpleGrantedAuthority(
+                "ROLE_" + role
+        );
     }
 }

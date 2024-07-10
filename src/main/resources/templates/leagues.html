@@ -1,46 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
-<body class="leagues-body">
-<!-- Include the header -->
+<html lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="fragments/commons::head"></head>
+<body class="leagues-body">
 <header th:replace="fragments/commons::nav"></header>
-
-<!-- Main Content -->
 <section class="leagues-section">
     <div class="leagues-container">
-        <h1>Football Leagues</h1>
+        <h1 class="leagues-title">Football Leagues</h1>
+        <form id="country-form" th:method="get" th:action="@{/leagues}">
+            <label for="country" class="country-label">Show leagues from:</label>
+            <select id="country" name="countryName" class="country-select" onchange="this.form.submit()">
+                <option th:text="'all countries'" th:selected="${countryName == 'all countries'}">All countries</option>
+                <option th:each="country : ${countriesList}" th:value="${country}" th:text="${country}"
+                        th:selected="${country == countryName}"></option>
+            </select>
+        </form>
+        <form   sec:authorize="hasRole('ADMIN')"
+                th:mthod="get"
+                th:action="@{/leagues/add}">
+            <button class="add-leagues-button">Add Leagues</button>
+        </form>
         <div class="league-list">
-            <a href="league_details.html" class="league-box">
-                <h2 class="league-title">Premier League</h2>
-                <img src="images/premier-league-logo.png" alt="Premier League Logo" class="league-logo">
-                <p class="league-country">England</p>
+            <a th:href="@{/league_details}" class="league-box" th:each="league : ${leaguesList}">
+                <h2 class="league-title"><span th:text="${league.name}"></span></h2>
+                <img th:src="${league.logo}" alt="League Logo" class="league-logo">
+                <p class="league-country"><span th:text="${league.countryName}"></span></p>
             </a>
-            <a href="league_details.html" class="league-box">
-                <h2 class="league-title">La Liga</h2>
-                <img src="images/premier-league-logo.png" alt="Premier League Logo" class="league-logo">
-                <p class="league-country">Spain</p>
-            </a>
-            <a href="league_details.html" class="league-box">
-                <h2 class="league-title">Bundesliga</h2>
-                <img src="images/premier-league-logo.png" alt="Premier League Logo" class="league-logo">
-                <p class="league-country">Germany</p>
-            </a>
-            <a href="league_details.html" class="league-box">
-                <h2 class="league-title">Serie A</h2>
-                <img src="images/premier-league-logo.png" alt="Premier League Logo" class="league-logo">
-                <p class="league-country">Italy</p>
-            </a>
-            <a href="league_details.html" class="league-box">
-                <h2 class="league-title">Ligue 1</h2>
-                <img src="images/premier-league-logo.png" alt="Premier League Logo" class="league-logo">
-                <p class="league-country">France</p>
-            </a>
-
-            <!-- Add more league boxes as needed -->
         </div>
     </div>
 </section>
-
-<footer th:replace="fragments/commons::footer"></footer>
+<footer class="league-footer"><p>&copy; 2024 Foot Score. All rights reserved.</p></footer>
 </body>
 </html>
