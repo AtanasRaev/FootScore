@@ -1,10 +1,10 @@
 package bg.softuni.footscore.model.dto;
 
-public class ApiLeagueDto {
+public class LeagueApiDto {
     private String name;
     private String logo;
 
-    public ApiLeagueDto() {
+    public LeagueApiDto() {
     }
 
     public String getName() {

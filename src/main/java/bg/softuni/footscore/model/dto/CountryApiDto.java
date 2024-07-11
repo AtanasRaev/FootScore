@@ -1,10 +1,10 @@
 package bg.softuni.footscore.model.dto;
 
-public class ApiCountryDto {
+public class CountryApiDto {
     private String name;
     private String flag;
 
-    public ApiCountryDto() {
+    public CountryApiDto() {
     }
 
     public String getName() {

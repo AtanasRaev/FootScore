@@ -1,12 +1,12 @@
 package bg.softuni.footscore.model.dto;
 
-public class AddLeagueDto {
+public class LeagueAddDto {
     private long id;
     private String name;
     private String logo;
     private boolean selected;
 
-    public AddLeagueDto() {
+    public LeagueAddDto() {
 
     }
 

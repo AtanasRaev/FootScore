@@ -22,8 +22,14 @@ public class Country {
     @OneToMany(mappedBy = "country")
     private List<League> leagues;
 
+    @ManyToMany
+    @JoinTable(joinColumns = @JoinColumn(name = "country_id"),
+            inverseJoinColumns = @JoinColumn(name = "season_id"))
+    private List<Season> seasons;
+
     public Country() {
         this.leagues = new ArrayList<>();
+        this.seasons = new ArrayList<>();
     }
 
     public long getId() {
@@ -56,5 +62,13 @@ public class Country {
 
     public void setLeagues(List<League> leagues) {
         this.leagues = leagues;
+    }
+
+    public List<Season> getSeasons() {
+        return seasons;
+    }
+
+    public void setSeasons(List<Season> seasons) {
+        this.seasons = seasons;
     }
 }

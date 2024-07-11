@@ -1,12 +1,14 @@
 package bg.softuni.footscore.service.impl;
 
 import bg.softuni.footscore.config.ApiConfig;
-import bg.softuni.footscore.model.dto.ApiCountryDto;
-import bg.softuni.footscore.model.dto.ApiLeagueCountryDto;
-import bg.softuni.footscore.model.dto.ApiResponseCountryLeagueDto;
+import bg.softuni.footscore.model.dto.CountryApiDto;
+import bg.softuni.footscore.model.dto.LeagueCountrySeasonsApiDto;
+import bg.softuni.footscore.model.dto.ResponseCountryLeagueSeasonsApiDto;
 import bg.softuni.footscore.model.entity.Country;
+import bg.softuni.footscore.model.entity.Season;
 import bg.softuni.footscore.repository.CountryRepository;
 import bg.softuni.footscore.service.CountryService;
+import bg.softuni.footscore.service.SeasonService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -22,12 +24,14 @@ public class CountryServiceImpl implements CountryService {
     private final ApiConfig apiConfig;
     private final RestClient restClient;
     private final ModelMapper modelMapper;
+    private final SeasonService seasonService;
 
-    public CountryServiceImpl(CountryRepository countryRepository, ApiConfig apiConfig, RestClient restClient, ModelMapper modelMapper) {
+    public CountryServiceImpl(CountryRepository countryRepository, ApiConfig apiConfig, RestClient restClient, ModelMapper modelMapper, SeasonService seasonService) {
         this.countryRepository = countryRepository;
         this.apiConfig = apiConfig;
         this.restClient = restClient;
         this.modelMapper = modelMapper;
+        this.seasonService = seasonService;
     }
 
     @Override
@@ -35,19 +39,6 @@ public class CountryServiceImpl implements CountryService {
         List<String> countries = new ArrayList<>();
         this.countryRepository.findAll().forEach(c -> countries.add(c.getName()));
         return countries;
-    }
-
-    @Override
-    public ApiResponseCountryLeagueDto getResponse(String name) {
-        String url = this.apiConfig.getUrl() + "leagues?country=" + name;
-
-        return this.restClient
-                .get()
-                .uri(url)
-                .header("x-rapidapi-key", this.apiConfig.getKey())
-                .header("x-rapidapi-host", this.apiConfig.getUrl())
-                .retrieve()
-                .body(ApiResponseCountryLeagueDto.class);
     }
 
     @Override
@@ -64,13 +55,16 @@ public class CountryServiceImpl implements CountryService {
     @Override
     @Transactional
     public void saveCountry(String name) {
-        ApiResponseCountryLeagueDto response = getResponse(name);
+        ResponseCountryLeagueSeasonsApiDto response = this.seasonService.getResponse(name);
 
-        ApiCountryDto countryDto = response.getResponse().stream().findFirst()
-                .map(ApiLeagueCountryDto::getCountry)
+        List<Season> seasons = this.seasonService.getAllSeasons();
+
+        CountryApiDto countryDto = response.getResponse().stream().findFirst()
+                .map(LeagueCountrySeasonsApiDto::getCountry)
                 .orElseThrow(() -> new IllegalStateException("No country data found"));
 
         Country country = this.modelMapper.map(countryDto, Country.class);
+        country.setSeasons(seasons);
         this.countryRepository.save(country);
     }
 }

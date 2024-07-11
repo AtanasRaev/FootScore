@@ -2,6 +2,9 @@ package bg.softuni.footscore.model.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "leagues")
 public class League {
@@ -22,7 +25,9 @@ public class League {
     @Column
     private boolean selected;
 
-    public League() {}
+
+    public League() {
+    }
 
     public long getId() {
         return id;
@@ -63,4 +68,5 @@ public class League {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
+
 }

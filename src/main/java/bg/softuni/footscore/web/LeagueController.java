@@ -1,6 +1,6 @@
 package bg.softuni.footscore.web;
 
-import bg.softuni.footscore.model.dto.AddLeagueDto;
+import bg.softuni.footscore.model.dto.LeagueAddDto;
 import bg.softuni.footscore.model.dto.LeaguesPageDto;
 import bg.softuni.footscore.model.entity.League;
 import bg.softuni.footscore.service.CountryService;
@@ -34,13 +34,18 @@ public class LeagueController {
         return "leagues";
     }
 
+    @GetMapping("/{id}")
+    public String allTeams(@PathVariable("id") long id, Model model) {
+        return "";
+    }
+
 
     //TODO:/leagues/add authority
     @GetMapping("/add")
     public String getLeaguesByCountry(@ModelAttribute("countryName") String countryName, Model model) {
         //todo: error handling
         List<String> countries = this.countryService.getAllCountriesNames();
-        List<AddLeagueDto> leagues = new ArrayList<>();
+        List<LeagueAddDto> leagues = new ArrayList<>();
 
         if (countryName != null && !countryName.isEmpty()) {
             leagues = this.leagueService.getAllNotSelectedLeaguesByCountry(countryName, true);
@@ -54,7 +59,7 @@ public class LeagueController {
     @PostMapping("/preview")
     public String previewSelectedLeagues(@RequestParam List<Long> leagueIds, Model model) {
         //todo: error handling
-        List<AddLeagueDto> selectedLeagues = this.leagueService.getLeaguesByIds(leagueIds);
+        List<LeagueAddDto> selectedLeagues = this.leagueService.getLeaguesByIds(leagueIds);
         model.addAttribute("selectedLeagues", selectedLeagues);
         return "preview-leagues";
     }
