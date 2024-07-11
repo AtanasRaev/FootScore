@@ -84,7 +84,7 @@ public class LeagueServiceImpl implements LeagueService {
 
     @Override
     @Transactional
-    public void saveLeague(String name) {
+    public void saveApiLeague(String name) {
         ApiResponseCountryLeagueDto response = this.countryService.getResponse(name);
 
         Country country = this.modelMapper.map(this.countryService.getCountry(name), Country.class);
@@ -105,6 +105,16 @@ public class LeagueServiceImpl implements LeagueService {
     @Override
     public boolean isEmpty() {
         return this.leagueRepository.count() == 0;
+    }
+
+    @Override
+    public League getLeagueById(long leagueId) {
+        return this.leagueRepository.findById(leagueId).get();
+    }
+
+    @Override
+    public void saveLeague(League league) {
+        this.leagueRepository.save(league);
     }
 
     private List<AddLeagueDto> mapToAddLeagueDtoList(List<League> leagues) {

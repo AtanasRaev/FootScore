@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/commons::head"></head>
+<body class="leagues-body">
+<header th:replace="fragments/commons::nav"></header>
+<section class="leagues-section">
+    <div class="leagues-container">
+        <h1 class="leagues-title">Remove Football Leagues</h1>
+        <form id="country-form" th:method="get" th:action="@{/leagues/remove}">
+            <label for="country" class="country-label">Show leagues from:</label>
+            <select id="country" name="countryName" class="country-select" onchange="this.form.submit()">
+                <option th:text="'all countries'" th:selected="${countryName == 'all countries'}">All countries</option>
+                <option th:each="country : ${countriesRemove}" th:value="${country}" th:text="${country}"
+                        th:selected="${country == countryName}"></option>
+            </select>
+        </form>
+        <div class="leagues-button-admin">
+            <form sec:authorize="hasRole('ADMIN')"
+                  th:mthod="get"
+                  th:action="@{/leagues}">
+                <button class="add-leagues-button">Done</button>
+            </form>
+        </div>
+        <div class="league-list">
+            <div class="league-box" th:each="league : ${leaguesRemove}">
+                <h2 class="league-title"><span th:text="${league.name}"></span></h2>
+                <img th:src="${league.logo}" alt="League Logo" class="league-logo">
+                <p class="league-country"><span th:text="${league.countryName}"></span></p>
+                <form th:action="@{/leagues/remove}" class="remove-league" method="post">
+                    <input type="hidden" th:id="${league.id}" th:name="leagueId" th:value="${league.id}">
+                    <button type="submit" class="remove-league-button">Remove</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<footer class="league-footer"><p>&copy; 2024 Foot Score. All rights reserved.</p></footer>
+</body>
+</html>

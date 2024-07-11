@@ -24,7 +24,7 @@ public class init implements CommandLineRunner {
             String[] countriesNames = {"england", "germany", "bulgaria", "spain"};
             for (String name : countriesNames) {
                 this.countryService.saveCountry(name);
-                this.leagueService.saveLeague(name);
+                this.leagueService.saveApiLeague(name);
             }
         }
     }

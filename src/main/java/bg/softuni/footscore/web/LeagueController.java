@@ -2,6 +2,7 @@ package bg.softuni.footscore.web;
 
 import bg.softuni.footscore.model.dto.AddLeagueDto;
 import bg.softuni.footscore.model.dto.LeaguesPageDto;
+import bg.softuni.footscore.model.entity.League;
 import bg.softuni.footscore.service.CountryService;
 import bg.softuni.footscore.service.LeagueService;
 import org.springframework.stereotype.Controller;
@@ -24,23 +25,17 @@ public class LeagueController {
     @GetMapping
     public String league(@ModelAttribute("countryName") String countryName, Model model) {
         //todo: error handling
-        List<String> countries = this.countryService.getAllCountriesNames();
+        Result result = getResult(countryName);
+        if (result == null) return "redirect:/leagues/error";
 
-        if (this.leagueService.isEmpty()) {
-            return "redirect:/leagues/error";
-        }
-
-        List<LeaguesPageDto> allSelectedLeagues = countryName.equals("all countries") || countryName.isEmpty() ?
-                this.leagueService.getAllSelectedLeagues() :
-                this.leagueService.getAllSelectedLeaguesByCountry(countryName, false);
-        model.addAttribute("countriesList", countries);
-        model.addAttribute("leaguesList", allSelectedLeagues);
+        model.addAttribute("countriesList", result.countries());
+        model.addAttribute("leaguesList", result.allSelectedLeagues());
 
         return "leagues";
     }
 
 
-
+    //TODO:/leagues/add authority
     @GetMapping("/add")
     public String getLeaguesByCountry(@ModelAttribute("countryName") String countryName, Model model) {
         //todo: error handling
@@ -69,5 +64,40 @@ public class LeagueController {
         //todo: error handling
         this.leagueService.saveSelectedLeagues(leagueIds);
         return "redirect:/leagues";
+    }
+
+    @GetMapping("/remove")
+    public String removeSelectedLeagues(@ModelAttribute("countryName") String countryName, Model model) {
+        Result result = getResult(countryName);
+        if (result == null) return "redirect:/leagues/error";
+
+        model.addAttribute("countriesRemove", result.countries());
+        model.addAttribute("leaguesRemove", result.allSelectedLeagues());
+
+        return "remove-leagues";
+    }
+
+    @PostMapping("/remove")
+    public String doRemoveSelectedLeagues(@RequestParam long leagueId) {
+        League leagueById = this.leagueService.getLeagueById(leagueId);
+        leagueById.setSelected(false);
+        this.leagueService.saveLeague(leagueById);
+        return "redirect:/leagues/remove";
+    }
+
+    private Result getResult(String countryName) {
+        List<String> countries = this.countryService.getAllCountriesNames();
+
+        if (this.leagueService.isEmpty()) {
+            return null;
+        }
+
+        List<LeaguesPageDto> allSelectedLeagues = countryName.equals("all countries") || countryName.isEmpty() ?
+                this.leagueService.getAllSelectedLeagues() :
+                this.leagueService.getAllSelectedLeaguesByCountry(countryName, false);
+        return new Result(countries, allSelectedLeagues);
+    }
+
+    private record Result(List<String> countries, List<LeaguesPageDto> allSelectedLeagues) {
     }
 }
