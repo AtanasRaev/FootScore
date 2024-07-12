@@ -13,4 +13,6 @@ public interface SeasonService {
     boolean isEmpty();
 
     ResponseCountryLeagueSeasonsApiDto getResponse(String name);
+
+    Season getSeasonByYear(int seasonYear);
 }

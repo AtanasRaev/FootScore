@@ -5,23 +5,32 @@ import bg.softuni.footscore.model.dto.LeaguesPageDto;
 import bg.softuni.footscore.model.entity.League;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface LeagueService {
     List<LeagueAddDto> getAllNotSelectedLeaguesByCountry(String name, boolean selected);
 
     List<LeaguesPageDto> getAllSelectedLeaguesByCountry(String name, boolean selected);
 
-    List<LeaguesPageDto> getAllSelectedLeagues();
+    List<LeaguesPageDto> getAllSelectedLeaguesDto();
+
+    List<League> getAllSelectedLeagues();
 
     List<LeagueAddDto> getLeaguesByIds(List<Long> leagueIds);
 
+    League getLeaguesByIds(long leagueId);
+
     void saveSelectedLeagues(List<Long> leagueIds);
 
-    void saveApiLeague(String name);
+    void saveApiLeagueAndTeam(String name);
 
     boolean isEmpty();
 
-    League getLeagueById(long leagueId);
+    Optional<League> getLeagueById(long leagueId);
+
+    League getLeagueByApiId(long leagueApiId);
 
     void saveLeague(League league);
+
+    List<League> getAllLeagues();
 }

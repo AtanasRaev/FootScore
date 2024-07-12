@@ -25,8 +25,15 @@ public class League {
     @Column
     private boolean selected;
 
+    @OneToMany(mappedBy = "league", fetch = FetchType.EAGER)
+    private List<Team> teams;
+
+    @Column(name = "api_id")
+    private Long apiId;
+
 
     public League() {
+        this.teams = new ArrayList<>();
     }
 
     public long getId() {
@@ -69,4 +76,19 @@ public class League {
         this.selected = selected;
     }
 
+    public List<Team> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(List<Team> teams) {
+        this.teams = teams;
+    }
+
+    public Long getApiId() {
+        return apiId;
+    }
+
+    public void setApiId(Long apiId) {
+        this.apiId = apiId;
+    }
 }

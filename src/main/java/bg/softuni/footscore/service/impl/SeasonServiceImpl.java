@@ -4,7 +4,6 @@ import bg.softuni.footscore.config.ApiConfig;
 import bg.softuni.footscore.model.dto.ResponseCountryLeagueSeasonsApiDto;
 import bg.softuni.footscore.model.entity.Season;
 import bg.softuni.footscore.repository.SeasonRepository;
-import bg.softuni.footscore.service.CountryService;
 import bg.softuni.footscore.service.SeasonService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -63,5 +62,10 @@ public class SeasonServiceImpl implements SeasonService {
                 .header("x-rapidapi-host", this.apiConfig.getUrl())
                 .retrieve()
                 .body(ResponseCountryLeagueSeasonsApiDto.class);
+    }
+
+    @Override
+    public Season getSeasonByYear(int seasonYear) {
+        return this.seasonRepository.findByYear(seasonYear);
     }
 }

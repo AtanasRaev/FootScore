@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/commons::head"></head>
+<body class="standings-body">
+<div class="standings-container">
+    <header class="standings-header">
+        <h1 class="standings-header-title">Football Standings</h1>
+    </header>
+    <section class="standings-league-info">
+        <h2 class="standings-league-info-title">League Information</h2>
+        <p class="standings-league-info-description">Get the latest standings for your favorite football leagues. Updated live from the API-Football service.</p>
+    </section>
+    <section class="standings-widget">
+        <div id="wg-api-football-standings"
+             data-host="v3.football.api-sports.io"
+             data-key="aabe068a1afbb4042965bafe4bdce64a"
+             data-league="39"
+             data-team=""
+             data-season="2023"
+             data-theme=""
+             data-show-errors="false"
+             data-show-logos="true"
+             class="wg_loader">
+        </div>
+    </section>
+    <footer class="standings-footer">
+        <p class="footer-text">&copy; 2024 Football Stats Inc. | Powered by API-Football</p>
+    </footer>
+</div>
+<script type="module" src="https://widgets.api-sports.io/2.0.3/widgets.js"></script>
+</body>
+</html>

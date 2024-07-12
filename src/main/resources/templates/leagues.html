@@ -28,7 +28,7 @@
             </form>
         </div>
         <div class="league-list">
-            <a th:href="@{/league/{id}(id=${league.id})}" class="league-box" th:each="league : ${leaguesList}">
+            <a th:href="@{/league/{id}/teams(id=${league.id})}" class="league-box" th:each="league : ${leaguesList}">
                 <h2 class="league-title"><span th:text="${league.name}"></span></h2>
                 <img th:src="${league.logo}" alt="League Logo" class="league-logo">
                 <p class="league-country"><span th:text="${league.countryName}"></span></p>

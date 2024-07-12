@@ -5,12 +5,15 @@ import bg.softuni.footscore.model.dto.LeaguesPageDto;
 import bg.softuni.footscore.model.entity.League;
 import bg.softuni.footscore.service.CountryService;
 import bg.softuni.footscore.service.LeagueService;
+import bg.softuni.footscore.service.SeasonService;
+import bg.softuni.footscore.service.TeamService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/leagues")
@@ -18,7 +21,8 @@ public class LeagueController {
     private final LeagueService leagueService;
     private final CountryService countryService;
 
-    public LeagueController(LeagueService leagueService, CountryService countryService) {
+    public LeagueController(LeagueService leagueService,
+                            CountryService countryService) {
         this.leagueService = leagueService;
         this.countryService = countryService;
     }
@@ -32,11 +36,6 @@ public class LeagueController {
         model.addAttribute("leaguesList", result.allSelectedLeagues());
 
         return "leagues";
-    }
-
-    @GetMapping("/{id}")
-    public String allTeams(@PathVariable("id") long id, Model model) {
-        return "";
     }
 
 
@@ -84,9 +83,11 @@ public class LeagueController {
 
     @PostMapping("/remove")
     public String doRemoveSelectedLeagues(@RequestParam long leagueId) {
-        League leagueById = this.leagueService.getLeagueById(leagueId);
-        leagueById.setSelected(false);
-        this.leagueService.saveLeague(leagueById);
+        Optional<League> leagueById = this.leagueService.getLeagueById(leagueId);
+        if (leagueById.isPresent()) {
+            leagueById.get().setSelected(false);
+            this.leagueService.saveLeague(leagueById.get());
+        }
         return "redirect:/leagues/remove";
     }
 
@@ -98,7 +99,7 @@ public class LeagueController {
         }
 
         List<LeaguesPageDto> allSelectedLeagues = countryName.equals("all countries") || countryName.isEmpty() ?
-                this.leagueService.getAllSelectedLeagues() :
+                this.leagueService.getAllSelectedLeaguesDto() :
                 this.leagueService.getAllSelectedLeaguesByCountry(countryName, false);
         return new Result(countries, allSelectedLeagues);
     }
