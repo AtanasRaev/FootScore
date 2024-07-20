@@ -99,7 +99,7 @@ public class LeagueServiceImpl implements LeagueService {
 
     @Override
     @Transactional
-    public void saveApiLeagueAndTeam(String name) {
+    public void saveApiLeagues(String name) {
         ResponseCountryLeagueSeasonsApiDto response = this.seasonService.getResponse(name);
 
         Optional<Country> optionalCountry = this.countryService.getCountry(name);

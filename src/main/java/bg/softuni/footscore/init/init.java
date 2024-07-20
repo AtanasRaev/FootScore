@@ -1,29 +1,25 @@
 package bg.softuni.footscore.init;
 
-import bg.softuni.footscore.model.entity.League;
 import bg.softuni.footscore.service.CountryService;
 import bg.softuni.footscore.service.LeagueService;
 import bg.softuni.footscore.service.SeasonService;
-import bg.softuni.footscore.service.TeamService;
 import jakarta.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class init implements CommandLineRunner {
     private final LeagueService leagueService;
     private final CountryService countryService;
     private final SeasonService seasonService;
-    private final TeamService teamService;
 
 
-    public init(LeagueService leagueService, CountryService countryService, SeasonService seasonService, TeamService teamService) {
+    public init(LeagueService leagueService,
+                CountryService countryService,
+                SeasonService seasonService) {
         this.leagueService = leagueService;
         this.countryService = countryService;
         this.seasonService = seasonService;
-        this.teamService = teamService;
     }
 
     @Override
@@ -34,7 +30,7 @@ public class init implements CommandLineRunner {
             this.seasonService.saveApiSeasons(countriesNames[0]);
             for (String name : countriesNames) {
                 this.countryService.saveCountry(name);
-                this.leagueService.saveApiLeagueAndTeam(name);
+                this.leagueService.saveApiLeagues(name);
             }
         }
     }

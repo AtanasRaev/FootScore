@@ -22,7 +22,7 @@ public interface LeagueService {
 
     void saveSelectedLeagues(List<Long> leagueIds);
 
-    void saveApiLeagueAndTeam(String name);
+    void saveApiLeagues(String name);
 
     boolean isEmpty();
 

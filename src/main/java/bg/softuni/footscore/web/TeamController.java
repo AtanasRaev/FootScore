@@ -33,7 +33,6 @@ public class TeamController {
             model.addAttribute("league", league);
         });
 
-
         return "teams";
     }
 }

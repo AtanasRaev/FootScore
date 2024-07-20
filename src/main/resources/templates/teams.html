@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:replace="fragments/commons::head"></head>
+<head>
+    <meta charset="UTF-8">
+    <title>Teams</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
 <body class="teams-body">
 <header th:replace="fragments/commons::nav"></header>
 
 <section class="teams-section">
     <div class="teams-container">
-        <h1 class="teams-title">Teams in <span th:text="${league.name}"></span></h1>
+        <h1 class="teams-title">Teams in <span th:text=" ${league.name}"></span></h1>
         <form id="season-form" th:method="get" th:action="@{/league/{leagueId}/teams}">
         </form>
         <div class="team-list">
-            <div th:each="team : ${teams}" class="team-box">
-                <h2 class="team-name"><span th:text="${team.name}"></span></h2>
-                <img th:src="${team.logo}" alt="Team Logo" class="team-logo">
-<!--                <p class="team-details"><span th:text="${team.details}"></span></p>-->
-            </div>
+            <a th:each="team : ${teams}" th:href="@{/team/{teamId}(teamId=${team.id})}" class="team-box">
+                <div>
+                    <h2 class="team-name" th:text="${team.name}"></h2>
+                    <img th:src="${team.logo}" alt="Team Logo" class="team-logo">
+                </div>
+            </a>
         </div>
     </div>
 </section>
