@@ -10,20 +10,30 @@
 
 <section class="teams-section">
     <div class="teams-container">
-        <h1 class="teams-title">Teams in <span th:text=" ${league.name}"></span></h1>
-        <form id="season-form" th:method="get" th:action="@{/league/{leagueId}/teams}">
+        <h1 class="teams-title">Teams in <span th:text="${league.name}"></span></h1>
+        <form id="season-form" th:method="get" th:action="@{/league/{leagueId}/teams(leagueId=${league.id})}">
+            <label for="season">Select Season:</label>
+            <select id="season" name="seasonId" onchange="this.form.submit()">
+                <option th:each="season : ${seasons}"
+                        th:value="${season.id}"
+                        th:text="${season.year}"
+                        th:selected="${season.id == selectedSeasonId}">Season</option>
+            </select>
+            <input type="hidden" name="leagueId" th:value="${league.id}">
         </form>
         <div class="team-list">
-            <a th:each="team : ${teams}" th:href="@{/team/{teamId}(teamId=${team.id})}" class="team-box">
-                <div>
-                    <h2 class="team-name" th:text="${team.name}"></h2>
+            <div th:each="team : ${teams}" class="team-box">
+                <a th:href="@{/team/{id}(id=${team.id})}" class="team-link">
+                    <h2 class="team-name"><span th:text="${team.name}"></span></h2>
                     <img th:src="${team.logo}" alt="Team Logo" class="team-logo">
-                </div>
-            </a>
+                </a>
+            </div>
         </div>
     </div>
 </section>
 
-<footer class="teams-footer"><p>&copy; 2024 Foot Score. All rights reserved.</p></footer>
+<footer class="teams-footer">
+    <p>&copy; 2024 Foot Score. All rights reserved.</p>
+</footer>
 </body>
 </html>

@@ -26,11 +26,14 @@ public class LeagueController {
         this.leagueService = leagueService;
         this.countryService = countryService;
     }
+
     @GetMapping
     public String league(@ModelAttribute("countryName") String countryName, Model model) {
         //todo: error handling
         Result result = getResult(countryName);
-        if (result == null) return "redirect:/leagues/error";
+        if (result == null) {
+            return "redirect:/leagues/error";
+        }
 
         model.addAttribute("countriesList", result.countries());
         model.addAttribute("leaguesList", result.allSelectedLeagues());

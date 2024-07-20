@@ -68,4 +68,9 @@ public class SeasonServiceImpl implements SeasonService {
     public Season getSeasonByYear(int seasonYear) {
         return this.seasonRepository.findByYear(seasonYear);
     }
+
+    @Override
+    public Season getSeasonById(long id) {
+        return this.seasonRepository.findById(id).get();
+    }
 }

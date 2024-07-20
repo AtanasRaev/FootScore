@@ -3,10 +3,12 @@ package bg.softuni.footscore.service.impl;
 import bg.softuni.footscore.model.dto.*;
 import bg.softuni.footscore.model.entity.Country;
 import bg.softuni.footscore.model.entity.League;
+import bg.softuni.footscore.model.entity.Season;
 import bg.softuni.footscore.repository.LeagueRepository;
 import bg.softuni.footscore.service.CountryService;
 import bg.softuni.footscore.service.LeagueService;
 import bg.softuni.footscore.service.SeasonService;
+import bg.softuni.footscore.service.TeamService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -90,8 +92,10 @@ public class LeagueServiceImpl implements LeagueService {
         List<League> leaguesToSave = new ArrayList<>();
         leagueIds.forEach(id -> {
             Optional<League> league = this.leagueRepository.findById(id);
-            league.get().setSelected(true);
-            leaguesToSave.add(league.get());
+            if (league.isPresent()) {
+                league.get().setSelected(true);
+                leaguesToSave.add(league.get());
+            }
         });
         this.leagueRepository.saveAll(leaguesToSave);
     }

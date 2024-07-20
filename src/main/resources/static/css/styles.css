@@ -282,6 +282,8 @@ body.leagues-body {
     gap: 0.6em;
     justify-content: center;
     padding-left: 2em;
+    padding-top: 1em;
+    padding-bottom: 1em;
     max-width: 40em;
     margin: 0 auto;
 }
@@ -659,18 +661,43 @@ body.add-league-body {
 
 .teams-section {
     padding: 20px;
+    flex: 1;
 }
 
 .teams-container {
     max-width: 1200px;
+    min-height: 717px;
     margin: 0 auto;
+    text-align: center;
 }
 
 .teams-title {
-    display: flex;
-    justify-content: center;
-    font-size: 2em;
+    font-size: 2.5em;
     margin-bottom: 20px;
+    color: #333;
+}
+
+#season-form {
+    margin-bottom: 20px;
+}
+
+#season-form label {
+    font-size: 1.2em;
+    margin-right: 10px;
+    color: #555;
+}
+
+#season {
+    padding: 5px;
+    font-size: 0.9em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#season:focus {
+    border-color: #007bff;
 }
 
 .team-list {
@@ -689,22 +716,29 @@ body.add-league-body {
     text-align: center;
     text-decoration: none;
     color: inherit;
-    transition: background-color 0.3s, box-shadow 0.3s;
+    background-color: #fff;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .team-box:hover {
-    background-color: #f0f0f0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .team-name {
-    font-size: 1.2em;
+    font-size: 24px;
+    color: #007bff;
     margin-bottom: 10px;
 }
 
 .team-logo {
     max-width: 100%;
     height: auto;
+    margin-bottom: 10px;
+}
+
+.team-link {
+    text-decoration: none;
 }
 
 footer.teams-footer {
