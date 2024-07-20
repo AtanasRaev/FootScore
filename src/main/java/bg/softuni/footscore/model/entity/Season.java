@@ -31,6 +31,6 @@ public class Season {
 
     @Override
     public String toString() {
-        return "Season " + this.year + "/" + this.year + 1;
+        return this.year + "/" + (this.year + 1);
     }
 }

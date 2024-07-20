@@ -16,7 +16,7 @@
             <select id="season" name="seasonId" onchange="this.form.submit()">
                 <option th:each="season : ${seasons}"
                         th:value="${season.id}"
-                        th:text="${season.year}"
+                        th:text="${season.toString()}"
                         th:selected="${season.id == selectedSeasonId}">Season</option>
             </select>
             <input type="hidden" name="leagueId" th:value="${league.id}">
