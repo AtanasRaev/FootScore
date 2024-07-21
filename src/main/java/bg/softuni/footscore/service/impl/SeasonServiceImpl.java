@@ -11,6 +11,7 @@ import org.springframework.web.client.RestClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SeasonServiceImpl implements SeasonService {
@@ -70,7 +71,7 @@ public class SeasonServiceImpl implements SeasonService {
     }
 
     @Override
-    public Season getSeasonById(long id) {
-        return this.seasonRepository.findById(id).get();
+    public Optional<Season> getSeasonById(long id) {
+        return this.seasonRepository.findById(id);
     }
 }

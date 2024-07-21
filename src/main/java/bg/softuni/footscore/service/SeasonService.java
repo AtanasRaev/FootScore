@@ -4,6 +4,7 @@ import bg.softuni.footscore.model.dto.ResponseCountryLeagueSeasonsApiDto;
 import bg.softuni.footscore.model.entity.Season;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SeasonService {
     void saveApiSeasons(String name);
@@ -16,5 +17,5 @@ public interface SeasonService {
 
     Season getSeasonByYear(int seasonYear);
 
-    Season getSeasonById(long id);
+    Optional<Season> getSeasonById(long id);
 }

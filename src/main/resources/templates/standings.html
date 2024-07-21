@@ -1,32 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
-<head th:replace="fragments/commons::head"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - Football Info</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<header th:replace="fragments/commons::nav"></header>
 <body class="standings-body">
 <div class="standings-container">
     <header class="standings-header">
-        <h1 class="standings-header-title">Football Standings</h1>
+        <h1 class="standings-header-title">Football Standings in:</h1>
     </header>
     <section class="standings-league-info">
-        <h2 class="standings-league-info-title">League Information</h2>
-        <p class="standings-league-info-description">Get the latest standings for your favorite football leagues. Updated live from the API-Football service.</p>
+        <h2 class="standings-league-info-title">
+            <span class="standings-league-info-span-text" th:text="${leagueName}"></span>
+        </h2>
+        <h2 class="standings-league-info-title">
+            <span class="standings-league-info-span-text">Season: </span>
+            <span class="standings-league-info-span-text" th:text="${selectedSeason.toString()}">
+            </span>
+        </h2>
+        <p class="standings-league-info-description">
+            Browse through the most recent and historical football standings to track your favorite leagues’ performance over time.
+        </p>
+        <form id="season-form" th:method="get" th:action="@{/widgets/standings}">
+            <label for="season">Select a season:</label>
+            <select id="season" name="seasonId" onchange="this.form.submit()">
+                <option th:each="season : ${seasons}"
+                        th:value="${season.id}"
+                        th:text="${season.toString()}"
+                        th:selected="${season.id == selectedSeasonId}">Season</option>
+            </select>
+            <input type="hidden" name="leagueId" th:value="${league.id}">
+        </form>
     </section>
     <section class="standings-widget">
         <div id="wg-api-football-standings"
              data-host="v3.football.api-sports.io"
-             data-key="aabe068a1afbb4042965bafe4bdce64a"
-             data-league="39"
-             data-team=""
-             data-season="2023"
+             th:data-key="${apiKey}"
+             th:data-league="${leagueId}"
+             th:data-season="${seasonYear}"
              data-theme=""
              data-show-errors="false"
              data-show-logos="true"
              class="wg_loader">
         </div>
     </section>
-    <footer class="standings-footer">
-        <p class="footer-text">&copy; 2024 Football Stats Inc. | Powered by API-Football</p>
-    </footer>
 </div>
+<footer class="standings-footer">
+    <p class="footer-text">&copy; 2024 Foot Score. All rights reserved.</p>
+</footer>
 <script type="module" src="https://widgets.api-sports.io/2.0.3/widgets.js"></script>
 </body>
 </html>

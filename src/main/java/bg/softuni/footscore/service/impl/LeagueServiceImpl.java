@@ -1,14 +1,15 @@
 package bg.softuni.footscore.service.impl;
 
-import bg.softuni.footscore.model.dto.*;
+import bg.softuni.footscore.model.dto.LeagueAddDto;
+import bg.softuni.footscore.model.dto.LeagueCountrySeasonsApiDto;
+import bg.softuni.footscore.model.dto.LeaguesPageDto;
+import bg.softuni.footscore.model.dto.ResponseCountryLeagueSeasonsApiDto;
 import bg.softuni.footscore.model.entity.Country;
 import bg.softuni.footscore.model.entity.League;
-import bg.softuni.footscore.model.entity.Season;
 import bg.softuni.footscore.repository.LeagueRepository;
 import bg.softuni.footscore.service.CountryService;
 import bg.softuni.footscore.service.LeagueService;
 import bg.softuni.footscore.service.SeasonService;
-import bg.softuni.footscore.service.TeamService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;

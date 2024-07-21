@@ -568,88 +568,93 @@ body.add-league-body {
     }
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
 .standings-body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(to right, #e0e0e0, #ffffff);
+    background: linear-gradient(to right, #f0f4f8, #d9e2ec);
     color: #333;
-    margin: 0;
-    padding: 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
     flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
 }
 
 .standings-container {
     background-color: #ffffff;
-    padding: 40px;
+    padding: 1.2em;
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    max-width: 900px;
-    width: 90%;
-    margin: 20px;
+    max-width: 45em;
+    width: 100%;
+    margin: 3em auto 0;
     box-sizing: border-box;
+    flex: 1;
 }
 
 .standings-header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .standings-header-title {
     margin: 0;
-    color: #0066cc;
+    color: #007acc;
     font-size: 2.5em;
     font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .standings-league-info {
+    display: flex;
+    flex-direction: column;
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .standings-league-info-title {
-    margin-bottom: 15px;
-    color: #333;
+    margin-bottom: 10px;
+    color: #007acc;
     font-size: 1.75em;
     font-weight: bold;
-    border-bottom: 2px solid #0066cc;
     display: inline-block;
     padding-bottom: 5px;
+}
+.standings-league-info-span-text {
+    border-bottom: 3px solid #007acc;
 }
 
 .standings-league-info-description {
     margin: 0;
-    color: #666;
-    font-size: 1.1em;
-    line-height: 1.5;
+    color: #555;
+    font-size: 1.2em;
+    line-height: 1.6;
 }
 
 .standings-widget {
     width: 100%;
-    margin-bottom: 30px;
-    overflow: hidden;
+    margin-bottom: 20px;
 }
 
 #wg-api-football-standings {
     width: 100%;
-    min-height: 600px;
+    padding: 0.2em;
     border: 1px solid #ddd;
     border-radius: 8px;
+    background-color: #ffffff;
 }
 
 .standings-footer {
-    text-align: center;
-    padding: 20px 0;
-    border-top: 1px solid #ddd;
-    color: #777;
-}
-
-.standings-footer-text {
-    margin: 0;
-    font-size: 0.9em;
+    display: flex;
+    font-size: 0.6em;
+    margin-top: 3.1em;
+    justify-content: center;
+    background-color: #2d2d32;
+    color: white;
+    width: 100%;
 }
 
 .teams-body {
@@ -750,4 +755,24 @@ footer.teams-footer {
     color: white;
     position: absolute;
     width: 100%;
+}
+
+.teams-standings-button {
+    display: inline-block;
+    margin: 20px 0;
+    padding: 10px 20px;
+    font-size: 1em;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    text-align: center;
+    text-decoration: none;
+}
+
+.teams-standings-button{
+    background-color: #0056b3;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }

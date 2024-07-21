@@ -4,7 +4,6 @@ import bg.softuni.footscore.config.ApiConfig;
 import bg.softuni.footscore.model.dto.ResponseTeamApiDto;
 import bg.softuni.footscore.model.dto.TeamPageDto;
 import bg.softuni.footscore.model.entity.*;
-import bg.softuni.footscore.repository.SeasonLeagueTeamRepository;
 import bg.softuni.footscore.repository.TeamRepository;
 import bg.softuni.footscore.repository.VenueRepository;
 import bg.softuni.footscore.service.LeagueService;
@@ -19,7 +18,6 @@ import org.springframework.web.client.RestClient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class TeamServiceImpl implements TeamService {
@@ -57,9 +55,14 @@ public class TeamServiceImpl implements TeamService {
         Optional<League> optionalLeague = this.leagueService.getLeagueById(leagueId);
 
         optionalLeague.ifPresent(league -> {
-            Season season = this.seasonService.getSeasonById(seasonId);
+            Optional<Season> season = this.seasonService.getSeasonById(seasonId);
 
-            ResponseTeamApiDto response = this.getResponse(league.getApiId(), season.getYear());
+            //TODO: if statement should
+            if (season.isEmpty()) {
+               throw new IllegalStateException("No season data found");
+            }
+
+            ResponseTeamApiDto response = this.getResponse(league.getApiId(), season.get().getYear());
 
             if (!response.getResponse().isEmpty()) {
                 List<Team> teamsToSave = new ArrayList<>();
@@ -90,7 +93,7 @@ public class TeamServiceImpl implements TeamService {
                         Optional<Team> optionalTeam = this.seasonLeagueTeamService.getTeamByLeagueIdAndSeasonId(leagueId, seasonId, team.getId());
                         if (optionalTeam.isEmpty()) {
                             SeasonLeagueTeam seasonLeagueTeam = new SeasonLeagueTeam();
-                            seasonLeagueTeam.setSeason(season);
+                            seasonLeagueTeam.setSeason(season.get());
                             seasonLeagueTeam.setLeague(league);
                             seasonLeagueTeam.setTeam(team);
 

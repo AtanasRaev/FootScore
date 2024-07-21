@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Teams</title>
@@ -12,7 +12,7 @@
     <div class="teams-container">
         <h1 class="teams-title">Teams in <span th:text="${league.name}"></span></h1>
         <form id="season-form" th:method="get" th:action="@{/league/{leagueId}/teams(leagueId=${league.id})}">
-            <label for="season">Select Season:</label>
+            <label for="season">Select a season:</label>
             <select id="season" name="seasonId" onchange="this.form.submit()">
                 <option th:each="season : ${seasons}"
                         th:value="${season.id}"
@@ -20,6 +20,12 @@
                         th:selected="${season.id == selectedSeasonId}">Season</option>
             </select>
             <input type="hidden" name="leagueId" th:value="${league.id}">
+        </form>
+        <form th:method="get"
+              th:action="@{/widgets/standings}">
+            <input type="hidden" name="leagueId" th:value="${league.id}">
+            <input type="hidden" name="seasonId" th:value="${selectedSeasonId}">
+            <button class="teams-standings-button">View standings</button>
         </form>
         <div class="team-list">
             <div th:each="team : ${teams}" class="team-box">
