@@ -12,10 +12,13 @@ public interface TeamService {
 
     ResponseTeamApiDto getResponse(long leagueApiId, int seasonYear);
 
-    Team findByName(String name);
-
     boolean isEmpty();
 
     List<TeamPageDto> findAllByIds(List<Long> teams);
 
+    Optional<Team> findById(long teamId);
+
+    Optional<Team> getTeamByApiId(long apiId);
+
+    Optional<Team> getTeamById(long teamId);
 }

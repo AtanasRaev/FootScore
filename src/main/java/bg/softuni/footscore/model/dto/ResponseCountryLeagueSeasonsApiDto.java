@@ -1,9 +1,7 @@
 package bg.softuni.footscore.model.dto;
-
-import java.io.Serializable;
 import java.util.List;
 
-public class ResponseCountryLeagueSeasonsApiDto implements Serializable {
+public class ResponseCountryLeagueSeasonsApiDto {
 
     private List<LeagueCountrySeasonsApiDto> response;
 

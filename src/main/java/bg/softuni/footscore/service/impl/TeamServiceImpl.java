@@ -68,13 +68,13 @@ public class TeamServiceImpl implements TeamService {
                 List<Team> teamsToSave = new ArrayList<>();
                 List<Venue> venuesToSave = new ArrayList<>();
 
-                response.getResponse().forEach(r -> {
-                    if (this.findByName(r.getTeam().getName()) == null) {
-                        Team team = this.modelMapper.map(r.getTeam(), Team.class);
-                        Venue venue = this.modelMapper.map(r.getVenue(), Venue.class);
+                response.getResponse().forEach(dto -> {
+                    if (this.getTeamByApiId(dto.getTeam().getId()).isEmpty()) {
+                        Team team = this.modelMapper.map(dto.getTeam(), Team.class);
+                        Venue venue = this.modelMapper.map(dto.getVenue(), Venue.class);
                         team.setVenue(venue);
-                        team.setLeague(league);
-                        team.setApiId(r.getTeam().getId());
+//                        team.setLeague(league);
+                        team.setApiId(dto.getTeam().getId());
 
                         teamsToSave.add(team);
                         if (!venuesToSave.contains(venue)) {
@@ -87,15 +87,15 @@ public class TeamServiceImpl implements TeamService {
 
                 this.teamRepository.saveAll(teamsToSave);
 
-                response.getResponse().forEach(r -> {
-                    Team team = this.teamRepository.findByApiId(r.getTeam().getId());
-                    if (team != null) {
-                        Optional<Team> optionalTeam = this.seasonLeagueTeamService.getTeamByLeagueIdAndSeasonId(leagueId, seasonId, team.getId());
+                response.getResponse().forEach(dto -> {
+                    Optional<Team> team = this.teamRepository.findByApiId(dto.getTeam().getId());
+                    if (team.isPresent()) {
+                        Optional<Team> optionalTeam = this.seasonLeagueTeamService.getTeamByLeagueIdAndSeasonId(leagueId, seasonId, team.get().getId());
                         if (optionalTeam.isEmpty()) {
                             SeasonLeagueTeam seasonLeagueTeam = new SeasonLeagueTeam();
                             seasonLeagueTeam.setSeason(season.get());
                             seasonLeagueTeam.setLeague(league);
-                            seasonLeagueTeam.setTeam(team);
+                            seasonLeagueTeam.setTeam(team.get());
 
                             this.seasonLeagueTeamService.save(seasonLeagueTeam);
                         }
@@ -120,11 +120,6 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Team findByName(String name) {
-        return this.teamRepository.findByName(name);
-    }
-
-    @Override
     public boolean isEmpty() {
         return this.teamRepository.count() == 0;
     }
@@ -134,5 +129,20 @@ public class TeamServiceImpl implements TeamService {
         return this.teamRepository.findAllById(ids).stream()
                 .map(team -> this.modelMapper.map(team, TeamPageDto.class))
                 .toList();
+    }
+
+    @Override
+    public Optional<Team> findById(long teamId) {
+        return this.teamRepository.findById(teamId);
+    }
+
+    @Override
+    public Optional<Team> getTeamByApiId(long apiId) {
+        return this.teamRepository.findByApiId(apiId);
+    }
+
+    @Override
+    public Optional<Team> getTeamById(long teamId) {
+        return this.teamRepository.findById(teamId);
     }
 }

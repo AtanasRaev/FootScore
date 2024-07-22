@@ -2,6 +2,8 @@ package bg.softuni.footscore.model.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "teams")
 public class Team {
@@ -17,9 +19,6 @@ public class Team {
 
     @OneToOne
     private Venue venue;
-
-    @ManyToOne
-    private League league;
 
     @Column
     private Long apiId;
@@ -62,13 +61,5 @@ public class Team {
 
     public void setVenue(Venue venue) {
         this.venue = venue;
-    }
-
-    public League getLeague() {
-        return league;
-    }
-
-    public void setLeague(League league) {
-        this.league = league;
     }
 }

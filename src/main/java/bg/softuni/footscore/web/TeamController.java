@@ -29,7 +29,6 @@ public class TeamController {
         this.seasonLeagueTeamService = seasonLeagueTeamService;
     }
 
-    //TODO: remove seasons with no info for the teams
     @GetMapping("/league/{leagueId}/teams")
     public String teams(@PathVariable long leagueId, @RequestParam(required = false) Long seasonId, Model model) {
         Optional<League> leagueById = this.leagueService.getLeagueById(leagueId);

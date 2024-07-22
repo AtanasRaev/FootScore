@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Teams</title>
+    <title>Players</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body class="teams-body">
@@ -10,8 +10,8 @@
 
 <section class="teams-section">
     <div class="teams-container">
-        <h1 class="teams-title">Teams in <span th:text="${league.name}"></span></h1>
-        <form id="season-form" th:method="get" th:action="@{/league/{leagueId}/teams(leagueId=${league.id})}">
+        <h1 class="teams-title">Players in <span th:text="${team.name}"></span></h1>
+        <form id="season-form" th:method="get" th:action="@{/team/{teamId}/players(teamId=${team.id})}">
             <label for="season">Select a season:</label>
             <select id="season" name="seasonId" onchange="this.form.submit()">
                 <option th:each="season : ${seasons}"
@@ -19,19 +19,14 @@
                         th:text="${season.toString()}"
                         th:selected="${season.id == selectedSeasonId}">Season</option>
             </select>
-            <input type="hidden" name="leagueId" th:value="${league.id}">
-        </form>
-        <form th:method="get"
-              th:action="@{/widgets/standings}">
-            <input type="hidden" name="leagueId" th:value="${league.id}">
-            <input type="hidden" name="seasonId" th:value="${selectedSeasonId}">
-            <button class="teams-standings-button">View standings</button>
+            <input type="hidden" name="leagueId" th:value="${team.id}">
         </form>
         <div class="team-list">
-            <div th:each="team : ${teams}" class="team-box">
-                <a th:href="@{/team/{teamId}/players(teamId=${team.id})}" class="team-link">
-                    <h2 class="team-name"><span th:text="${team.name}"></span></h2>
-                    <img th:src="${team.logo}" alt="Team Logo" class="team-logo">
+            <div th:each="player : ${players}" class="team-box">
+                <a th:href="@{/player/{playerId}(playerId=${player.id})}" class="team-link">
+                    <h2 class="team-name"><span th:text="${player.fullName}"></span></h2>
+                    <img th:src="${player.photo}" alt="Team Logo" class="team-logo">
+                    <span th:text="${player.position}"></span>
                 </a>
             </div>
         </div>
