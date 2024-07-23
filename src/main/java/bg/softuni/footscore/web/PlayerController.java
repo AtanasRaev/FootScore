@@ -24,7 +24,8 @@ public class PlayerController {
     private final SeasonService seasonService;
     private final SeasonTeamPlayerService seasonTeamPlayerService;
 
-    public PlayerController(PlayerService playerService, TeamService teamService,
+    public PlayerController(PlayerService playerService,
+                            TeamService teamService,
                             SeasonService seasonService,
                             SeasonTeamPlayerService seasonTeamPlayerService) {
         this.playerService = playerService;
@@ -32,8 +33,6 @@ public class PlayerController {
         this.seasonService = seasonService;
         this.seasonTeamPlayerService = seasonTeamPlayerService;
     }
-
-    //TODO: FIX -> 1. NOT LOADING THE PLAYERS ON THE FIRST LOAD, 2. SLOW PAGE LOADING, 3. CHECK FOR ERRORS
 
     @GetMapping("/team/{teamId}/players")
     public String players(@PathVariable long teamId, @RequestParam(required = false) Long seasonId, Model model) {
@@ -46,16 +45,19 @@ public class PlayerController {
             model.addAttribute("seasons", seasons.reversed());
             model.addAttribute("selectedSeasonId", seasonId);
 
-            this.showPlayers(teamId, model, Objects.requireNonNullElseGet(seasonId, () -> seasons.getLast().getId()));
+            if (seasonId == null) {
+                seasonId = seasons.getLast().getId();
+            }
+
+            List<Player> allPlayers = this.seasonTeamPlayerService.getAllPlayersBySeasonIdAndTeamId(teamId, seasonId);
+
+            if (allPlayers.isEmpty()) {
+                this.playerService.saveApiPlayersForTeamAndSeason(teamId, seasonId);
+                allPlayers = this.seasonTeamPlayerService.getAllPlayersBySeasonIdAndTeamId(teamId, seasonId);
+            }
+
+            model.addAttribute("players", allPlayers);
         }
         return "players";
-    }
-
-    private void showPlayers(long teamId, Model model, long seasonId) {
-        List<Player> allPlayers = this.seasonTeamPlayerService.getAllPlayersBySeasonIdAndTeamId(teamId, seasonId);
-        if (allPlayers.isEmpty()) {
-            this.playerService.saveApiPlayersForTeamAndSeason(teamId, seasonId);
-        }
-        model.addAttribute("players", allPlayers);
     }
 }

@@ -3,6 +3,7 @@ package bg.softuni.footscore.service.impl;
 import bg.softuni.footscore.config.ApiConfig;
 import bg.softuni.footscore.model.dto.PlayerStatisticsApiDto;
 import bg.softuni.footscore.model.dto.ResponsePlayerApiDto;
+import bg.softuni.footscore.model.dto.SeasonsByPlayerApiDto;
 import bg.softuni.footscore.model.dto.StatisticsApiDto;
 import bg.softuni.footscore.model.entity.Player;
 import bg.softuni.footscore.model.entity.Season;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +38,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     public static final String PLAYERS_BY_TEAM_AND_SEASON = "%splayers?team=%d&season=%d";
     public static final String PLAYERS_BY_ID_AND_SEASON = "%splayers?id=%d&season=%d";
+    public static final String PLAYERS_BY_ID_AND_ALL_SEASONS = "%splayers/seasons?player=%d";
 
     public PlayerServiceImpl(PlayerRepository playerRepository,
                              TeamService teamService,
@@ -65,22 +69,14 @@ public class PlayerServiceImpl implements PlayerService {
                 throw new IllegalStateException("No season data found");
             }
 
-            ResponsePlayerApiDto responseList = this.getResponse(PLAYERS_BY_TEAM_AND_SEASON, team.getApiId(), season.get().getYear());
+            ResponsePlayerApiDto responseList = this.getResponsePlayerApiDto(PLAYERS_BY_TEAM_AND_SEASON, team.getApiId(), season.get().getYear());
 
             if (!responseList.getResponse().isEmpty()) {
                 List<Player> playersToSave = new ArrayList<>();
                 responseList.getResponse().forEach(dto -> {
 
                     if (this.getPlayerByApiId(dto.getPlayer().getId()).isEmpty()) {
-
                         Player player = createPlayer(dto);
-
-                        ResponsePlayerApiDto responsePlayer = this.getResponse(PLAYERS_BY_ID_AND_SEASON, player.getApiId(), season.get().getYear());
-                        StatisticsApiDto statistics = responsePlayer.getResponse().getFirst().getStatistics().getFirst();
-
-                        player.setTeam(statistics.getTeam().getName());
-                        player.setPosition(statistics.getGames().getPosition());
-
                         playersToSave.add(player);
                     }
                 });
@@ -104,43 +100,9 @@ public class PlayerServiceImpl implements PlayerService {
         });
     }
 
-    private static Player createPlayer(PlayerStatisticsApiDto dto) {
-        String heightStr = dto.getPlayer().getHeight();
-        String weightStr = dto.getPlayer().getWeight();
-
-        Integer height = null;
-        Integer weight = null;
-
-        if (heightStr != null && !heightStr.trim().isEmpty()) {
-            String[] heightParts = heightStr.split("\\s+");
-            if (heightParts.length > 0) {
-                height = Integer.parseInt(heightParts[0]);
-            }
-        }
-
-        if (weightStr != null && !weightStr.trim().isEmpty()) {
-            String[] weightParts = weightStr.split("\\s+");
-            if (weightParts.length > 0) {
-                weight = Integer.parseInt(weightParts[0]);
-            }
-        }
-
-        return new Player(
-                dto.getPlayer().getFirstname(),
-                dto.getPlayer().getLastname(),
-                dto.getPlayer().getAge(),
-                LocalDate.parse(dto.getPlayer().getBirth().getDate()),
-                dto.getPlayer().getNationality(),
-                height,
-                weight,
-                dto.getPlayer().getPhoto(),
-                dto.getPlayer().getId()
-        );
-    }
-
 
     @Override
-    public ResponsePlayerApiDto getResponse(String query, long id, int seasonYear) {
+    public ResponsePlayerApiDto getResponsePlayerApiDto(String query, long id, int seasonYear) {
         String url = String.format(query, this.apiConfig.getUrl(), id, seasonYear);
 
         return this.restClient
@@ -153,6 +115,19 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    public SeasonsByPlayerApiDto getResponseSeasonsByPlayerApiDto(String query, long id) {
+        String url = String.format(query, this.apiConfig.getUrl(), id);
+
+        return this.restClient
+                .get()
+                .uri(url)
+                .header("x-rapidapi-key", this.apiConfig.getKey())
+                .header("x-rapidapi-host", this.apiConfig.getUrl())
+                .retrieve()
+                .body(SeasonsByPlayerApiDto.class);
+    }
+
+    @Override
     public Optional<Player> getPlayerByApiId(long apiId) {
         return this.playerRepository.findByApiId(apiId);
     }
@@ -161,4 +136,75 @@ public class PlayerServiceImpl implements PlayerService {
     public boolean isEmpty() {
         return this.playerRepository.count() == 0;
     }
+
+    private static Player createPlayer(PlayerStatisticsApiDto dto) {
+        String heightStr = dto.getPlayer().getHeight();
+        String weightStr = dto.getPlayer().getWeight();
+
+        Integer height = null;
+        Integer weight = null;
+
+        height = parseStringToInteger(heightStr, height);
+
+        weight = parseStringToInteger(weightStr, weight);
+
+        LocalDate birthDate = parseBirthDate(dto.getPlayer().getBirth().getDate());
+
+        if (birthDate != null) {
+            System.out.println("Parsed date: " + birthDate);
+        } else {
+            System.out.println("Failed to parse date");
+        }
+
+        return new Player(
+                dto.getPlayer().getFirstname(),
+                dto.getPlayer().getLastname(),
+                dto.getPlayer().getAge(),
+                birthDate,
+                dto.getPlayer().getNationality(),
+                height,
+                weight,
+                dto.getPlayer().getPhoto(),
+                dto.getPlayer().getId()
+        );
+    }
+
+    private static Integer parseStringToInteger(String heightStr, Integer height) {
+        if (heightStr != null && !heightStr.trim().isEmpty()) {
+            String[] heightParts = heightStr.split("\\s+");
+            if (heightParts.length > 0) {
+                height = Integer.parseInt(heightParts[0]);
+            }
+        }
+        return height;
+    }
+
+    private static LocalDate parseBirthDate(String dateString) {
+
+        if (dateString == null) {
+            return null;
+        }
+
+        DateTimeFormatter standardFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter fallbackFormatter = DateTimeFormatter.ofPattern("yyyy-M-d");
+
+        try {
+            return LocalDate.parse(dateString, standardFormatter);
+        } catch (DateTimeParseException e1) {
+            try {
+                return LocalDate.parse(dateString, fallbackFormatter);
+            } catch (DateTimeParseException e2) {
+                System.err.println("Error parsing date: " + e2.getMessage());
+                return null;
+            }
+        }
+    }
+
+//                            SeasonsByPlayerApiDto responseSeasonsByPlayerApiDto = getResponseSeasonsByPlayerApiDto(PLAYERS_BY_ID_AND_ALL_SEASONS, player.getApiId());
+//                        int year = responseSeasonsByPlayerApiDto.getResponse().getLast();
+//                        ResponsePlayerApiDto responsePlayer = this.getResponsePlayerApiDto(PLAYERS_BY_ID_AND_SEASON, player.getApiId(), year);
+//                        StatisticsApiDto statistics = responsePlayer.getResponse().getFirst().getStatistics().getFirst();
+//
+//                        player.setTeam(statistics.getTeam().getName());
+//                        player.setPosition(statistics.getGames().getPosition());
 }

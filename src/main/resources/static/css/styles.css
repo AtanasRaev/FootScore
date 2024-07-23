@@ -776,3 +776,35 @@ footer.teams-footer {
     background-color: #0056b3;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
+
+.player-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 200px;
+    padding: 0.4em;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    background-color: #fff;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.player-position {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 0;
+    margin-top: 1em;
+}
+.player-logo {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.player-name {
+    font-size: 24px;
+    color: #007bff;
+    margin-bottom: 10px;
+}

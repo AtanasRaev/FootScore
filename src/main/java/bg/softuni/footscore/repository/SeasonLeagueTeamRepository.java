@@ -18,4 +18,6 @@ public interface SeasonLeagueTeamRepository extends JpaRepository<SeasonLeagueTe
     @Query("SELECT t FROM SeasonLeagueTeam s JOIN s.team t WHERE s.season.id = :seasonId AND s.league.id = :leagueId AND s.team.id = :teamId")
     Optional<Team> findTeamByLeagueIdAndSeasonId(Long leagueId, Long seasonId, Long teamId);
 
+    Optional<SeasonLeagueTeam> findByTeamIdAndLeagueId(long teamId, long leagueId);
+
 }

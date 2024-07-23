@@ -12,10 +12,10 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name")
     private String lastName;
 
     @Column(name = "full_name")
@@ -24,9 +24,8 @@ public class Player {
     @Column
     private String position;
 
-    @Positive
-    @Column(nullable = false)
-    private int age;
+    @Column
+    private Integer age;
 
     @Column
     private LocalDate birthday;
@@ -51,7 +50,7 @@ public class Player {
 
     public Player(String firstName,
                   String lastName,
-                  int age,
+                  Integer age,
                   LocalDate birthday,
                   String nationality,
                   Integer height,
@@ -115,12 +114,11 @@ public class Player {
         this.position = position;
     }
 
-    @Positive
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(@Positive int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 

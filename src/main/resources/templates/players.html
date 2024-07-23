@@ -17,17 +17,20 @@
                 <option th:each="season : ${seasons}"
                         th:value="${season.id}"
                         th:text="${season.toString()}"
-                        th:selected="${season.id == selectedSeasonId}">Season</option>
+                        th:selected="${season.id == selectedSeasonId}">Season
+                </option>
             </select>
             <input type="hidden" name="leagueId" th:value="${team.id}">
         </form>
         <div class="team-list">
-            <div th:each="player : ${players}" class="team-box">
-                <a th:href="@{/player/{playerId}(playerId=${player.id})}" class="team-link">
-                    <h2 class="team-name"><span th:text="${player.fullName}"></span></h2>
-                    <img th:src="${player.photo}" alt="Team Logo" class="team-logo">
-                    <span th:text="${player.position}"></span>
-                </a>
+            <div th:each="player : ${players}" class="player-box">
+                <div>
+                    <a th:href="@{/player/{playerId}(playerId=${player.id})}" class="team-link">
+                        <h2 class="player-name"><span th:text="${player.fullName}"></span></h2>
+                        <img th:src="${player.photo}" alt="Team Logo" class="player-logo">
+                        <p class="player-position"><span th:text="${player.position}"></span></p>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

@@ -9,7 +9,7 @@ public class PlayerApiDto {
 
     private String lastname;
 
-    private int age;
+    private Integer age;
 
     private BirthPlayerApiDto birth;
 
@@ -48,11 +48,11 @@ public class PlayerApiDto {
         this.lastname = lastname;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 

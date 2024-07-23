@@ -11,5 +11,7 @@ public interface SeasonLeagueTeamService {
 
     Optional<Team> getTeamByLeagueIdAndSeasonId(long leagueId, long seasonId, long teamId);
 
+    Optional<SeasonLeagueTeam> getByTeamIdAndLeagueId(long teamId, long leagueId);
+
     void save(SeasonLeagueTeam seasonLeagueTeam);
 }
