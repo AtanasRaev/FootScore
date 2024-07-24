@@ -11,15 +11,30 @@
 <section class="teams-section">
     <div class="teams-container">
         <h1 class="teams-title">Players in <span th:text="${team.name}"></span></h1>
-        <form id="season-form" th:method="get" th:action="@{/team/{teamId}/players(teamId=${team.id})}">
-            <label for="season">Select a season:</label>
-            <select id="season" name="seasonId" onchange="this.form.submit()">
-                <option th:each="season : ${seasons}"
-                        th:value="${season.id}"
-                        th:text="${season.toString()}"
-                        th:selected="${season.id == selectedSeasonId}">Season
-                </option>
-            </select>
+        <form id="player-season-form" th:method="get" th:action="@{/team/{teamId}/players(teamId=${team.id})}">
+            <div class="players-filters">
+                <label for="player-season">Select a season:</label>
+                <select id="player-season" name="seasonId" onchange="this.form.submit()">
+                    <option th:each="season : ${seasons}"
+                            th:value="${season.id}"
+                            th:text="${season.toString()}"
+                            th:selected="${season.id == selectedSeasonId}">Season
+                    </option>
+                </select>
+            </div>
+            <div class="players-filters">
+                <label for="position">Sort by position:</label>
+                <select id="position" name="position" onchange="this.form.submit()">
+                    <option th:text="'all positions'" th:selected="${selectedPosition == 'all countries'}">All
+                        positions
+                    </option>
+                    <option th:each="position : ${positions}"
+                            th:value="${position}"
+                            th:text="${position}"
+                            th:selected="${position == selectedPosition}">Position
+                    </option>
+                </select>
+            </div>
             <input type="hidden" name="leagueId" th:value="${team.id}">
         </form>
         <div class="team-list">

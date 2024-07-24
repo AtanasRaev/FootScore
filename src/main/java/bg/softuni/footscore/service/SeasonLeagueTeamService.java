@@ -9,7 +9,9 @@ import java.util.Optional;
 public interface SeasonLeagueTeamService {
     List<Team> getAllTeamsBySeasonIdAndLeagueId(long leagueId, long seasonId);
 
-    Optional<Team> getTeamByLeagueIdAndSeasonId(long leagueId, long seasonId, long teamId);
+    Optional<Team> getTeamByLeagueIdAndSeasonIdAndTeamId(long leagueId, long seasonId, long teamId);
+
+    List<Optional<SeasonLeagueTeam>> getTeamByLeagueIdAndSeasonId(long leagueId, long seasonId);
 
     Optional<SeasonLeagueTeam> getByTeamIdAndLeagueId(long teamId, long leagueId);
 

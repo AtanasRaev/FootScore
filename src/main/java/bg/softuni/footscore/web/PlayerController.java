@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -35,15 +36,21 @@ public class PlayerController {
     }
 
     @GetMapping("/team/{teamId}/players")
-    public String players(@PathVariable long teamId, @RequestParam(required = false) Long seasonId, Model model) {
+    public String players(@PathVariable long teamId,
+                          @RequestParam(required = false) Long seasonId,
+                          @RequestParam(required = false) String position,
+                          Model model) {
         Optional<Team> teamById = this.teamService.getTeamById(teamId);
 
         List<Season> seasons = this.seasonService.getAllSeasons();
+
+        String[] positions = {"Attacker", "Midfielder", "Defender", "Goalkeeper"};
 
         if (teamById.isPresent()) {
             model.addAttribute("team", teamById.get());
             model.addAttribute("seasons", seasons.reversed());
             model.addAttribute("selectedSeasonId", seasonId);
+            model.addAttribute("positions", positions);
 
             if (seasonId == null) {
                 seasonId = seasons.getLast().getId();
@@ -52,8 +59,15 @@ public class PlayerController {
             List<Player> allPlayers = this.seasonTeamPlayerService.getAllPlayersBySeasonIdAndTeamId(teamId, seasonId);
 
             if (allPlayers.isEmpty()) {
-                this.playerService.saveApiPlayersForTeamAndSeason(teamId, seasonId);
+                Optional<Season> seasonOptional = this.seasonService.getSeasonById(seasonId);
+                seasonOptional.ifPresent(season -> this.playerService.saveApiPlayersForTeamAndSeason(teamById.get(), season));
                 allPlayers = this.seasonTeamPlayerService.getAllPlayersBySeasonIdAndTeamId(teamId, seasonId);
+            }
+
+            if (position != null && !position.equals("all positions")) {
+                allPlayers.removeIf(player -> !player.getPosition().equals(position));
+
+                model.addAttribute("selectedPosition", position);
             }
 
             model.addAttribute("players", allPlayers);

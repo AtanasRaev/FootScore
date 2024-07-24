@@ -2,13 +2,15 @@ package bg.softuni.footscore.service;
 
 import bg.softuni.footscore.model.dto.ResponseTeamApiDto;
 import bg.softuni.footscore.model.dto.TeamPageDto;
+import bg.softuni.footscore.model.entity.League;
+import bg.softuni.footscore.model.entity.Season;
 import bg.softuni.footscore.model.entity.Team;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface TeamService {
-    void saveApiTeamsForLeagueAndSeason(long leagueId, long seasonId);
+    void saveApiTeamsForLeagueAndSeason(League league, Season season);
 
     ResponseTeamApiDto getResponse(long leagueApiId, int seasonYear);
 

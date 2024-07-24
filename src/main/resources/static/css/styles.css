@@ -808,3 +808,51 @@ footer.teams-footer {
     color: #007bff;
     margin-bottom: 10px;
 }
+
+#position-form {
+    margin-bottom: 20px;
+}
+
+#position-form label {
+    font-size: 1.2em;
+    margin-right: 10px;
+    color: #555;
+}
+
+#position {
+    padding: 5px;
+    font-size: 0.9em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#position:focus {
+    border-color: #007bff;
+}
+
+#player-season-form {
+    margin-bottom: 20px;
+    justify-content: space-evenly;
+    display: flex;
+}
+
+#player-season-form label {
+    font-size: 1.2em;
+    margin-right: 10px;
+    color: #555;
+}
+
+#player-season {
+    padding: 5px;
+    font-size: 0.9em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#player-season:focus {
+    border-color: #007bff;
+}

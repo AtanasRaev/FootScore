@@ -12,4 +12,5 @@ public interface SeasonTeamPlayerService {
     Optional<Player> getPlayerByTeamIdAndSeasonId(long teamId, long seasonId, long playerId);
 
     void save(SeasonTeamPlayer seasonTeamPlayer);
+
 }

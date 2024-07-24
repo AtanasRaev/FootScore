@@ -51,58 +51,47 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     @Transactional
-    public void saveApiTeamsForLeagueAndSeason(long leagueId, long seasonId) {
-        Optional<League> optionalLeague = this.leagueService.getLeagueById(leagueId);
+    public void saveApiTeamsForLeagueAndSeason(League league, Season season) {
 
-        optionalLeague.ifPresent(league -> {
-            Optional<Season> season = this.seasonService.getSeasonById(seasonId);
+        ResponseTeamApiDto response = this.getResponse(league.getApiId(), season.getYear());
 
-            //TODO: if statement should
-            if (season.isEmpty()) {
-               throw new IllegalStateException("No season data found");
-            }
+        if (!response.getResponse().isEmpty()) {
+            List<Team> teamsToSave = new ArrayList<>();
+            List<Venue> venuesToSave = new ArrayList<>();
 
-            ResponseTeamApiDto response = this.getResponse(league.getApiId(), season.get().getYear());
+            response.getResponse().forEach(dto -> {
+                if (this.getTeamByApiId(dto.getTeam().getId()).isEmpty()) {
+                    Team team = this.modelMapper.map(dto.getTeam(), Team.class);
+                    Venue venue = this.modelMapper.map(dto.getVenue(), Venue.class);
+                    team.setVenue(venue);
+                    team.setApiId(dto.getTeam().getId());
 
-            if (!response.getResponse().isEmpty()) {
-                List<Team> teamsToSave = new ArrayList<>();
-                List<Venue> venuesToSave = new ArrayList<>();
-
-                response.getResponse().forEach(dto -> {
-                    if (this.getTeamByApiId(dto.getTeam().getId()).isEmpty()) {
-                        Team team = this.modelMapper.map(dto.getTeam(), Team.class);
-                        Venue venue = this.modelMapper.map(dto.getVenue(), Venue.class);
-                        team.setVenue(venue);
-//                        team.setLeague(league);
-                        team.setApiId(dto.getTeam().getId());
-
-                        teamsToSave.add(team);
-                        if (!venuesToSave.contains(venue)) {
-                            venuesToSave.add(venue);
-                        }
+                    teamsToSave.add(team);
+                    if (!venuesToSave.contains(venue)) {
+                        venuesToSave.add(venue);
                     }
-                });
+                }
+            });
 
-                this.venueRepository.saveAll(venuesToSave);
+            this.venueRepository.saveAll(venuesToSave);
 
-                this.teamRepository.saveAll(teamsToSave);
+            this.teamRepository.saveAll(teamsToSave);
 
-                response.getResponse().forEach(dto -> {
-                    Optional<Team> team = this.teamRepository.findByApiId(dto.getTeam().getId());
-                    if (team.isPresent()) {
-                        Optional<Team> optionalTeam = this.seasonLeagueTeamService.getTeamByLeagueIdAndSeasonId(leagueId, seasonId, team.get().getId());
-                        if (optionalTeam.isEmpty()) {
-                            SeasonLeagueTeam seasonLeagueTeam = new SeasonLeagueTeam();
-                            seasonLeagueTeam.setSeason(season.get());
-                            seasonLeagueTeam.setLeague(league);
-                            seasonLeagueTeam.setTeam(team.get());
+            response.getResponse().forEach(dto -> {
+                Optional<Team> team = this.teamRepository.findByApiId(dto.getTeam().getId());
+                if (team.isPresent()) {
+                    Optional<Team> optionalTeam = this.seasonLeagueTeamService.getTeamByLeagueIdAndSeasonIdAndTeamId(league.getId(), season.getId(), team.get().getId());
+                    if (optionalTeam.isEmpty()) {
+                        SeasonLeagueTeam seasonLeagueTeam = new SeasonLeagueTeam();
+                        seasonLeagueTeam.setSeason(season);
+                        seasonLeagueTeam.setLeague(league);
+                        seasonLeagueTeam.setTeam(team.get());
 
-                            this.seasonLeagueTeamService.save(seasonLeagueTeam);
-                        }
+                        this.seasonLeagueTeamService.save(seasonLeagueTeam);
                     }
-                });
-            }
-        });
+                }
+            });
+        }
     }
 
 

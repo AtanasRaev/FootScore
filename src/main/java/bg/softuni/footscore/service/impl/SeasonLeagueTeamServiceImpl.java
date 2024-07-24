@@ -4,6 +4,7 @@ import bg.softuni.footscore.model.entity.SeasonLeagueTeam;
 import bg.softuni.footscore.model.entity.Team;
 import bg.softuni.footscore.repository.SeasonLeagueTeamRepository;
 import bg.softuni.footscore.service.SeasonLeagueTeamService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,8 +24,13 @@ public class SeasonLeagueTeamServiceImpl implements SeasonLeagueTeamService {
     }
 
     @Override
-    public Optional<Team> getTeamByLeagueIdAndSeasonId(long leagueId, long seasonId, long teamId) {
-        return this.seasonLeagueTeamRepository.findTeamByLeagueIdAndSeasonId(leagueId, seasonId, teamId);
+    public Optional<Team> getTeamByLeagueIdAndSeasonIdAndTeamId(long leagueId, long seasonId, long teamId) {
+        return this.seasonLeagueTeamRepository.findTeamByLeagueIdAndSeasonIdAndTeamId(leagueId, seasonId, teamId);
+    }
+
+    @Override
+    public List<Optional<SeasonLeagueTeam>> getTeamByLeagueIdAndSeasonId(long leagueId, long seasonId) {
+        return this.seasonLeagueTeamRepository.findTeamByLeagueIdAndSeasonId(leagueId, seasonId);
     }
 
     @Override
@@ -33,6 +39,7 @@ public class SeasonLeagueTeamServiceImpl implements SeasonLeagueTeamService {
     }
 
     @Override
+    @Transactional
     public void save(SeasonLeagueTeam seasonLeagueTeam) {
         this.seasonLeagueTeamRepository.save(seasonLeagueTeam);
     }

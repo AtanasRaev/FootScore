@@ -3,10 +3,13 @@ package bg.softuni.footscore.web;
 import bg.softuni.footscore.model.dto.LeagueAddDto;
 import bg.softuni.footscore.model.dto.LeaguesPageDto;
 import bg.softuni.footscore.model.entity.League;
+import bg.softuni.footscore.model.entity.Season;
+import bg.softuni.footscore.model.entity.SeasonLeagueTeam;
 import bg.softuni.footscore.service.CountryService;
 import bg.softuni.footscore.service.LeagueService;
 import bg.softuni.footscore.service.SeasonService;
 import bg.softuni.footscore.service.TeamService;
+import bg.softuni.footscore.service.impl.SeasonLeagueTeamServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +23,20 @@ import java.util.Optional;
 public class LeagueController {
     private final LeagueService leagueService;
     private final CountryService countryService;
+    private final TeamService teamService;
+    private final SeasonService seasonService;
+    private final SeasonLeagueTeamServiceImpl seasonLeagueTeamService;
 
     public LeagueController(LeagueService leagueService,
-                            CountryService countryService) {
+                            CountryService countryService,
+                            TeamService teamService,
+                            SeasonService seasonService,
+                            SeasonLeagueTeamServiceImpl seasonLeagueTeamService) {
         this.leagueService = leagueService;
         this.countryService = countryService;
+        this.teamService = teamService;
+        this.seasonService = seasonService;
+        this.seasonLeagueTeamService = seasonLeagueTeamService;
     }
 
     @GetMapping
@@ -68,7 +80,20 @@ public class LeagueController {
 
     @PostMapping("/saveSelected")
     public String saveSelectedLeagues(@RequestParam List<Long> leagueIds) {
+
         //todo: error handling
+        leagueIds.forEach(id -> {
+            Optional<League> leagueOptional = this.leagueService.getLeagueById(id);
+            for (Season season : this.seasonService.getAllSeasons()) {
+                leagueOptional.ifPresent(league -> {
+                    List<Optional<SeasonLeagueTeam>> optional = this.seasonLeagueTeamService.getTeamByLeagueIdAndSeasonId(league.getId(), season.getId());
+
+                    if (optional.isEmpty()) {
+                        this.teamService.saveApiTeamsForLeagueAndSeason(league, season);
+                    }
+                });
+            }
+        });
         this.leagueService.saveSelectedLeagues(leagueIds);
         return "redirect:/leagues";
     }

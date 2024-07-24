@@ -58,51 +58,42 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     @Transactional
-    public void saveApiPlayersForTeamAndSeason(long teamId, long seasonId) {
-        Optional<Team> teamOptional = this.teamService.findById(teamId);
+    public void saveApiPlayersForTeamAndSeason(Team team, Season season) {
 
-        teamOptional.ifPresent(team -> {
-            Optional<Season> season = this.seasonService.getSeasonById(seasonId);
+        ResponsePlayerApiDto responseList = this.getResponsePlayerApiDto(PLAYERS_BY_TEAM_SEASON_AND_PAGE, team.getApiId(), season.getYear(), 1);
 
-            if (season.isEmpty()) {
-                throw new IllegalStateException("No season data found");
-            }
-
-            ResponsePlayerApiDto responseList = this.getResponsePlayerApiDto(PLAYERS_BY_TEAM_SEASON_AND_PAGE, team.getApiId(), season.get().getYear(), 1);
-
-            if (!responseList.getResponse().isEmpty()) {
-                for (int i = 1; i <= responseList.getPaging().getTotal(); i++) {
-                    if (i != 1) {
-                        responseList = this.getResponsePlayerApiDto(PLAYERS_BY_TEAM_SEASON_AND_PAGE, team.getApiId(), season.get().getYear(), i);
-                    }
-
-                    List<Player> playersToSave = new ArrayList<>();
-                    responseList.getResponse().forEach(dto -> {
-                        if (this.getPlayerByApiId(dto.getPlayer().getId()).isEmpty()) {
-                            Player player = createPlayer(dto);
-                            player.setPosition(dto.getStatistics().getFirst().getGames().getPosition());
-                            playersToSave.add(player);
-                        }
-                    });
-                    this.playerRepository.saveAll(playersToSave);
-
-                    responseList.getResponse().forEach(dto -> {
-                        Optional<Player> player = this.playerRepository.findByApiId(dto.getPlayer().getId());
-                        if (player.isPresent()) {
-                            Optional<Player> optionalPlayer = this.seasonTeamPlayerService.getPlayerByTeamIdAndSeasonId(teamId, seasonId, player.get().getId());
-                            if (optionalPlayer.isEmpty()) {
-                                SeasonTeamPlayer seasonTeamPlayer = new SeasonTeamPlayer();
-                                seasonTeamPlayer.setSeason(season.get());
-                                seasonTeamPlayer.setTeam(team);
-                                seasonTeamPlayer.setPlayer(player.get());
-
-                                this.seasonTeamPlayerService.save(seasonTeamPlayer);
-                            }
-                        }
-                    });
+        if (!responseList.getResponse().isEmpty()) {
+            for (int i = 1; i <= responseList.getPaging().getTotal(); i++) {
+                if (i != 1) {
+                    responseList = this.getResponsePlayerApiDto(PLAYERS_BY_TEAM_SEASON_AND_PAGE, team.getApiId(), season.getYear(), i);
                 }
+
+                List<Player> playersToSave = new ArrayList<>();
+                responseList.getResponse().forEach(dto -> {
+                    if (this.getPlayerByApiId(dto.getPlayer().getId()).isEmpty()) {
+                        Player player = createPlayer(dto);
+                        player.setPosition(dto.getStatistics().getFirst().getGames().getPosition());
+                        playersToSave.add(player);
+                    }
+                });
+                this.playerRepository.saveAll(playersToSave);
+
+                responseList.getResponse().forEach(dto -> {
+                    Optional<Player> player = this.playerRepository.findByApiId(dto.getPlayer().getId());
+                    if (player.isPresent()) {
+                        Optional<Player> optionalPlayer = this.seasonTeamPlayerService.getPlayerByTeamIdAndSeasonId(team.getId(), season.getId(), player.get().getId());
+                        if (optionalPlayer.isEmpty()) {
+                            SeasonTeamPlayer seasonTeamPlayer = new SeasonTeamPlayer();
+                            seasonTeamPlayer.setSeason(season);
+                            seasonTeamPlayer.setTeam(team);
+                            seasonTeamPlayer.setPlayer(player.get());
+
+                            this.seasonTeamPlayerService.save(seasonTeamPlayer);
+                        }
+                    }
+                });
             }
-        });
+        }
     }
 
 

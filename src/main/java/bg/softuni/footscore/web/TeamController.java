@@ -2,10 +2,8 @@ package bg.softuni.footscore.web;
 
 import bg.softuni.footscore.model.entity.League;
 import bg.softuni.footscore.model.entity.Season;
-import bg.softuni.footscore.service.LeagueService;
-import bg.softuni.footscore.service.SeasonLeagueTeamService;
-import bg.softuni.footscore.service.SeasonService;
-import bg.softuni.footscore.service.TeamService;
+import bg.softuni.footscore.model.entity.Team;
+import bg.softuni.footscore.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,13 +15,13 @@ import java.util.Optional;
 
 @Controller
 public class TeamController {
-    private final TeamService teamService;
     private final LeagueService leagueService;
     private final SeasonService seasonService;
     private final SeasonLeagueTeamService seasonLeagueTeamService;
 
-    public TeamController(TeamService teamService, LeagueService leagueService, SeasonService seasonService, SeasonLeagueTeamService seasonLeagueTeamService) {
-        this.teamService = teamService;
+    public TeamController(LeagueService leagueService,
+                          SeasonService seasonService,
+                          SeasonLeagueTeamService seasonLeagueTeamService) {
         this.leagueService = leagueService;
         this.seasonService = seasonService;
         this.seasonLeagueTeamService = seasonLeagueTeamService;
@@ -39,13 +37,13 @@ public class TeamController {
             model.addAttribute("seasons", seasons.reversed());
             model.addAttribute("selectedSeasonId", seasonId);
 
-            if (seasonId != null) {
-                this.teamService.saveApiTeamsForLeagueAndSeason(leagueId, seasonId);
-                model.addAttribute("teams", this.seasonLeagueTeamService.getAllTeamsBySeasonIdAndLeagueId(leagueId, seasonId));
-            } else {
-                this.teamService.saveApiTeamsForLeagueAndSeason(leagueId, seasons.getLast().getId());
-                model.addAttribute("teams", this.seasonLeagueTeamService.getAllTeamsBySeasonIdAndLeagueId(leagueId, seasons.getLast().getId()));
+            if (seasonId == null) {
+                seasonId = seasons.getLast().getId();
             }
+
+            List<Team> allTeams = this.seasonLeagueTeamService.getAllTeamsBySeasonIdAndLeagueId(leagueId, seasonId);
+
+            model.addAttribute("teams", allTeams);
         }
         return "teams";
     }
