@@ -9,6 +9,8 @@ public class PlayerApiDto {
 
     private String lastname;
 
+    private String name;
+
     private Integer age;
 
     private BirthPlayerApiDto birth;
@@ -46,6 +48,14 @@ public class PlayerApiDto {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getAge() {

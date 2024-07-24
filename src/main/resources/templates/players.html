@@ -26,7 +26,7 @@
             <div th:each="player : ${players}" class="player-box">
                 <div>
                     <a th:href="@{/player/{playerId}(playerId=${player.id})}" class="team-link">
-                        <h2 class="player-name"><span th:text="${player.fullName}"></span></h2>
+                        <h2 class="player-name"><span th:text="${player.shortName}"></span></h2>
                         <img th:src="${player.photo}" alt="Team Logo" class="player-logo">
                         <p class="player-position"><span th:text="${player.position}"></span></p>
                     </a>

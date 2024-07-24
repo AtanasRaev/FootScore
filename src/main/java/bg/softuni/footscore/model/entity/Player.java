@@ -1,7 +1,6 @@
 package bg.softuni.footscore.model.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDate;
 
@@ -17,6 +16,9 @@ public class Player {
 
     @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "short_name")
+    private String shortName;
 
     @Column(name = "full_name")
     private String fullName;
@@ -50,6 +52,7 @@ public class Player {
 
     public Player(String firstName,
                   String lastName,
+                  String name,
                   Integer age,
                   LocalDate birthday,
                   String nationality,
@@ -60,6 +63,7 @@ public class Player {
 
         this.firstName = firstName;
         this.lastName = lastName;
+        this.shortName = name;
         this.setFullName();
         this.age = age;
         this.birthday = birthday;
@@ -96,6 +100,14 @@ public class Player {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     public String getFullName() {

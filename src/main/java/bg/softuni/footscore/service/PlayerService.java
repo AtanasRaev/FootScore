@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface PlayerService {
     void saveApiPlayersForTeamAndSeason(long teamId, long seasonId);
 
-    ResponsePlayerApiDto getResponsePlayerApiDto(String query, long id, int seasonYear);
+    ResponsePlayerApiDto getResponsePlayerApiDto(String query, long id, int seasonYear, int page);
 
     SeasonsByPlayerApiDto getResponseSeasonsByPlayerApiDto(String query, long id);
 

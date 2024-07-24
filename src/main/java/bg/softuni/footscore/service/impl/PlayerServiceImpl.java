@@ -4,7 +4,6 @@ import bg.softuni.footscore.config.ApiConfig;
 import bg.softuni.footscore.model.dto.PlayerStatisticsApiDto;
 import bg.softuni.footscore.model.dto.ResponsePlayerApiDto;
 import bg.softuni.footscore.model.dto.SeasonsByPlayerApiDto;
-import bg.softuni.footscore.model.dto.StatisticsApiDto;
 import bg.softuni.footscore.model.entity.Player;
 import bg.softuni.footscore.model.entity.Season;
 import bg.softuni.footscore.model.entity.SeasonTeamPlayer;
@@ -36,7 +35,7 @@ public class PlayerServiceImpl implements PlayerService {
     private final ApiConfig apiConfig;
     private final RestClient restClient;
 
-    public static final String PLAYERS_BY_TEAM_AND_SEASON = "%splayers?team=%d&season=%d";
+    public static final String PLAYERS_BY_TEAM_SEASON_AND_PAGE = "%splayers?team=%d&season=%d&page=%d";
     public static final String PLAYERS_BY_ID_AND_SEASON = "%splayers?id=%d&season=%d";
     public static final String PLAYERS_BY_ID_AND_ALL_SEASONS = "%splayers/seasons?player=%d";
 
@@ -69,41 +68,47 @@ public class PlayerServiceImpl implements PlayerService {
                 throw new IllegalStateException("No season data found");
             }
 
-            ResponsePlayerApiDto responseList = this.getResponsePlayerApiDto(PLAYERS_BY_TEAM_AND_SEASON, team.getApiId(), season.get().getYear());
+            ResponsePlayerApiDto responseList = this.getResponsePlayerApiDto(PLAYERS_BY_TEAM_SEASON_AND_PAGE, team.getApiId(), season.get().getYear(), 1);
 
             if (!responseList.getResponse().isEmpty()) {
-                List<Player> playersToSave = new ArrayList<>();
-                responseList.getResponse().forEach(dto -> {
-
-                    if (this.getPlayerByApiId(dto.getPlayer().getId()).isEmpty()) {
-                        Player player = createPlayer(dto);
-                        playersToSave.add(player);
+                for (int i = 1; i <= responseList.getPaging().getTotal(); i++) {
+                    if (i != 1) {
+                        responseList = this.getResponsePlayerApiDto(PLAYERS_BY_TEAM_SEASON_AND_PAGE, team.getApiId(), season.get().getYear(), i);
                     }
-                });
-                this.playerRepository.saveAll(playersToSave);
 
-                responseList.getResponse().forEach(dto -> {
-                    Optional<Player> player = this.playerRepository.findByApiId(dto.getPlayer().getId());
-                    if (player.isPresent()) {
-                        Optional<Player> optionalPlayer = this.seasonTeamPlayerService.getPlayerByTeamIdAndSeasonId(teamId, seasonId, player.get().getId());
-                        if (optionalPlayer.isEmpty()) {
-                            SeasonTeamPlayer seasonTeamPlayer = new SeasonTeamPlayer();
-                            seasonTeamPlayer.setSeason(season.get());
-                            seasonTeamPlayer.setTeam(team);
-                            seasonTeamPlayer.setPlayer(player.get());
-
-                            this.seasonTeamPlayerService.save(seasonTeamPlayer);
+                    List<Player> playersToSave = new ArrayList<>();
+                    responseList.getResponse().forEach(dto -> {
+                        if (this.getPlayerByApiId(dto.getPlayer().getId()).isEmpty()) {
+                            Player player = createPlayer(dto);
+                            player.setPosition(dto.getStatistics().getFirst().getGames().getPosition());
+                            playersToSave.add(player);
                         }
-                    }
-                });
+                    });
+                    this.playerRepository.saveAll(playersToSave);
+
+                    responseList.getResponse().forEach(dto -> {
+                        Optional<Player> player = this.playerRepository.findByApiId(dto.getPlayer().getId());
+                        if (player.isPresent()) {
+                            Optional<Player> optionalPlayer = this.seasonTeamPlayerService.getPlayerByTeamIdAndSeasonId(teamId, seasonId, player.get().getId());
+                            if (optionalPlayer.isEmpty()) {
+                                SeasonTeamPlayer seasonTeamPlayer = new SeasonTeamPlayer();
+                                seasonTeamPlayer.setSeason(season.get());
+                                seasonTeamPlayer.setTeam(team);
+                                seasonTeamPlayer.setPlayer(player.get());
+
+                                this.seasonTeamPlayerService.save(seasonTeamPlayer);
+                            }
+                        }
+                    });
+                }
             }
         });
     }
 
 
     @Override
-    public ResponsePlayerApiDto getResponsePlayerApiDto(String query, long id, int seasonYear) {
-        String url = String.format(query, this.apiConfig.getUrl(), id, seasonYear);
+    public ResponsePlayerApiDto getResponsePlayerApiDto(String query, long id, int seasonYear, int page) {
+        String url = String.format(query, this.apiConfig.getUrl(), id, seasonYear, page);
 
         return this.restClient
                 .get()
@@ -159,6 +164,7 @@ public class PlayerServiceImpl implements PlayerService {
         return new Player(
                 dto.getPlayer().getFirstname(),
                 dto.getPlayer().getLastname(),
+                dto.getPlayer().getName(),
                 dto.getPlayer().getAge(),
                 birthDate,
                 dto.getPlayer().getNationality(),
