@@ -72,11 +72,24 @@ public class PlayerServiceImpl implements PlayerService {
                 responseList.getResponse().forEach(dto -> {
                     if (this.getPlayerByApiId(dto.getPlayer().getId()).isEmpty()) {
                         Player player = createPlayer(dto);
-                        player.setPosition(dto.getStatistics().getFirst().getGames().getPosition());
-                        playersToSave.add(player);
+
+                        Optional<Player> optional = this.playerRepository.findByApiId(player.getApiId());
+
+                        if (optional.isEmpty()) {
+                            player.setPosition(dto.getStatistics().getFirst().getGames().getPosition());
+                            playersToSave.add(player);
+                        }
                     }
                 });
-                this.playerRepository.saveAll(playersToSave);
+                playersToSave.forEach(player -> {
+                    Optional<Player> optional = this.playerRepository.findByApiId(player.getApiId());
+
+                    optional.ifPresent(playersToSave::remove);
+                });
+
+                if (!playersToSave.isEmpty()) {
+                    this.playerRepository.saveAll(playersToSave);
+                }
 
                 responseList.getResponse().forEach(dto -> {
                     Optional<Player> player = this.playerRepository.findByApiId(dto.getPlayer().getId());

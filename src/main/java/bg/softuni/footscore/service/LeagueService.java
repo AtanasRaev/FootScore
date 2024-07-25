@@ -16,9 +16,7 @@ public interface LeagueService {
 
     List<League> getAllSelectedLeagues();
 
-    List<LeagueAddDto> getLeaguesByIds(List<Long> leagueIds);
-
-    League getLeaguesByIds(long leagueId);
+    List<LeagueAddDto> getLeagueByIds(List<Long> leagueIds);
 
     void saveSelectedLeagues(List<Long> leagueIds);
 
@@ -28,7 +26,7 @@ public interface LeagueService {
 
     Optional<League> getLeagueById(long leagueId);
 
-    League getLeagueByApiId(long leagueApiId);
+    Optional<League> getLeagueByApiId(long leagueApiId);
 
     void saveLeague(League league);
 

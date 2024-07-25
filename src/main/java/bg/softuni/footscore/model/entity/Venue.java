@@ -15,6 +15,9 @@ public class Venue {
     @Column
     private String city;
 
+    @Column
+    private Integer capacity;
+
     public Venue() {
     }
 
@@ -42,4 +45,11 @@ public class Venue {
         this.city = city;
     }
 
+    public Integer getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Integer capacity) {
+        this.capacity = capacity;
+    }
 }

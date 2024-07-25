@@ -73,7 +73,7 @@ public class LeagueController {
     @PostMapping("/preview")
     public String previewSelectedLeagues(@RequestParam List<Long> leagueIds, Model model) {
         //todo: error handling
-        List<LeagueAddDto> selectedLeagues = this.leagueService.getLeaguesByIds(leagueIds);
+        List<LeagueAddDto> selectedLeagues = this.leagueService.getLeagueByIds(leagueIds);
         model.addAttribute("selectedLeagues", selectedLeagues);
         return "preview-leagues";
     }

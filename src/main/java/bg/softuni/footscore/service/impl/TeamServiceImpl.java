@@ -66,16 +66,27 @@ public class TeamServiceImpl implements TeamService {
                     team.setVenue(venue);
                     team.setApiId(dto.getTeam().getId());
 
-                    teamsToSave.add(team);
-                    if (!venuesToSave.contains(venue)) {
-                        venuesToSave.add(venue);
+                    Optional<Team> optional = this.teamRepository.findByApiId(team.getApiId());
+
+                    if (optional.isEmpty()) {
+                        teamsToSave.add(team);
+                        if (!venuesToSave.contains(venue)) {
+                            venuesToSave.add(venue);
+                        }
                     }
                 }
             });
 
-            this.venueRepository.saveAll(venuesToSave);
+            teamsToSave.forEach(team -> {
+                Optional<Team> optional = this.teamRepository.findByApiId(team.getApiId());
 
-            this.teamRepository.saveAll(teamsToSave);
+                optional.ifPresent(teamsToSave::remove);
+            });
+
+            if (!venuesToSave.isEmpty() && !teamsToSave.isEmpty()) {
+                this.venueRepository.saveAll(venuesToSave);
+                this.teamRepository.saveAll(teamsToSave);
+            }
 
             response.getResponse().forEach(dto -> {
                 Optional<Team> team = this.teamRepository.findByApiId(dto.getTeam().getId());

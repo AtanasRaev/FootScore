@@ -57,7 +57,11 @@ public class PlayerController {
             List<League> leagues = new ArrayList<>();
             byTeamIdAndSeasonId.forEach(s -> {
                 Optional<League> leagueOptional = this.leagueService.getLeagueById(s.getLeague().getId());
-                leagueOptional.ifPresent(leagues::add);
+                leagueOptional.ifPresent(league -> {
+                    if (league.isSelected()) {
+                        leagues.add(league);
+                    }
+                });
             });
             model.addAttribute("team", teamOptional.get());
             model.addAttribute("seasons", seasons.reversed());
@@ -72,6 +76,11 @@ public class PlayerController {
                 Optional<Season> seasonOptional = this.seasonService.getSeasonById(seasonId);
                 seasonOptional.ifPresent(season -> this.playerService.saveApiPlayersForTeamAndSeason(teamOptional.get(), season));
                 allPlayers = this.seasonTeamPlayerService.getAllPlayersBySeasonIdAndTeamId(teamId, seasonId);
+            }
+
+            if (allPlayers.isEmpty()) {
+                //no data for players
+                return "redirect:players/error";
             }
 
             if (position != null && !position.equals("All positions")) {

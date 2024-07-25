@@ -55,6 +55,10 @@ public class CountryServiceImpl implements CountryService {
                 .orElseThrow(() -> new IllegalStateException("No country data found"));
 
         Country country = this.modelMapper.map(countryDto, Country.class);
-        this.countryRepository.save(country);
+
+        Optional<Country> optional = this.countryRepository.findByName(country.getName());
+        if (optional.isEmpty()) {
+            this.countryRepository.save(country);
+        }
     }
 }

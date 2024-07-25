@@ -3,6 +3,7 @@ package bg.softuni.footscore.model.dto;
 public class VenueApiDto {
     private String name;
     private String city;
+    private Integer capacity;
 
     public VenueApiDto() {
     }
@@ -21,5 +22,13 @@ public class VenueApiDto {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public Integer getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Integer capacity) {
+        this.capacity = capacity;
     }
 }

@@ -6,6 +6,7 @@ import bg.softuni.footscore.model.dto.LeaguesPageDto;
 import bg.softuni.footscore.model.dto.ResponseCountryLeagueSeasonsApiDto;
 import bg.softuni.footscore.model.entity.Country;
 import bg.softuni.footscore.model.entity.League;
+import bg.softuni.footscore.model.entity.Player;
 import bg.softuni.footscore.repository.LeagueRepository;
 import bg.softuni.footscore.service.CountryService;
 import bg.softuni.footscore.service.LeagueService;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class LeagueServiceImpl implements LeagueService {
@@ -74,18 +74,13 @@ public class LeagueServiceImpl implements LeagueService {
     }
 
     @Override
-    public List<LeagueAddDto> getLeaguesByIds(List<Long> leagueIds) {
+    public List<LeagueAddDto> getLeagueByIds(List<Long> leagueIds) {
         List<LeagueAddDto> selectedLeagues = new ArrayList<>();
         leagueIds.forEach(id -> {
             Optional<League> league = this.leagueRepository.findById(id);
             selectedLeagues.add(this.modelMapper.map(league.get(), LeagueAddDto.class));
         });
         return selectedLeagues;
-    }
-
-    @Override
-    public League getLeaguesByIds(long leagueId) {
-        return this.leagueRepository.findById(leagueId).get();
     }
 
     @Override
@@ -112,12 +107,29 @@ public class LeagueServiceImpl implements LeagueService {
         if (optionalCountry.isPresent()) {
             Country country = optionalCountry.get();
 
-            List<League> leagues = response.getResponse().stream()
-                    .map(dto -> mapToLeague(dto, country))
-                    .collect(Collectors.toList());
+            List<League> leaguesToSave = new ArrayList<>();
 
-            country.setLeagues(leagues);
-            this.leagueRepository.saveAll(leagues);
+            response.getResponse().forEach(dto -> {
+                League league = this.mapToLeague(dto, country);
+
+                Optional<League> optional = this.leagueRepository.findByApiId(league.getApiId());
+
+                if (optional.isEmpty()) {
+                    leaguesToSave.add(league);
+                }
+            });
+
+            leaguesToSave.forEach(league -> {
+                Optional<League> optional = this.leagueRepository.findByApiId(league.getApiId());
+
+                optional.ifPresent(leaguesToSave::remove);
+            });
+
+            if (!leaguesToSave.isEmpty()) {
+                country.setLeagues(leaguesToSave);
+                this.leagueRepository.saveAll(leaguesToSave);
+            }
+
         } else {
             throw new EntityNotFoundException("Country not found: " + name);
         }
@@ -143,7 +155,7 @@ public class LeagueServiceImpl implements LeagueService {
     }
 
     @Override
-    public League getLeagueByApiId(long leagueApiId) {
+    public Optional<League> getLeagueByApiId(long leagueApiId) {
         return this.leagueRepository.findByApiId(leagueApiId);
     }
 
