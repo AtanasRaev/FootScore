@@ -86,7 +86,7 @@ public class LeagueController {
             Optional<League> leagueOptional = this.leagueService.getLeagueById(id);
             for (Season season : this.seasonService.getAllSeasons()) {
                 leagueOptional.ifPresent(league -> {
-                    List<Optional<SeasonLeagueTeam>> optional = this.seasonLeagueTeamService.getTeamByLeagueIdAndSeasonId(league.getId(), season.getId());
+                    List<Optional<SeasonLeagueTeam>> optional = this.seasonLeagueTeamService.getTeamsByLeagueIdAndSeasonId(league.getId(), season.getId());
 
                     if (optional.isEmpty()) {
                         this.teamService.saveApiTeamsForLeagueAndSeason(league, season);
@@ -126,7 +126,7 @@ public class LeagueController {
             return null;
         }
 
-        List<LeaguesPageDto> allSelectedLeagues = countryName.equals("all countries") || countryName.isEmpty() ?
+        List<LeaguesPageDto> allSelectedLeagues = countryName.equals("All countries") || countryName.isEmpty() ?
                 this.leagueService.getAllSelectedLeaguesDto() :
                 this.leagueService.getAllSelectedLeaguesByCountry(countryName, false);
         return new Result(countries, allSelectedLeagues);

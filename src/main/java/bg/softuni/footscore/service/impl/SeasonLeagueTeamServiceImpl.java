@@ -29,13 +29,18 @@ public class SeasonLeagueTeamServiceImpl implements SeasonLeagueTeamService {
     }
 
     @Override
-    public List<Optional<SeasonLeagueTeam>> getTeamByLeagueIdAndSeasonId(long leagueId, long seasonId) {
+    public List<Optional<SeasonLeagueTeam>> getTeamsByLeagueIdAndSeasonId(long leagueId, long seasonId) {
         return this.seasonLeagueTeamRepository.findTeamByLeagueIdAndSeasonId(leagueId, seasonId);
     }
 
     @Override
     public Optional<SeasonLeagueTeam> getByTeamIdAndLeagueId(long teamId, long leagueId) {
         return this.seasonLeagueTeamRepository.findByTeamIdAndLeagueId(teamId, leagueId);
+    }
+
+    @Override
+    public List<SeasonLeagueTeam> getByTeamIdAndSeasonId(long teamId, long seasonId) {
+        return this.seasonLeagueTeamRepository.findByTeamIdAndSeasonId(teamId, seasonId);
     }
 
     @Override

@@ -23,9 +23,14 @@
                 </select>
             </div>
             <div class="players-filters">
+                <a th:href="@{/league/{leagueId}/teams(leagueId=${league.id})}" class="team-link" th:each="league : ${leagues}">
+                    <img th:src="${league.logo}" alt="Team Logo" class="player-logo">
+                </a>
+            </div>
+            <div class="players-filters">
                 <label for="position">Sort by position:</label>
                 <select id="position" name="position" onchange="this.form.submit()">
-                    <option th:text="'all positions'" th:selected="${selectedPosition == 'all countries'}">All
+                    <option th:text="'All positions'" th:selected="${selectedPosition == 'All countries'}">All
                         positions
                     </option>
                     <option th:each="position : ${positions}"
@@ -34,8 +39,8 @@
                             th:selected="${position == selectedPosition}">Position
                     </option>
                 </select>
+                <input type="hidden" name="teamId" th:value="${team.id}">
             </div>
-            <input type="hidden" name="leagueId" th:value="${team.id}">
         </form>
         <div class="team-list">
             <div th:each="player : ${players}" class="player-box">

@@ -60,7 +60,7 @@ body {
     padding: 1em;
     box-sizing: border-box;
     color: white;
-    background: url('/images/background.jpg') center center no-repeat;
+    background: url('/images/background.jpg') no-repeat center -342px;
     background-size: cover;
     margin: 0;
     overflow: hidden;
@@ -291,7 +291,7 @@ body.leagues-body {
 .league-box {
     display: block;
     width: 200px;
-    padding: 20px;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 10px;
     text-align: center;
@@ -312,7 +312,7 @@ body.leagues-body {
 
 .league-logo {
     max-width: 100px;
-    height: auto;
+    height: 100px;
     margin: 10px 0;
 }
 
@@ -791,6 +791,11 @@ footer.teams-footer {
     background-color: #fff;
     transition: transform 0.3s, box-shadow 0.3s;
 }
+
+.players-filters {
+    align-content: center;
+}
+
 .player-position {
     font-size: 18px;
     color: #555;
@@ -855,4 +860,8 @@ footer.teams-footer {
 
 #player-season:focus {
     border-color: #007bff;
+}
+
+:root {
+    --primary-font-size: 15px !important;
 }

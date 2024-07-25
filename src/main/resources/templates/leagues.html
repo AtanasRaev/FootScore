@@ -10,7 +10,7 @@
         <form id="country-form" th:method="get" th:action="@{/leagues}">
             <label for="country" class="country-label">Show leagues from:</label>
             <select id="country" name="countryName" class="country-select" onchange="this.form.submit()">
-                <option th:text="'all countries'" th:selected="${countryName == 'all countries'}">All countries</option>
+                <option th:text="'All countries'" th:selected="${countryName == 'All countries'}">All countries</option>
                 <option th:each="country : ${countriesList}" th:value="${country}" th:text="${country}"
                         th:selected="${country == countryName}"></option>
             </select>
