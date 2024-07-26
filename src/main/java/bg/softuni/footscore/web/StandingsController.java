@@ -1,8 +1,10 @@
 package bg.softuni.footscore.web;
 
 import bg.softuni.footscore.model.entity.League;
+import bg.softuni.footscore.model.entity.LeagueTeamSeason;
 import bg.softuni.footscore.model.entity.Season;
 import bg.softuni.footscore.service.LeagueService;
+import bg.softuni.footscore.service.LeagueTeamSeasonService;
 import bg.softuni.footscore.service.SeasonService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -10,58 +12,70 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 public class StandingsController {
 
     private final SeasonService seasonService;
     private final LeagueService leagueService;
+    private final LeagueTeamSeasonService leagueTeamSeasonService;
 
     @Value("${forex.api.key}")
     private String apiKey;
 
-    public StandingsController(SeasonService seasonService, LeagueService leagueService) {
+    public StandingsController(SeasonService seasonService,
+                               LeagueService leagueService,
+                               LeagueTeamSeasonService leagueTeamSeasonService) {
         this.seasonService = seasonService;
         this.leagueService = leagueService;
+        this.leagueTeamSeasonService = leagueTeamSeasonService;
     }
 
     @GetMapping("/widgets/standings")
-    public String getStandings(@RequestParam String leagueId,
-                               @RequestParam(required = false) String seasonId,
+    public String getStandings(@RequestParam long leagueId,
+                               @RequestParam(required = false) Long seasonId,
                                Model model) {
-        Optional<League> leagueOpt = leagueService.getLeagueById(Long.parseLong(leagueId));
+
+
+        Optional<League> leagueOpt = leagueService.getLeagueById(leagueId);
         if (leagueOpt.isEmpty()) {
             return "error/leagueNotFound";
         }
 
-        League league = leagueOpt.get();
-        model.addAttribute("apiKey", apiKey);
-        model.addAttribute("seasons", this.seasonService.getAllSeasons().reversed());
-        model.addAttribute("leagueName", league.getName());
-        model.addAttribute("leagueId", league.getApiId());
-        model.addAttribute("league", leagueOpt.get());
+        List<Season> seasons = this.seasonService.getAllSeasons();
 
-        Season season = getSeasonYear(seasonId);
-        if (season != null) {
-            int year = season.getYear();
-            model.addAttribute("selectedSeasonId", season.getId());
-            model.addAttribute("selectedSeason", season);
-            model.addAttribute("seasonYear", year);
+        Set<Season> currentSeasons = new LinkedHashSet<>();
+        for (Season season : seasons) {
+            for (LeagueTeamSeason leagueTeamSeason : this.leagueTeamSeasonService.getByLeagueIdAndSeasonId(leagueOpt.get().getId(), season.getId())) {
+                currentSeasons.add(season);
+            }
+        }
 
-        } else {
-            return "error/seasonNotFound";
+        seasonId = getSeasonId(seasonId, currentSeasons.stream().toList().getLast().getId());
+
+        Optional<Season> seasonOptional = this.seasonService.getSeasonById(seasonId);
+        if (seasonOptional.isPresent()) {
+            League league = leagueOpt.get();
+            model.addAttribute("selectedSeasonId", seasonOptional.get().getId());
+            model.addAttribute("selectedSeason", seasonOptional.get());
+            model.addAttribute("seasonYear", seasonOptional.get().getYear());
+            model.addAttribute("apiKey", apiKey);
+            model.addAttribute("seasons", currentSeasons.stream().toList().reversed());
+            model.addAttribute("leagueName", league.getName());
+            model.addAttribute("leagueApiId", league.getApiId());
+            model.addAttribute("league", leagueOpt.get());
         }
 
         return "standings";
     }
-
-    private Season getSeasonYear(String seasonId) {
-        if (seasonId != null && !seasonId.isEmpty()) {
-            Optional<Season> seasonOpt = seasonService.getSeasonById(Long.parseLong(seasonId));
-            return seasonOpt.orElse(null);
-        } else {
-            return this.seasonService.getAllSeasons().getLast();
+    private static Long getSeasonId(Long seasonId, long currentSeasons) {
+        if (seasonId == null) {
+            seasonId = currentSeasons;
         }
+        return seasonId;
     }
 }
