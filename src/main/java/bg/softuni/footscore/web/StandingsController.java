@@ -1,18 +1,17 @@
 package bg.softuni.footscore.web;
 
 import bg.softuni.footscore.model.entity.League;
-import bg.softuni.footscore.model.entity.LeagueTeamSeason;
 import bg.softuni.footscore.model.entity.Season;
 import bg.softuni.footscore.service.LeagueService;
 import bg.softuni.footscore.service.LeagueTeamSeasonService;
 import bg.softuni.footscore.service.SeasonService;
+import bg.softuni.footscore.utils.SeasonUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -40,22 +39,15 @@ public class StandingsController {
                                @RequestParam(required = false) Long seasonId,
                                Model model) {
 
-
         Optional<League> leagueOpt = leagueService.getLeagueById(leagueId);
         if (leagueOpt.isEmpty()) {
             return "error/leagueNotFound";
         }
 
         List<Season> seasons = this.seasonService.getAllSeasons();
+        Set<Season> currentSeasons = SeasonUtils.getCurrentSeasonsForLeague(leagueId, leagueTeamSeasonService, seasons);
 
-        Set<Season> currentSeasons = new LinkedHashSet<>();
-        for (Season season : seasons) {
-            for (LeagueTeamSeason leagueTeamSeason : this.leagueTeamSeasonService.getByLeagueIdAndSeasonId(leagueOpt.get().getId(), season.getId())) {
-                currentSeasons.add(season);
-            }
-        }
-
-        seasonId = getSeasonId(seasonId, currentSeasons.stream().toList().getLast().getId());
+        seasonId = getId(seasonId, currentSeasons.stream().toList().getLast().getId());
 
         Optional<Season> seasonOptional = this.seasonService.getSeasonById(seasonId);
         if (seasonOptional.isPresent()) {
@@ -72,10 +64,8 @@ public class StandingsController {
 
         return "standings";
     }
-    private static Long getSeasonId(Long seasonId, long currentSeasons) {
-        if (seasonId == null) {
-            seasonId = currentSeasons;
-        }
-        return seasonId;
+
+    private static Long getId(Long seasonId, long currentSeasonId) {
+        return seasonId != null ? seasonId : currentSeasonId;
     }
 }

@@ -2,6 +2,7 @@ package bg.softuni.footscore.web;
 
 import bg.softuni.footscore.model.entity.*;
 import bg.softuni.footscore.service.*;
+import bg.softuni.footscore.utils.SeasonUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,23 +42,15 @@ public class TeamController {
         }
 
         List<Season> seasons = this.seasonService.getAllSeasons();
+        Set<Season> currentSeasons = SeasonUtils.getCurrentSeasonsForLeague(leagueId, leagueTeamSeasonService, seasons);
 
-        Set<Season> currentSeasons = new LinkedHashSet<>();
-        for (Season season : seasons) {
-            for (LeagueTeamSeason leagueTeamSeason : this.leagueTeamSeasonService.getByLeagueIdAndSeasonId(leagueById.get().getId(), season.getId())) {
-                currentSeasons.add(season);
-            }
-        }
-
-        seasonId = getSeasonId(seasonId, currentSeasons.stream().toList().getLast().getId());
+        seasonId = getId(seasonId, currentSeasons.stream().toList().getLast().getId());
 
         model.addAttribute("league", leagueById.get());
         model.addAttribute("seasons", currentSeasons.stream().toList().reversed());
         model.addAttribute("selectedSeasonId", seasonId);
 
-
         List<Team> allTeams = this.leagueTeamSeasonService.getAllTeamsBySeasonIdAndLeagueId(leagueId, seasonId);
-
         model.addAttribute("teams", allTeams);
 
         return "teams";
@@ -70,17 +63,9 @@ public class TeamController {
                               Model model) {
 
         List<Season> seasons = this.seasonService.getAllSeasons();
-        Set<Season> currentSeasons = new LinkedHashSet<>();
+        Set<Season> currentSeasons = SeasonUtils.getCurrentSeasonsForTeam(teamId, leagueTeamSeasonService, seasons);
 
-        for (Season season : seasons) {
-            for (LeagueTeamSeason leagueTeamSeason : this.leagueTeamSeasonService.getByTeamIdAndSeasonId(teamId, season.getId())) {
-                if (leagueTeamSeason.getLeague().isSelected()) {
-                    currentSeasons.add(season);
-                }
-            }
-        }
-
-        seasonId = getSeasonId(seasonId, currentSeasons.stream().toList().getLast().getId());
+        seasonId = getId(seasonId, currentSeasons.stream().toList().getLast().getId());
 
         Optional<Team> teamOptional = this.teamService.findById(teamId);
         Optional<Season> seasonOptional = this.seasonService.getSeasonById(seasonId);
@@ -95,7 +80,7 @@ public class TeamController {
                 leagues.add(league);
             }
 
-            leagueId = getSeasonId(leagueId, leagues.getLast().getId());
+            leagueId = getId(leagueId, leagues.getLast().getId());
 
             Optional<TeamStatistics> optional = this.teamStatisticsService.getByTeamIdAndSeasonYearAndLeagueId(teamId, seasonOptional.get().getYear(), leagueId);
 
@@ -112,10 +97,7 @@ public class TeamController {
         return "team-details";
     }
 
-    private static Long getSeasonId(Long seasonId, long currentSeasons) {
-        if (seasonId == null) {
-            seasonId = currentSeasons;
-        }
-        return seasonId;
+    private static Long getId(Long seasonId, long currentSeasonId) {
+        return seasonId != null ? seasonId : currentSeasonId;
     }
 }

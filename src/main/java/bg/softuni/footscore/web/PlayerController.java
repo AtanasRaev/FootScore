@@ -2,6 +2,7 @@ package bg.softuni.footscore.web;
 
 import bg.softuni.footscore.model.entity.*;
 import bg.softuni.footscore.service.*;
+import bg.softuni.footscore.utils.SeasonUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,16 +46,9 @@ public class PlayerController {
         }
 
         List<Season> seasons = this.seasonService.getAllSeasons();
-        Set<Season> currentSeasons = new LinkedHashSet<>();
+        Set<Season> currentSeasons = SeasonUtils.getCurrentSeasonsForTeam(teamId, leagueTeamSeasonService, seasons);
 
-        for (Season season : seasons) {
-            for (LeagueTeamSeason leagueTeamSeason : this.leagueTeamSeasonService.getByTeamIdAndSeasonId(teamId, season.getId())) {
-                if (leagueTeamSeason.getLeague().isSelected()) {
-                    currentSeasons.add(season);
-                }
-            }
-        }
-        seasonId = getSeasonId(seasonId, currentSeasons.stream().toList().getLast().getId());
+        seasonId = getId(seasonId, currentSeasons.stream().toList().getLast().getId());
 
         List<LeagueTeamSeason> byTeamIdAndSeasonId = this.leagueTeamSeasonService.getByTeamIdAndSeasonId(teamId, seasonId);
 
@@ -69,12 +63,12 @@ public class PlayerController {
                 }
             });
         });
+
         model.addAttribute("team", teamOptional.get());
         model.addAttribute("seasons", currentSeasons.stream().toList().reversed());
         model.addAttribute("selectedSeasonId", seasonId);
         model.addAttribute("positions", positions);
         model.addAttribute("leagues", leagues);
-
 
         List<Player> allPlayers = this.playerTeamSeasonService.getAllPlayersBySeasonIdAndTeamId(teamId, seasonId);
 
@@ -85,13 +79,11 @@ public class PlayerController {
         }
 
         if (allPlayers.isEmpty()) {
-            //no data for players
-            return "redirect:players/error";
+            return "redirect:/players/error";
         }
 
         if (position != null && !position.equals("All positions")) {
             allPlayers.removeIf(player -> !player.getPosition().equals(position));
-
             model.addAttribute("selectedPosition", position);
         }
 
@@ -99,10 +91,8 @@ public class PlayerController {
 
         return "players";
     }
-    private static Long getSeasonId(Long seasonId, long currentSeasons) {
-        if (seasonId == null) {
-            seasonId = currentSeasons;
-        }
-        return seasonId;
+
+    private static Long getId(Long seasonId, long currentSeasonId) {
+        return seasonId != null ? seasonId : currentSeasonId;
     }
 }
