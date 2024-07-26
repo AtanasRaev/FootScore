@@ -31,6 +31,14 @@ public class League {
     public League() {
     }
 
+    public League(String name, String logo, Country country, boolean selected, Long apiId) {
+        this.name = name;
+        this.logo = logo;
+        this.country = country;
+        this.selected = selected;
+        this.apiId = apiId;
+    }
+
     public long getId() {
         return id;
     }

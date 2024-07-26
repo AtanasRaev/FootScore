@@ -894,62 +894,140 @@ footer.teams-footer {
     font-size: 16px;
 }
 
-.team-details-info, .team-details-league-info, .team-details-stadium-info, .team-details-statistics {
-    margin: 20px 0;
+.team-details-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.team-details-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.team-details-info {
     text-align: center;
+    margin-bottom: 2rem;
 }
 
-.team-details-name, .team-details-league-name, .team-details-stadium-name {
-    font-size: 24px;
-    color: #333;
+.team-details-info h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
 }
 
-.team-details-logo, .team-details-league-logo {
+.team-details-logo {
+    max-width: 200px;
+    height: auto;
+    margin: 1rem 0;
+}
+
+.team-details-stadium-info {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.team-details-stadium-info h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.team-details-stadium-name, .team-details-stadium-capacity {
+    font-size: 1.5rem;
+    color: #555;
+}
+
+.team-details-season-selector {
+    margin-bottom: 2rem;
+}
+
+.team-details-season-selector form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.team-details-season-selector label {
+    margin-right: 0.5rem;
+    font-size: 1rem;
+}
+
+.team-details-season-selector select {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.team-details-league-details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.team-details-league-info {
+    text-align: center;
+    max-width: 200px;
+}
+
+.team-details-league-logo {
     max-width: 150px;
-    display: block;
-    margin: 10px auto;
+    height: auto;
+    border-radius: 8px;
 }
 
-.team-details-stadium-capacity {
-    font-size: 18px;
-    color: #666;
+.team-details-statistics {
+    margin-bottom: 2rem;
 }
 
 .team-details-statistics h2 {
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 10px;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .team-details-statistics ul {
     list-style: none;
     padding: 0;
-    text-align: left;
-    max-width: 600px;
-    margin: 0 auto;
 }
 
 .team-details-statistics li {
-    font-size: 18px;
-    color: #555;
-    padding: 5px 0;
+    margin-bottom: 0.5rem;
 }
 
-.team-details-statistics li span {
-    font-weight: bold;
-    color: #000;
+.team-details-players-page {
+    text-align: center;
 }
 
 .team-details-players-page button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #007bff;
-    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #333;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .team-details-players-page button:hover {
-    background-color: #0056b3;
+    background-color: #555;
+}
+
+@media (max-width: 768px) {
+    .team-details-box {
+        flex-direction: column;
+    }
+
+    .team-details-league-details {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .team-details-league-info {
+        max-width: none;
+    }
 }

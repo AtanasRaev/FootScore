@@ -106,6 +106,11 @@ public class TeamStatisticsServiceImpl implements TeamStatisticsService {
         return this.teamStatisticsRepository.findByTeamApiIdAndSeasonYearAndLeagueApiId(teamApiId, seasonYear, leagueApiId);
     }
 
+    @Override
+    public Optional<TeamStatistics> getByTeamIdAndSeasonYearAndLeagueId(long teamId, int seasonYear, long leagueId) {
+        return this.teamStatisticsRepository.findByTeamIdAndSeasonYearAndLeagueId(teamId, seasonYear, leagueId);
+    }
+
     public void setGoalsStatistics(TeamStatistics teamStatistic, TeamStatisticsDetailsDto dto) {
         GoalsDto goals = dto.getGoals();
         GoalsDetailDto forGoals = goals.getForGoals();

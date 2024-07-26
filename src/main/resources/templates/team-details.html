@@ -9,37 +9,44 @@
 <header th:replace="fragments/commons::nav"></header>
 <body>
 <div class="team-details-container">
-    <h1>Team Details</h1>
+    <div class="team-details-box">
+        <div class="team-details-info">
+            <h1 th:text="${team.name}">Team Details</h1>
+            <img class="team-details-logo" th:src="${team.logo}" alt="Team Logo">
+        </div>
+        <div class="team-details-stadium-info">
+            <h2 class="team-details-name"> Stadium:</h2>
+            <h3 class="team-details-stadium-name" th:text="${team.venue.name}"></h3>
+            <p class="team-details-stadium-capacity" th:text="'Capacity: ' + ${team.venue.capacity}"></p>
+        </div>
+    </div>
+
     <div class="team-details-season-selector">
-        <form id="season-form" th:method="get" th:action="@{/team/{teamId}/details(teamId=${team.id})}">
+        <form id="season-form" th:method="get" th:action="@{/team/{teamId}/details(teamId=${team.id}, seasonId=${selectedSeasonId})}">
             <label for="season">Select a season:</label>
             <select id="season" name="seasonId" onchange="this.form.submit()">
                 <option th:each="season : ${seasons}"
                         th:value="${season.id}"
                         th:text="${season.toString()}"
-                        th:selected="${season.id == selectedSeasonId}">Season</option>
+                        th:selected="${season.id == selectedSeasonId}">Season
+                </option>
             </select>
             <input type="hidden" name="teamId" th:value="${team.id}">
         </form>
     </div>
 
-    <div class="team-details-info">
-        <h2 class="team-details-name" th:text="${team.name}"></h2>
-        <img class="team-details-logo" th:src="${team.logo}" alt="Team Logo">
-    </div>
-
-    <div class="team-details-league-info" th:each="league : ${leagues}">
-        <h3 class="team-details-league-name" th:text="${league.name}"></h3>
-        <img class="team-details-league-logo" th:src="${league.logo}" alt="League Logo">
-    </div>
-
-    <div class="team-details-stadium-info">
-        <h3 class="team-details-stadium-name" th:text="${team.venue.name}"></h3>
-        <p class="team-details-stadium-capacity" th:text="'Capacity: ' + ${team.venue.capacity}"></p>
+    <div class="team-details-league-details">
+        <div class="team-details-league-info" th:each="league : ${leagues}">
+            <a th:href="@{/team/{teamId}/details(teamId=${team.id}, seasonId=${selectedSeasonId}, leagueId=${league.id})}">
+                <h3 class="team-details-league-name" th:text="${league.name}"></h3>
+                <img class="team-details-league-logo" th:src="${league.logo}" alt="League Logo">
+            </a>
+        </div>
     </div>
 
     <div class="team-details-statistics">
-        <h2>Statistics</h2>
+        <h2>Statistics for <span th:text="${statistics.league.name}"></span></h2>
+        <h2>Season: <span th:text="${statistics.season.toString()}"></span></h2>
         <ul>
             <li>Total Matches Played: <span th:text="${statistics.fixturesPlayedTotal}"></span></li>
             <li>Wins: <span th:text="${statistics.fixturesWinsTotal}"></span></li>
@@ -50,7 +57,9 @@
             <li>Goal difference: <span th:text="${statistics.goalDifference}"></span></li>
             <li>Formations:</li>
             <li th:each="lineup : ${statistics.lineups}">
-                <span>Played <span th:text="${lineup.value}"></span> matches with formation <span th:text="${lineup.key}"></span></span>
+                <span>
+                    Played <span th:text="${lineup.value}"></span> matches with formation <span th:text="${lineup.key}"></span>
+                </span>
             </li>
             <li>Matches without conceding a goal: <span th:text="${statistics.cleanSheetsTotal}"></span></li>
             <li>Total Penalties Scored: <span th:text="${statistics.penaltyScoredTotal}"></span></li>

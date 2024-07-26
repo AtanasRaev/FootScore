@@ -20,6 +20,11 @@ public class Venue {
 
     public Venue() {
     }
+    public Venue(String name, String city, Integer capacity) {
+        this.name = name;
+        this.city = city;
+        this.capacity = capacity;
+    }
 
     public long getId() {
         return id;

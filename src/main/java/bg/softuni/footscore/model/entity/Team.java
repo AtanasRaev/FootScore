@@ -31,6 +31,13 @@ public class Team {
         this.statistics = new ArrayList<>();
     }
 
+    public Team(String name, String logo, Venue venue, Long apiId) {
+        this.name = name;
+        this.logo = logo;
+        this.venue = venue;
+        this.apiId = apiId;
+    }
+
     public long getId() {
         return id;
     }

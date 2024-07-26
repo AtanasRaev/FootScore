@@ -109,7 +109,11 @@ public class LeagueServiceImpl implements LeagueService {
             List<League> leaguesToSave = new ArrayList<>();
 
             response.getResponse().forEach(dto -> {
-                League league = this.mapToLeague(dto, country);
+                League league = new League(dto.getLeague().getName(),
+                        dto.getLeague().getLogo(),
+                        country,
+                        false,
+                        dto.getLeague().getId());
 
                 Optional<League> optional = this.leagueRepository.findByApiId(league.getApiId());
 

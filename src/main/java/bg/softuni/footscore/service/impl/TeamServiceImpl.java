@@ -53,10 +53,8 @@ public class TeamServiceImpl implements TeamService {
 
             response.getResponse().forEach(dto -> {
                 if (this.getTeamByApiId(dto.getTeam().getId()).isEmpty()) {
-                    Team team = this.modelMapper.map(dto.getTeam(), Team.class);
-                    Venue venue = this.modelMapper.map(dto.getVenue(), Venue.class);
-                    team.setVenue(venue);
-                    team.setApiId(dto.getTeam().getId());
+                    Venue venue = new Venue(dto.getVenue().getName(), dto.getVenue().getCity(), dto.getVenue().getCapacity());
+                    Team team = new Team(dto.getTeam().getName(), dto.getTeam().getLogo(), venue, dto.getTeam().getId());
 
                     Optional<Team> optional = this.teamRepository.findByApiId(team.getApiId());
 

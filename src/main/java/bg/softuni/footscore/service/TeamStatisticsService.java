@@ -11,4 +11,6 @@ public interface TeamStatisticsService {
     ResponseTeamStatisticsSeason getResponse(long leagueApiId, long teamApiId, int seasonYear);
 
     Optional<TeamStatistics> getByTeamApiIdAndSeasonYearAndLeagueApiId(long teamApiId, int seasonYear, long leagueApiId);
+
+    Optional<TeamStatistics> getByTeamIdAndSeasonYearAndLeagueId(long teamId, int seasonYear, long leagueId);
 }

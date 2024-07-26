@@ -56,6 +56,7 @@ public class TeamController {
     @GetMapping("/team/{teamId}/details")
     public String teamDetails(@PathVariable long teamId,
                               @RequestParam(required = false) Long seasonId,
+                              @RequestParam(required = false) Long leagueId,
                               Model model) {
 
         List<Season> seasons = this.seasonService.getAllSeasons();
@@ -72,8 +73,11 @@ public class TeamController {
                 this.teamStatisticsService.saveApiStatistics(league.getApiId(), teamOptional.get().getApiId(), seasonOptional.get().getYear());
                 leagues.add(league);
             }
+            if (leagueId == null) {
+                leagueId = leagues.getLast().getId();
+            }
 
-            Optional<TeamStatistics> optional = this.teamStatisticsService.getByTeamApiIdAndSeasonYearAndLeagueApiId(teamOptional.get().getApiId(), seasonOptional.get().getYear(), leagues.getFirst().getApiId());
+            Optional<TeamStatistics> optional = this.teamStatisticsService.getByTeamIdAndSeasonYearAndLeagueId(teamId, seasonOptional.get().getYear(), leagueId);
 
             model.addAttribute("selectedSeasonId", seasonId);
             model.addAttribute("seasons", seasons.reversed());
