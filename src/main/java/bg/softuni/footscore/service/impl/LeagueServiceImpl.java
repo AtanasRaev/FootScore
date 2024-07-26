@@ -1,12 +1,11 @@
 package bg.softuni.footscore.service.impl;
 
-import bg.softuni.footscore.model.dto.LeagueAddDto;
+import bg.softuni.footscore.model.dto.leagueDto.LeagueAddDto;
 import bg.softuni.footscore.model.dto.LeagueCountrySeasonsApiDto;
-import bg.softuni.footscore.model.dto.LeaguesPageDto;
+import bg.softuni.footscore.model.dto.leagueDto.LeaguesPageDto;
 import bg.softuni.footscore.model.dto.ResponseCountryLeagueSeasonsApiDto;
 import bg.softuni.footscore.model.entity.Country;
 import bg.softuni.footscore.model.entity.League;
-import bg.softuni.footscore.model.entity.Player;
 import bg.softuni.footscore.repository.LeagueRepository;
 import bg.softuni.footscore.service.CountryService;
 import bg.softuni.footscore.service.LeagueService;
@@ -160,7 +159,7 @@ public class LeagueServiceImpl implements LeagueService {
     }
 
     @Override
-    public void saveLeague(League league) {
+    public void updateLeague(League league) {
         this.leagueRepository.save(league);
     }
 

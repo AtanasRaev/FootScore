@@ -1,9 +1,9 @@
 package bg.softuni.footscore.service.impl;
 
-import bg.softuni.footscore.model.entity.SeasonLeagueTeam;
+import bg.softuni.footscore.model.entity.LeagueTeamSeason;
 import bg.softuni.footscore.model.entity.Team;
-import bg.softuni.footscore.repository.SeasonLeagueTeamRepository;
-import bg.softuni.footscore.service.SeasonLeagueTeamService;
+import bg.softuni.footscore.repository.LeagueTeamSeasonRepository;
+import bg.softuni.footscore.service.LeagueTeamSeasonService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class SeasonLeagueTeamServiceImpl implements SeasonLeagueTeamService {
-    private final SeasonLeagueTeamRepository seasonLeagueTeamRepository;
+public class LeagueTeamSeasonServiceImpl implements LeagueTeamSeasonService {
+    private final LeagueTeamSeasonRepository seasonLeagueTeamRepository;
 
-    public SeasonLeagueTeamServiceImpl(SeasonLeagueTeamRepository seasonLeagueTeamRepository) {
+    public LeagueTeamSeasonServiceImpl(LeagueTeamSeasonRepository seasonLeagueTeamRepository) {
         this.seasonLeagueTeamRepository = seasonLeagueTeamRepository;
     }
 
@@ -29,23 +29,23 @@ public class SeasonLeagueTeamServiceImpl implements SeasonLeagueTeamService {
     }
 
     @Override
-    public List<Optional<SeasonLeagueTeam>> getTeamsByLeagueIdAndSeasonId(long leagueId, long seasonId) {
+    public List<Optional<LeagueTeamSeason>> getTeamsByLeagueIdAndSeasonId(long leagueId, long seasonId) {
         return this.seasonLeagueTeamRepository.findTeamByLeagueIdAndSeasonId(leagueId, seasonId);
     }
 
     @Override
-    public Optional<SeasonLeagueTeam> getByTeamIdAndLeagueId(long teamId, long leagueId) {
+    public Optional<LeagueTeamSeason> getByTeamIdAndLeagueId(long teamId, long leagueId) {
         return this.seasonLeagueTeamRepository.findByTeamIdAndLeagueId(teamId, leagueId);
     }
 
     @Override
-    public List<SeasonLeagueTeam> getByTeamIdAndSeasonId(long teamId, long seasonId) {
+    public List<LeagueTeamSeason> getByTeamIdAndSeasonId(long teamId, long seasonId) {
         return this.seasonLeagueTeamRepository.findByTeamIdAndSeasonId(teamId, seasonId);
     }
 
     @Override
     @Transactional
-    public void save(SeasonLeagueTeam seasonLeagueTeam) {
+    public void save(LeagueTeamSeason seasonLeagueTeam) {
         this.seasonLeagueTeamRepository.save(seasonLeagueTeam);
     }
 }

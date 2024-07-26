@@ -1,19 +1,18 @@
 package bg.softuni.footscore.service.impl;
 
 import bg.softuni.footscore.model.entity.Player;
-import bg.softuni.footscore.model.entity.SeasonTeamPlayer;
-import bg.softuni.footscore.repository.SeasonTeamPlayerRepository;
-import bg.softuni.footscore.service.SeasonTeamPlayerService;
+import bg.softuni.footscore.repository.PlayerTeamSeasonRepository;
+import bg.softuni.footscore.service.PlayerTeamSeasonService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class SeasonTeamPlayerServiceImpl implements SeasonTeamPlayerService {
-    private final SeasonTeamPlayerRepository seasonTeamPlayerRepository;
+public class PlayerTeamSeasonServiceImpl implements PlayerTeamSeasonService {
+    private final PlayerTeamSeasonRepository seasonTeamPlayerRepository;
 
-    public SeasonTeamPlayerServiceImpl(SeasonTeamPlayerRepository seasonTeamPlayerRepository) {
+    public PlayerTeamSeasonServiceImpl(PlayerTeamSeasonRepository seasonTeamPlayerRepository) {
         this.seasonTeamPlayerRepository = seasonTeamPlayerRepository;
     }
 
@@ -28,7 +27,7 @@ public class SeasonTeamPlayerServiceImpl implements SeasonTeamPlayerService {
     }
 
     @Override
-    public void save(SeasonTeamPlayer seasonTeamPlayer) {
+    public void save(bg.softuni.footscore.model.entity.PlayerTeamSeason seasonTeamPlayer) {
         this.seasonTeamPlayerRepository.save(seasonTeamPlayer);
     }
 }

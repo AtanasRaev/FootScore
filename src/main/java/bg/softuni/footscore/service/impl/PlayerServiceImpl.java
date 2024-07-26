@@ -1,17 +1,17 @@
 package bg.softuni.footscore.service.impl;
 
 import bg.softuni.footscore.config.ApiConfig;
-import bg.softuni.footscore.model.dto.PlayerStatisticsApiDto;
+import bg.softuni.footscore.model.dto.playerDto.PlayerStatisticsApiDto;
 import bg.softuni.footscore.model.dto.ResponsePlayerApiDto;
 import bg.softuni.footscore.model.dto.SeasonsByPlayerApiDto;
 import bg.softuni.footscore.model.entity.Player;
 import bg.softuni.footscore.model.entity.Season;
-import bg.softuni.footscore.model.entity.SeasonTeamPlayer;
+import bg.softuni.footscore.model.entity.PlayerTeamSeason;
 import bg.softuni.footscore.model.entity.Team;
 import bg.softuni.footscore.repository.PlayerRepository;
 import bg.softuni.footscore.service.PlayerService;
 import bg.softuni.footscore.service.SeasonService;
-import bg.softuni.footscore.service.SeasonTeamPlayerService;
+import bg.softuni.footscore.service.PlayerTeamSeasonService;
 import bg.softuni.footscore.service.TeamService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -30,7 +30,7 @@ public class PlayerServiceImpl implements PlayerService {
     private final PlayerRepository playerRepository;
     private final TeamService teamService;
     private final SeasonService seasonService;
-    private final SeasonTeamPlayerService seasonTeamPlayerService;
+    private final PlayerTeamSeasonService playerTeamSeasonService;
     private final ModelMapper modelMapper;
     private final ApiConfig apiConfig;
     private final RestClient restClient;
@@ -42,14 +42,14 @@ public class PlayerServiceImpl implements PlayerService {
     public PlayerServiceImpl(PlayerRepository playerRepository,
                              TeamService teamService,
                              SeasonService seasonService,
-                             SeasonTeamPlayerService seasonTeamPlayerService,
+                             PlayerTeamSeasonService seasonTeamPlayerService,
                              ModelMapper modelMapper,
                              ApiConfig apiConfig,
                              RestClient restClient) {
         this.playerRepository = playerRepository;
         this.teamService = teamService;
         this.seasonService = seasonService;
-        this.seasonTeamPlayerService = seasonTeamPlayerService;
+        this.playerTeamSeasonService = seasonTeamPlayerService;
         this.modelMapper = modelMapper;
         this.apiConfig = apiConfig;
         this.restClient = restClient;
@@ -94,14 +94,14 @@ public class PlayerServiceImpl implements PlayerService {
                 responseList.getResponse().forEach(dto -> {
                     Optional<Player> player = this.playerRepository.findByApiId(dto.getPlayer().getId());
                     if (player.isPresent()) {
-                        Optional<Player> optionalPlayer = this.seasonTeamPlayerService.getPlayerByTeamIdAndSeasonId(team.getId(), season.getId(), player.get().getId());
+                        Optional<Player> optionalPlayer = this.playerTeamSeasonService.getPlayerByTeamIdAndSeasonId(team.getId(), season.getId(), player.get().getId());
                         if (optionalPlayer.isEmpty()) {
-                            SeasonTeamPlayer seasonTeamPlayer = new SeasonTeamPlayer();
+                            PlayerTeamSeason seasonTeamPlayer = new PlayerTeamSeason();
                             seasonTeamPlayer.setSeason(season);
                             seasonTeamPlayer.setTeam(team);
                             seasonTeamPlayer.setPlayer(player.get());
 
-                            this.seasonTeamPlayerService.save(seasonTeamPlayer);
+                            this.playerTeamSeasonService.save(seasonTeamPlayer);
                         }
                     }
                 });
@@ -210,11 +210,10 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-//                            SeasonsByPlayerApiDto responseSeasonsByPlayerApiDto = getResponseSeasonsByPlayerApiDto(PLAYERS_BY_ID_AND_ALL_SEASONS, player.getApiId());
+//                        SeasonsByPlayerApiDto responseSeasonsByPlayerApiDto = getResponseSeasonsByPlayerApiDto(PLAYERS_BY_ID_AND_ALL_SEASONS, player.getApiId());
 //                        int year = responseSeasonsByPlayerApiDto.getResponse().getLast();
 //                        ResponsePlayerApiDto responsePlayer = this.getResponsePlayerApiDto(PLAYERS_BY_ID_AND_SEASON, player.getApiId(), year);
 //                        StatisticsApiDto statistics = responsePlayer.getResponse().getFirst().getStatistics().getFirst();
 //
 //                        player.setTeam(statistics.getTeam().getName());
-//                        player.setPosition(statistics.getGames().getPosition());
 }

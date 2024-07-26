@@ -2,13 +2,11 @@ package bg.softuni.footscore.service.impl;
 
 import bg.softuni.footscore.config.ApiConfig;
 import bg.softuni.footscore.model.dto.ResponseTeamApiDto;
-import bg.softuni.footscore.model.dto.TeamPageDto;
+import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 import bg.softuni.footscore.model.entity.*;
 import bg.softuni.footscore.repository.TeamRepository;
 import bg.softuni.footscore.repository.VenueRepository;
-import bg.softuni.footscore.service.LeagueService;
-import bg.softuni.footscore.service.SeasonLeagueTeamService;
-import bg.softuni.footscore.service.SeasonService;
+import bg.softuni.footscore.service.LeagueTeamSeasonService;
 import bg.softuni.footscore.service.TeamService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -26,26 +24,20 @@ public class TeamServiceImpl implements TeamService {
     private final ModelMapper modelMapper;
     private final ApiConfig apiConfig;
     private final RestClient restClient;
-    private final LeagueService leagueService;
-    private final SeasonService seasonService;
-    private final SeasonLeagueTeamService seasonLeagueTeamService;
+    private final LeagueTeamSeasonService leagueTeamSeasonService;
 
     public TeamServiceImpl(TeamRepository teamRepository,
                            ModelMapper modelMapper,
                            ApiConfig apiConfig,
                            RestClient restClient,
                            VenueRepository venueRepository,
-                           LeagueService leagueService,
-                           SeasonService seasonService,
-                           SeasonLeagueTeamService seasonLeagueTeamService) {
+                           LeagueTeamSeasonService seasonLeagueTeamService) {
         this.teamRepository = teamRepository;
         this.modelMapper = modelMapper;
         this.apiConfig = apiConfig;
         this.restClient = restClient;
         this.venueRepository = venueRepository;
-        this.leagueService = leagueService;
-        this.seasonService = seasonService;
-        this.seasonLeagueTeamService = seasonLeagueTeamService;
+        this.leagueTeamSeasonService = seasonLeagueTeamService;
     }
 
 
@@ -91,14 +83,14 @@ public class TeamServiceImpl implements TeamService {
             response.getResponse().forEach(dto -> {
                 Optional<Team> team = this.teamRepository.findByApiId(dto.getTeam().getId());
                 if (team.isPresent()) {
-                    Optional<Team> optionalTeam = this.seasonLeagueTeamService.getTeamByLeagueIdAndSeasonIdAndTeamId(league.getId(), season.getId(), team.get().getId());
+                    Optional<Team> optionalTeam = this.leagueTeamSeasonService.getTeamByLeagueIdAndSeasonIdAndTeamId(league.getId(), season.getId(), team.get().getId());
                     if (optionalTeam.isEmpty()) {
-                        SeasonLeagueTeam seasonLeagueTeam = new SeasonLeagueTeam();
+                        LeagueTeamSeason seasonLeagueTeam = new LeagueTeamSeason();
                         seasonLeagueTeam.setSeason(season);
                         seasonLeagueTeam.setLeague(league);
                         seasonLeagueTeam.setTeam(team.get());
 
-                        this.seasonLeagueTeamService.save(seasonLeagueTeam);
+                        this.leagueTeamSeasonService.save(seasonLeagueTeam);
                     }
                 }
             });
@@ -144,5 +136,10 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public Optional<Team> getTeamById(long teamId) {
         return this.teamRepository.findById(teamId);
+    }
+
+    @Override
+    public void update(Team team) {
+        this.teamRepository.save(team);
     }
 }

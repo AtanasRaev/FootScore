@@ -1,7 +1,5 @@
 package bg.softuni.footscore.init;
 
-import bg.softuni.footscore.model.entity.League;
-import bg.softuni.footscore.model.entity.Season;
 import bg.softuni.footscore.service.CountryService;
 import bg.softuni.footscore.service.LeagueService;
 import bg.softuni.footscore.service.SeasonService;
@@ -9,9 +7,6 @@ import bg.softuni.footscore.service.TeamService;
 import jakarta.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Optional;
 
 @Component
 public class init implements CommandLineRunner {

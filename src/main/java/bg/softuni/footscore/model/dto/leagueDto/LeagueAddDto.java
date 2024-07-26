@@ -1,11 +1,13 @@
-package bg.softuni.footscore.model.dto;
+package bg.softuni.footscore.model.dto.leagueDto;
 
-public class TeamPageDto {
+public class LeagueAddDto {
     private long id;
     private String name;
     private String logo;
+    private boolean selected;
 
-    public TeamPageDto() {
+    public LeagueAddDto() {
+
     }
 
     public long getId() {
@@ -30,5 +32,13 @@ public class TeamPageDto {
 
     public void setLogo(String logo) {
         this.logo = logo;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

@@ -1,4 +1,4 @@
-package bg.softuni.footscore.model.dto;
+package bg.softuni.footscore.model.dto.teamDto;
 
 public class TeamVenueDto {
     TeamApiDto team;

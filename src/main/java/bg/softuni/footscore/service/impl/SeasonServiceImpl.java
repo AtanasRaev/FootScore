@@ -66,7 +66,7 @@ public class SeasonServiceImpl implements SeasonService {
     }
 
     @Override
-    public Season getSeasonByYear(int seasonYear) {
+    public Optional<Season> getSeasonByYear(int seasonYear) {
         return this.seasonRepository.findByYear(seasonYear);
     }
 

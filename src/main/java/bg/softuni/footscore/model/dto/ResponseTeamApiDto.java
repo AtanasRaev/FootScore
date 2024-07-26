@@ -1,5 +1,7 @@
 package bg.softuni.footscore.model.dto;
 
+import bg.softuni.footscore.model.dto.teamDto.TeamVenueDto;
+
 import java.util.List;
 
 public class ResponseTeamApiDto {

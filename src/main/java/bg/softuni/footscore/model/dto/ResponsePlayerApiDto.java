@@ -1,5 +1,8 @@
 package bg.softuni.footscore.model.dto;
 
+import bg.softuni.footscore.model.dto.playerDto.PageApiDto;
+import bg.softuni.footscore.model.dto.playerDto.PlayerStatisticsApiDto;
+
 import java.util.List;
 
 public class ResponsePlayerApiDto {

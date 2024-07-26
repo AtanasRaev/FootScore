@@ -1,6 +1,4 @@
-package bg.softuni.footscore.model.dto;
-
-import jdk.jfr.Name;
+package bg.softuni.footscore.model.dto.playerDto;
 
 public class PlayerApiDto {
     private long id;

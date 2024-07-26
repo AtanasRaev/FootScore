@@ -2,6 +2,7 @@ package bg.softuni.footscore.model.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,6 +23,13 @@ public class Team {
 
     @Column
     private Long apiId;
+
+    @OneToMany(mappedBy = "team")
+    private List<TeamStatistics> statistics;
+
+    public Team() {
+        this.statistics = new ArrayList<>();
+    }
 
     public long getId() {
         return id;
@@ -61,5 +69,13 @@ public class Team {
 
     public void setVenue(Venue venue) {
         this.venue = venue;
+    }
+
+    public List<TeamStatistics> getStatistics() {
+        return statistics;
+    }
+
+    public void setStatistics(List<TeamStatistics> statistics) {
+        this.statistics = statistics;
     }
 }

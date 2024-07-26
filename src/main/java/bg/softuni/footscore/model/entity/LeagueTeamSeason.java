@@ -3,8 +3,8 @@ package bg.softuni.footscore.model.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "seasons_leagues_teams")
-public class SeasonLeagueTeam {
+@Table(name = "leagues_teams_season")
+public class LeagueTeamSeason {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -21,7 +21,7 @@ public class SeasonLeagueTeam {
     @JoinColumn(name = "league_id", referencedColumnName = "id")
     private League league;
 
-    public SeasonLeagueTeam() {
+    public LeagueTeamSeason() {
     }
 
     public long getId() {

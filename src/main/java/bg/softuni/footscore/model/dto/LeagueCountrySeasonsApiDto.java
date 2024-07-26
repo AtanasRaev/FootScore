@@ -1,5 +1,7 @@
 package bg.softuni.footscore.model.dto;
 
+import bg.softuni.footscore.model.dto.leagueDto.LeagueApiDto;
+
 import java.util.List;
 
 public class LeagueCountrySeasonsApiDto {

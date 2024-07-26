@@ -1,15 +1,15 @@
 package bg.softuni.footscore.web;
 
-import bg.softuni.footscore.model.dto.LeagueAddDto;
-import bg.softuni.footscore.model.dto.LeaguesPageDto;
+import bg.softuni.footscore.model.dto.leagueDto.LeagueAddDto;
+import bg.softuni.footscore.model.dto.leagueDto.LeaguesPageDto;
 import bg.softuni.footscore.model.entity.League;
 import bg.softuni.footscore.model.entity.Season;
-import bg.softuni.footscore.model.entity.SeasonLeagueTeam;
+import bg.softuni.footscore.model.entity.LeagueTeamSeason;
 import bg.softuni.footscore.service.CountryService;
 import bg.softuni.footscore.service.LeagueService;
 import bg.softuni.footscore.service.SeasonService;
 import bg.softuni.footscore.service.TeamService;
-import bg.softuni.footscore.service.impl.SeasonLeagueTeamServiceImpl;
+import bg.softuni.footscore.service.impl.LeagueTeamSeasonServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,13 +25,13 @@ public class LeagueController {
     private final CountryService countryService;
     private final TeamService teamService;
     private final SeasonService seasonService;
-    private final SeasonLeagueTeamServiceImpl seasonLeagueTeamService;
+    private final LeagueTeamSeasonServiceImpl seasonLeagueTeamService;
 
     public LeagueController(LeagueService leagueService,
                             CountryService countryService,
                             TeamService teamService,
                             SeasonService seasonService,
-                            SeasonLeagueTeamServiceImpl seasonLeagueTeamService) {
+                            LeagueTeamSeasonServiceImpl seasonLeagueTeamService) {
         this.leagueService = leagueService;
         this.countryService = countryService;
         this.teamService = teamService;
@@ -86,7 +86,7 @@ public class LeagueController {
             Optional<League> leagueOptional = this.leagueService.getLeagueById(id);
             for (Season season : this.seasonService.getAllSeasons()) {
                 leagueOptional.ifPresent(league -> {
-                    List<Optional<SeasonLeagueTeam>> optional = this.seasonLeagueTeamService.getTeamsByLeagueIdAndSeasonId(league.getId(), season.getId());
+                    List<Optional<LeagueTeamSeason>> optional = this.seasonLeagueTeamService.getTeamsByLeagueIdAndSeasonId(league.getId(), season.getId());
 
                     if (optional.isEmpty()) {
                         this.teamService.saveApiTeamsForLeagueAndSeason(league, season);
@@ -114,7 +114,7 @@ public class LeagueController {
         Optional<League> leagueById = this.leagueService.getLeagueById(leagueId);
         if (leagueById.isPresent()) {
             leagueById.get().setSelected(false);
-            this.leagueService.saveLeague(leagueById.get());
+            this.leagueService.updateLeague(leagueById.get());
         }
         return "redirect:/leagues/remove";
     }

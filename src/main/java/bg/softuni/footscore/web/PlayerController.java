@@ -17,20 +17,20 @@ public class PlayerController {
     private final PlayerService playerService;
     private final TeamService teamService;
     private final SeasonService seasonService;
-    private final SeasonTeamPlayerService seasonTeamPlayerService;
-    private final SeasonLeagueTeamService seasonLeagueTeamService;
+    private final PlayerTeamSeasonService playerTeamSeasonService;
+    private final LeagueTeamSeasonService seasonLeagueTeamService;
     private final LeagueService leagueService;
 
     public PlayerController(PlayerService playerService,
                             TeamService teamService,
                             SeasonService seasonService,
-                            SeasonTeamPlayerService seasonTeamPlayerService,
-                            SeasonLeagueTeamService seasonLeagueTeamService,
+                            PlayerTeamSeasonService seasonTeamPlayerService,
+                            LeagueTeamSeasonService seasonLeagueTeamService,
                             LeagueService leagueService) {
         this.playerService = playerService;
         this.teamService = teamService;
         this.seasonService = seasonService;
-        this.seasonTeamPlayerService = seasonTeamPlayerService;
+        this.playerTeamSeasonService = seasonTeamPlayerService;
         this.seasonLeagueTeamService = seasonLeagueTeamService;
         this.leagueService = leagueService;
     }
@@ -49,7 +49,7 @@ public class PlayerController {
             seasonId = seasons.getLast().getId();
         }
 
-        List<SeasonLeagueTeam> byTeamIdAndSeasonId = this.seasonLeagueTeamService.getByTeamIdAndSeasonId(teamId, seasonId);
+        List<LeagueTeamSeason> byTeamIdAndSeasonId = this.seasonLeagueTeamService.getByTeamIdAndSeasonId(teamId, seasonId);
 
         String[] positions = {"Attacker", "Midfielder", "Defender", "Goalkeeper"};
 
@@ -70,12 +70,12 @@ public class PlayerController {
             model.addAttribute("leagues", leagues);
 
 
-            List<Player> allPlayers = this.seasonTeamPlayerService.getAllPlayersBySeasonIdAndTeamId(teamId, seasonId);
+            List<Player> allPlayers = this.playerTeamSeasonService.getAllPlayersBySeasonIdAndTeamId(teamId, seasonId);
 
             if (allPlayers.isEmpty()) {
                 Optional<Season> seasonOptional = this.seasonService.getSeasonById(seasonId);
                 seasonOptional.ifPresent(season -> this.playerService.saveApiPlayersForTeamAndSeason(teamOptional.get(), season));
-                allPlayers = this.seasonTeamPlayerService.getAllPlayersBySeasonIdAndTeamId(teamId, seasonId);
+                allPlayers = this.playerTeamSeasonService.getAllPlayersBySeasonIdAndTeamId(teamId, seasonId);
             }
 
             if (allPlayers.isEmpty()) {

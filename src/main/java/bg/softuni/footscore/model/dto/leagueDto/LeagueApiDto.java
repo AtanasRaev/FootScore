@@ -1,9 +1,10 @@
-package bg.softuni.footscore.model.dto;
+package bg.softuni.footscore.model.dto.leagueDto;
 
 public class LeagueApiDto {
     private long id;
     private String name;
     private String logo;
+    private Integer season;
 
     public LeagueApiDto() {
     }
@@ -30,5 +31,13 @@ public class LeagueApiDto {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public Integer getSeason() {
+        return season;
+    }
+
+    public void setSeason(Integer season) {
+        this.season = season;
     }
 }

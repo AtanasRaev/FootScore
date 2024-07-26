@@ -15,7 +15,7 @@ public interface SeasonService {
 
     ResponseCountryLeagueSeasonsApiDto getResponse(String name);
 
-    Season getSeasonByYear(int seasonYear);
+    Optional<Season> getSeasonByYear(int seasonYear);
 
     Optional<Season> getSeasonById(long id);
 }

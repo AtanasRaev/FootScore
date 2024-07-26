@@ -1,7 +1,7 @@
 package bg.softuni.footscore.service;
 
-import bg.softuni.footscore.model.dto.LeagueAddDto;
-import bg.softuni.footscore.model.dto.LeaguesPageDto;
+import bg.softuni.footscore.model.dto.leagueDto.LeagueAddDto;
+import bg.softuni.footscore.model.dto.leagueDto.LeaguesPageDto;
 import bg.softuni.footscore.model.entity.League;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public interface LeagueService {
 
     Optional<League> getLeagueByApiId(long leagueApiId);
 
-    void saveLeague(League league);
+    void updateLeague(League league);
 
     List<League> getAllLeagues();
 }
