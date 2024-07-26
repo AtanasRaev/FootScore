@@ -44,6 +44,11 @@ public class LeagueTeamSeasonServiceImpl implements LeagueTeamSeasonService {
     }
 
     @Override
+    public List<LeagueTeamSeason> getByLeagueIdAndSeasonId(long leagueId, long seasonId) {
+        return this.seasonLeagueTeamRepository.findByLeagueIdAndSeasonId(leagueId, seasonId);
+    }
+
+    @Override
     @Transactional
     public void save(LeagueTeamSeason seasonLeagueTeam) {
         this.seasonLeagueTeamRepository.save(seasonLeagueTeam);

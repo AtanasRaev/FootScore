@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class TeamController {
@@ -37,19 +35,31 @@ public class TeamController {
                         @RequestParam(required = false) Long seasonId,
                         Model model) {
         Optional<League> leagueById = this.leagueService.getLeagueById(leagueId);
+
+        if (leagueById.isEmpty()) {
+            return "redirect:/league-error";
+        }
+
         List<Season> seasons = this.seasonService.getAllSeasons();
 
-        if (leagueById.isPresent()) {
-            model.addAttribute("league", leagueById.get());
-            model.addAttribute("seasons", seasons.reversed());
-            model.addAttribute("selectedSeasonId", seasonId);
-
-            seasonId = this.getSeasonId(seasonId, seasons);
-
-            List<Team> allTeams = this.leagueTeamSeasonService.getAllTeamsBySeasonIdAndLeagueId(leagueId, seasonId);
-
-            model.addAttribute("teams", allTeams);
+        Set<Season> currentSeasons = new LinkedHashSet<>();
+        for (Season season : seasons) {
+            for (LeagueTeamSeason leagueTeamSeason : this.leagueTeamSeasonService.getByLeagueIdAndSeasonId(leagueById.get().getId(), season.getId())) {
+                currentSeasons.add(season);
+            }
         }
+
+        seasonId = getSeasonId(seasonId, currentSeasons.stream().toList().getLast().getId());
+
+        model.addAttribute("league", leagueById.get());
+        model.addAttribute("seasons", currentSeasons.stream().toList().reversed());
+        model.addAttribute("selectedSeasonId", seasonId);
+
+
+        List<Team> allTeams = this.leagueTeamSeasonService.getAllTeamsBySeasonIdAndLeagueId(leagueId, seasonId);
+
+        model.addAttribute("teams", allTeams);
+
         return "teams";
     }
 
@@ -60,7 +70,17 @@ public class TeamController {
                               Model model) {
 
         List<Season> seasons = this.seasonService.getAllSeasons();
-        seasonId = this.getSeasonId(seasonId, seasons);
+        Set<Season> currentSeasons = new LinkedHashSet<>();
+
+        for (Season season : seasons) {
+            for (LeagueTeamSeason leagueTeamSeason : this.leagueTeamSeasonService.getByTeamIdAndSeasonId(teamId, season.getId())) {
+                if (leagueTeamSeason.getLeague().isSelected()) {
+                    currentSeasons.add(season);
+                }
+            }
+        }
+
+        seasonId = getSeasonId(seasonId, currentSeasons.stream().toList().getLast().getId());
 
         Optional<Team> teamOptional = this.teamService.findById(teamId);
         Optional<Season> seasonOptional = this.seasonService.getSeasonById(seasonId);
@@ -68,19 +88,19 @@ public class TeamController {
         if (teamOptional.isPresent() && seasonOptional.isPresent()) {
             List<LeagueTeamSeason> list = this.leagueTeamSeasonService.getByTeamIdAndSeasonId(teamId, seasonId);
             List<League> leagues = new ArrayList<>();
+
             for (LeagueTeamSeason leagueTeamSeason : list) {
                 League league = leagueTeamSeason.getLeague();
                 this.teamStatisticsService.saveApiStatistics(league.getApiId(), teamOptional.get().getApiId(), seasonOptional.get().getYear());
                 leagues.add(league);
             }
-            if (leagueId == null) {
-                leagueId = leagues.getLast().getId();
-            }
+
+            leagueId = getSeasonId(leagueId, leagues.getLast().getId());
 
             Optional<TeamStatistics> optional = this.teamStatisticsService.getByTeamIdAndSeasonYearAndLeagueId(teamId, seasonOptional.get().getYear(), leagueId);
 
             model.addAttribute("selectedSeasonId", seasonId);
-            model.addAttribute("seasons", seasons.reversed());
+            model.addAttribute("seasons", currentSeasons.stream().toList().reversed());
             model.addAttribute("team", teamOptional.get());
             model.addAttribute("leagues", leagues);
 
@@ -92,11 +112,10 @@ public class TeamController {
         return "team-details";
     }
 
-    private long getSeasonId(Long seasonId, List<Season> seasons) {
+    private static Long getSeasonId(Long seasonId, long currentSeasons) {
         if (seasonId == null) {
-            seasonId = seasons.getLast().getId();
+            seasonId = currentSeasons;
         }
-
         return seasonId;
     }
 }

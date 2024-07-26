@@ -24,4 +24,6 @@ public interface LeagueTeamSeasonRepository extends JpaRepository<LeagueTeamSeas
     List<Optional<LeagueTeamSeason>> findTeamByLeagueIdAndSeasonId(long leagueId, long seasonId);
 
     List<LeagueTeamSeason> findByTeamIdAndSeasonId(long teamId, long seasonId);
+
+    List<LeagueTeamSeason> findByLeagueIdAndSeasonId(long leagueId, long seasonId);
 }

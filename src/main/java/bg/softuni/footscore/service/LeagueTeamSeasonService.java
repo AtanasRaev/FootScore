@@ -17,5 +17,7 @@ public interface LeagueTeamSeasonService {
 
     List<LeagueTeamSeason> getByTeamIdAndSeasonId(long teamId, long seasonId);
 
+    List<LeagueTeamSeason> getByLeagueIdAndSeasonId(long leagueId, long seasonId);
+
     void save(LeagueTeamSeason seasonLeagueTeam);
 }
