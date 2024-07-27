@@ -29,7 +29,7 @@ public class LeagueTeamSeasonServiceImpl implements LeagueTeamSeasonService {
     }
 
     @Override
-    public List<Optional<LeagueTeamSeason>> getTeamsByLeagueIdAndSeasonId(long leagueId, long seasonId) {
+    public List<LeagueTeamSeason> getTeamsByLeagueIdAndSeasonId(long leagueId, long seasonId) {
         return this.seasonLeagueTeamRepository.findTeamByLeagueIdAndSeasonId(leagueId, seasonId);
     }
 

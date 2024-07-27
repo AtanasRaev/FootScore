@@ -83,16 +83,12 @@ public class LeagueController {
 
     @PostMapping("/saveSelected")
     public String saveSelectedLeagues(@RequestParam List<Long> leagueIds) {
-//        if (leagueIds == null || leagueIds.isEmpty()) {
-//            return "redirect:/saveSelected";
-//        }
-
         //todo: error handling
         leagueIds.forEach(id -> {
             Optional<League> leagueOptional = this.leagueService.getLeagueById(id);
             for (Season season : this.seasonService.getAllSeasons()) {
                 leagueOptional.ifPresent(league -> {
-                    List<Optional<LeagueTeamSeason>> optional = this.seasonLeagueTeamService.getTeamsByLeagueIdAndSeasonId(league.getId(), season.getId());
+                    List<LeagueTeamSeason> optional = this.seasonLeagueTeamService.getTeamsByLeagueIdAndSeasonId(league.getId(), season.getId());
 
                     if (optional.isEmpty()) {
                         this.teamService.saveApiTeamsForLeagueAndSeason(league, season);
@@ -100,7 +96,7 @@ public class LeagueController {
                 });
             }
         });
-        this.leagueService.saveSelectedLeagues(leagueIds);
+        this.leagueService.updateSelectedLeagues(leagueIds);
         return "redirect:/leagues";
     }
 

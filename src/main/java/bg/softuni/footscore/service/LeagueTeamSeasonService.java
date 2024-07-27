@@ -11,7 +11,7 @@ public interface LeagueTeamSeasonService {
 
     Optional<Team> getTeamByLeagueIdAndSeasonIdAndTeamId(long leagueId, long seasonId, long teamId);
 
-    List<Optional<LeagueTeamSeason>> getTeamsByLeagueIdAndSeasonId(long leagueId, long seasonId);
+    List<LeagueTeamSeason> getTeamsByLeagueIdAndSeasonId(long leagueId, long seasonId);
 
     Optional<LeagueTeamSeason> getByTeamIdAndLeagueId(long teamId, long leagueId);
 

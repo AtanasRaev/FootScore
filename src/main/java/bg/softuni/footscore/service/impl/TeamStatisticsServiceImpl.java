@@ -79,7 +79,7 @@ public class TeamStatisticsServiceImpl implements TeamStatisticsService {
                         this.teamStatisticsRepository.save(teamStatistic);
 
                         optionalTeam.get().getStatistics().add(teamStatistic);
-                        this.teamService.update(optionalTeam.get());
+                        this.teamService.updateTeam(optionalTeam.get());
                     }
                 }
             }

@@ -83,7 +83,7 @@ public class LeagueServiceImpl implements LeagueService {
     }
 
     @Override
-    public void saveSelectedLeagues(List<Long> leagueIds) {
+    public void updateSelectedLeagues(List<Long> leagueIds) {
         List<League> leaguesToSave = new ArrayList<>();
         leagueIds.forEach(id -> {
             Optional<League> league = this.leagueRepository.findById(id);

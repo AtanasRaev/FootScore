@@ -12,7 +12,5 @@ public interface UserService {
 
     Optional<UserEntity> getUserByUsername(String username);
 
-    void saveUser(UserEntity user);
-
     void addFavoriteTeams(UserEntity user, List<Team> allByIds);
 }

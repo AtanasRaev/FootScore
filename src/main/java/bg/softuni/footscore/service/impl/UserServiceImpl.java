@@ -52,11 +52,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUser(UserEntity user) {
-        this.userRepository.save(user);
-    }
-
-    @Override
     @Transactional
     public void addFavoriteTeams(UserEntity user, List<Team> allByIds) {
         if (allByIds.isEmpty()) {

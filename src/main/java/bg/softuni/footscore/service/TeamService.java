@@ -23,5 +23,5 @@ public interface TeamService {
 
     Optional<Team> getTeamById(long teamId);
 
-    void update(Team team);
+    void updateTeam(Team team);
 }

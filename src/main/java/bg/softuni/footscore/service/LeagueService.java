@@ -18,7 +18,7 @@ public interface LeagueService {
 
     List<LeagueAddDto> getLeagueByIds(List<Long> leagueIds);
 
-    void saveSelectedLeagues(List<Long> leagueIds);
+    void updateSelectedLeagues(List<Long> leagueIds);
 
     void saveApiLeagues(String name);
 

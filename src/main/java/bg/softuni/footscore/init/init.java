@@ -13,17 +13,14 @@ public class init implements CommandLineRunner {
     private final LeagueService leagueService;
     private final CountryService countryService;
     private final SeasonService seasonService;
-    private final TeamService teamService;
 
 
     public init(LeagueService leagueService,
                 CountryService countryService,
-                SeasonService seasonService,
-                TeamService teamService) {
+                SeasonService seasonService) {
         this.leagueService = leagueService;
         this.countryService = countryService;
         this.seasonService = seasonService;
-        this.teamService = teamService;
     }
 
     @Override

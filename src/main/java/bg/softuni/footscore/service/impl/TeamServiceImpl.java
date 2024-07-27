@@ -2,7 +2,6 @@ package bg.softuni.footscore.service.impl;
 
 import bg.softuni.footscore.config.ApiConfig;
 import bg.softuni.footscore.model.dto.ResponseTeamApiDto;
-import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 import bg.softuni.footscore.model.entity.*;
 import bg.softuni.footscore.repository.TeamRepository;
 import bg.softuni.footscore.repository.VenueRepository;
@@ -135,7 +134,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public void update(Team team) {
+    public void updateTeam(Team team) {
         this.teamRepository.save(team);
     }
 }
