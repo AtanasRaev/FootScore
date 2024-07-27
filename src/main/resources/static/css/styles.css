@@ -368,7 +368,7 @@ button.remove-league-button:hover {
 .leagues-button-admin {
     display: flex;
     justify-content: center;
-    gap: 0.3em;
+    gap: 1em;
 }
 
 .add-leagues-button {
@@ -678,6 +678,30 @@ body.add-league-body {
     color: #333;
 }
 
+.teams-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    margin-bottom: 1em;
+}
+
+.favorite-checkbox {
+    display: none;
+}
+
+.favorite-button {
+    display: inline-block;
+    cursor: pointer;
+    font-size: 45px;
+    color: #d3d3d3;
+    transition: color 0.3s, border-color 0.3s;
+}
+
+.favorite-checkbox:checked + .favorite-button .star-icon {
+    color: #ffcc00;
+    border-color: #ffcc00;
+}
+
 #season-form {
     margin-bottom: 20px;
 }
@@ -709,8 +733,9 @@ body.add-league-body {
 }
 
 .team-box {
-    display: block;
+    display: flex;
     width: 200px;
+    flex-direction: column;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -727,7 +752,7 @@ body.add-league-body {
 }
 
 .team-name {
-    font-size: 24px;
+    font-size: 22px;
     color: #007bff;
     margin-bottom: 10px;
 }
@@ -1070,4 +1095,141 @@ footer.teams-footer {
     background-color: #2d2d32;
     color: white;
     width: 100%;
+}
+
+
+.profile-container {
+    width: 80%;
+    max-width: 1000px;
+    margin: 5em auto 0;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.profile-header{
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+#profile-photo {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+.user-info h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.user-info p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.favorites-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.favorites-section {
+    width: 48%;
+}
+
+.favorites-section h2, .page-header h1 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.favorites-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.favorite-item {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    padding: 10px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.favorite-item:hover {
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.favorite-photo {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.show-more {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    border-radius: 4px;
+    padding: 10px;
+    text-decoration: none;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.show-more:hover {
+    background-color: #0056b3;
+}
+
+.back-button {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    border-radius: 4px;
+    padding: 10px;
+    text-decoration: none;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+.team-box-add {
+    display: flex;
+    width: 200px;
+    height: 250px;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    background-color: #fff;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.team-logo-add {
+    max-width: 100%;
+    height: auto;
 }

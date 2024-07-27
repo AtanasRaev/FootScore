@@ -33,7 +33,7 @@ public class FootScoreUserDetailsService implements UserDetailsService {
 
     private static UserDetails map(UserEntity user) {
         return new FootScoreUserDetails(
-                user.getEmail(),
+                user.getUsername(),
                 user.getPassword(),
                 List.of(map(user.getRole().getRole())),
                 user.getFirstName(),

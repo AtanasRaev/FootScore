@@ -115,10 +115,8 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public List<TeamPageDto> findAllByIds(List<Long> ids) {
-        return this.teamRepository.findAllById(ids).stream()
-                .map(team -> this.modelMapper.map(team, TeamPageDto.class))
-                .toList();
+    public List<Team> findAllByIds(List<Long> ids) {
+        return this.teamRepository.findAllById(ids);
     }
 
     @Override

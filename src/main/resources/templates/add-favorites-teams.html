@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Teams</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="teams-body">
+<header th:replace="fragments/commons::nav"></header>
+<section class="teams-section">
+    <div class="teams-container">
+        <h1 class="teams-title">Teams in <span th:text="${league.name}"></span></h1>
+        <h2 class="teams-title">Season: <span th:text="${season.toString()}"></span></h2>
+        <form id="season-form" th:method="get"
+              th:action="@{/league/{leagueId}/teams/add-favorites(leagueId=${league.id})}">
+            <input type="hidden" name="leagueId" th:value="${league.id}">
+        </form>
+        <form th:method="post"
+              th:action="@{/league/{leagueId}/teams(leagueId=${league.id})}">
+            <div class="leagues-button-admin">
+                <input type="hidden" name="leagueId" th:value="${league.id}">
+                <button class="add-leagues-button">Done</button>
+            </div>
+            <div class="team-list">
+                <div th:each="team : ${teams}" class="team-box-add">
+                    <h2 class="team-name"><span th:text="${team.name}"></span></h2>
+                    <img th:src="${team.logo}" alt="Team Logo" class="team-logo-add">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" th:id="'favorite-team-' + ${team.id}" class="favorite-checkbox"
+                               th:name="teamIds" th:value="${team.id}">
+                        <label th:for="'favorite-team-' + ${team.id}" class="favorite-button">
+                            <span class="star-icon">&#9733;</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<footer class="teams-footer">
+    <p>&copy; 2024 Foot Score. All rights reserved.</p>
+</footer>
+</body>
+</html>

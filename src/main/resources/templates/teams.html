@@ -7,7 +7,6 @@
 </head>
 <body class="teams-body">
 <header th:replace="fragments/commons::nav"></header>
-
 <section class="teams-section">
     <div class="teams-container">
         <h1 class="teams-title">Teams in <span th:text="${league.name}"></span></h1>
@@ -17,19 +16,30 @@
                 <option th:each="season : ${seasons}"
                         th:value="${season.id}"
                         th:text="${season.toString()}"
-                        th:selected="${season.id == selectedSeasonId}">Season</option>
+                        th:selected="${season.id == selectedSeasonId}">Season
+                </option>
             </select>
             <input type="hidden" name="leagueId" th:value="${league.id}">
         </form>
-        <form th:method="get"
-              th:action="@{/widgets/standings}">
-            <input type="hidden" name="leagueId" th:value="${league.id}">
-            <input type="hidden" name="seasonId" th:value="${selectedSeasonId}">
-            <button class="teams-standings-button">View standings</button>
-        </form>
+        <div class="teams-buttons">
+            <form th:method="get"
+                  th:action="@{/widgets/standings}">
+                <input type="hidden" name="leagueId" th:value="${league.id}">
+                <input type="hidden" name="seasonId" th:value="${selectedSeasonId}">
+                <button class="add-leagues-button">View standings</button>
+            </form>
+            <form th:method="get"
+                  th:action="@{/league/{leagueId}/teams/add-favorites(leagueId=${league.id})}">
+                <input type="hidden" name="seasonId" th:value="${selectedSeasonId}">
+                <input type="hidden" name="leagueId" th:value="${league.id}">
+                <button class="add-leagues-button">Add to favorites</button>
+            </form>
+        </div>
+
         <div class="team-list">
             <div th:each="team : ${teams}" class="team-box">
-                <a th:href="@{/team/{teamId}/details(teamId=${team.id}, seasonId=${selectedSeasonId})}" class="team-link">
+                <a th:href="@{/team/{teamId}/details(teamId=${team.id}, seasonId=${selectedSeasonId})}"
+                   class="team-link">
                     <h2 class="team-name"><span th:text="${team.name}"></span></h2>
                     <img th:src="${team.logo}" alt="Team Logo" class="team-logo">
                 </a>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<header th:replace="fragments/commons::nav"></header>
+<body>
+<div class="profile-container">
+    <header class="profile-header">
+        <img src="${user.photo}" alt="Profile Photo" id="profile-photo">
+        <div class="user-info">
+            <h1 id="name" th:text="${user.firstName} + ' ' + ${user.lastName}"></h1>
+
+            <p id="username">
+                <strong>Username:</strong>
+                <span th:text="${user.username}"></span>
+            </p>
+
+            <p id="email">
+                <strong>Email:</strong>
+                <span th:text="${user.email}"></span>
+            </p>
+        </div>
+    </header>
+    <div class="favorites-container">
+        <section class="favorites-section">
+            <h2>Favorite Teams</h2>
+            <div id="favorite-teams" class="favorites-list">
+                <a href="/show-all?type=teams" class="show-more">Show All</a>
+            </div>
+        </section>
+        <section class="favorites-section">
+            <h2>Favorite Players</h2>
+            <div id="favorite-players" class="favorites-list">
+                <a href="/show-all?type=players" class="show-more">Show All</a>
+            </div>
+        </section>
+    </div>
+</div>
+<footer class="player-footer">
+    <p>&copy; 2024 Foot Score. All rights reserved.</p>
+</footer>
+</body>
+</html>

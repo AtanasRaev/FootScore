@@ -3,13 +3,19 @@ package bg.softuni.footscore.web;
 import bg.softuni.footscore.model.entity.*;
 import bg.softuni.footscore.service.*;
 import bg.softuni.footscore.utils.SeasonUtils;
+import bg.softuni.footscore.utils.UserUtils;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Controller
 public class TeamController {
@@ -18,17 +24,20 @@ public class TeamController {
     private final LeagueTeamSeasonService leagueTeamSeasonService;
     private final TeamStatisticsService teamStatisticsService;
     private final TeamService teamService;
+    private final UserService userService;
 
     public TeamController(LeagueService leagueService,
                           SeasonService seasonService,
                           LeagueTeamSeasonService seasonLeagueTeamService,
                           TeamStatisticsService teamStatisticsService,
-                          TeamService teamService) {
+                          TeamService teamService,
+                          UserService userService) {
         this.leagueService = leagueService;
         this.seasonService = seasonService;
         this.leagueTeamSeasonService = seasonLeagueTeamService;
         this.teamStatisticsService = teamStatisticsService;
         this.teamService = teamService;
+        this.userService = userService;
     }
 
     @GetMapping("/league/{leagueId}/teams")
@@ -55,6 +64,59 @@ public class TeamController {
 
         return "teams";
     }
+
+    @Transactional
+    @PostMapping("/league/{leagueId}/teams")
+    public String addTeam(@PathVariable long leagueId,
+                          @RequestParam (required = false) Long seasonId,
+                          @RequestParam (required = false) List<Long> teamIds,
+                          Model model) {
+
+        Optional<League> leagueById = this.leagueService.getLeagueById(leagueId);
+        if (leagueById.isEmpty()) {
+            return "redirect:/league-error";
+        }
+
+        if (teamIds == null || teamIds.isEmpty() ) {
+            return "redirect:/league/" + leagueId + "/teams";
+        }
+
+        if(seasonId == null) {
+            seasonId = this.seasonService.getAllSeasons().getLast().getId();
+        }
+
+        model.addAttribute("seasonId", this.seasonService.getSeasonById(seasonId).get());
+
+
+        String username = UserUtils.findUsername();
+
+        Optional<UserEntity> optionalUser = userService.getUserByUsername(username);
+
+        if (optionalUser.isPresent()) {
+            List<Team> allByIds = this.teamService.findAllByIds(teamIds);
+            this.userService.addFavoriteTeams(optionalUser.get(), allByIds);
+        }
+
+        return "redirect:/league/" + leagueId + "/teams";
+    }
+
+    @GetMapping("/league/{leagueId}/teams/add-favorites")
+    public String teamsAddFavorites(@PathVariable long leagueId,
+                                    @RequestParam Long seasonId,
+                                    Model model) {
+
+        if(seasonId == null) {
+            seasonId = this.seasonService.getAllSeasons().getLast().getId();
+        }
+        List<LeagueTeamSeason> byLeagueIdAndSeasonId = this.leagueTeamSeasonService.getByLeagueIdAndSeasonId(leagueId, seasonId);
+
+        model.addAttribute("teams", byLeagueIdAndSeasonId.stream().map(LeagueTeamSeason::getTeam).toList());
+        model.addAttribute("league", byLeagueIdAndSeasonId.getFirst().getLeague());
+        model.addAttribute("season", byLeagueIdAndSeasonId.getFirst().getSeason());
+
+        return "add-favorites-teams";
+    }
+
 
     @GetMapping("/team/{teamId}/details")
     public String teamDetails(@PathVariable long teamId,

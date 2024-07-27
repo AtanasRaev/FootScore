@@ -71,8 +71,11 @@ public class LeagueController {
     }
 
     @PostMapping("/preview")
-    public String previewSelectedLeagues(@RequestParam List<Long> leagueIds, Model model) {
+    public String previewSelectedLeagues(@RequestParam(required = false) List<Long> leagueIds, Model model) {
         //todo: error handling
+        if (leagueIds == null || leagueIds.isEmpty()) {
+            return "redirect:/leagues/add";
+        }
         List<LeagueAddDto> selectedLeagues = this.leagueService.getLeagueByIds(leagueIds);
         model.addAttribute("selectedLeagues", selectedLeagues);
         return "preview-leagues";
@@ -80,6 +83,9 @@ public class LeagueController {
 
     @PostMapping("/saveSelected")
     public String saveSelectedLeagues(@RequestParam List<Long> leagueIds) {
+//        if (leagueIds == null || leagueIds.isEmpty()) {
+//            return "redirect:/saveSelected";
+//        }
 
         //todo: error handling
         leagueIds.forEach(id -> {
@@ -110,7 +116,7 @@ public class LeagueController {
     }
 
     @PostMapping("/remove")
-    public String doRemoveSelectedLeagues(@RequestParam long leagueId) {
+    public String doRemoveSelectedLeagues(@RequestParam Long leagueId) {
         Optional<League> leagueById = this.leagueService.getLeagueById(leagueId);
         if (leagueById.isPresent()) {
             leagueById.get().setSelected(false);

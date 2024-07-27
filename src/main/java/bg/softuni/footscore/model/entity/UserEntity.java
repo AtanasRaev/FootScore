@@ -3,8 +3,8 @@ package bg.softuni.footscore.model.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -33,31 +33,31 @@ public class UserEntity {
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
 
-    @OneToMany
-    private List<Team> favouriteTeams;
+    @ManyToMany
+    private Set<Team> favoriteTeams;
 
-    @OneToMany
-    private List<Player> favouritePlayers;
+    @ManyToMany
+    private Set<Player> favoritePlayers;
 
     public UserEntity() {
-        this.favouriteTeams = new ArrayList<>();
-        this.favouritePlayers = new ArrayList<>();
+        this.favoriteTeams = new LinkedHashSet<>();
+        this.favoritePlayers = new LinkedHashSet<>();
     }
 
-    public List<Team> getFavouriteTeams() {
-        return favouriteTeams;
+    public Set<Team> getFavoriteTeams() {
+        return favoriteTeams;
     }
 
-    public void setFavouriteTeams(List<Team> favouriteTeams) {
-        this.favouriteTeams = favouriteTeams;
+    public void setFavoriteTeams(Set<Team> favoriteTeams) {
+        this.favoriteTeams = favoriteTeams;
     }
 
-    public List<Player> getFavouritePlayers() {
-        return favouritePlayers;
+    public Set<Player> getFavoritePlayers() {
+        return favoritePlayers;
     }
 
-    public void setFavouritePlayers(List<Player> favouritePlayers) {
-        this.favouritePlayers = favouritePlayers;
+    public void setFavoritePlayers(Set<Player> favoritePlayers) {
+        this.favoritePlayers = favoritePlayers;
     }
 
     public long getId() {
