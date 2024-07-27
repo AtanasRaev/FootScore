@@ -1,7 +1,5 @@
 package bg.softuni.footscore.model.dto.teamDto;
 
-import java.util.List;
-
 public class LineupDto {
     private String formation;
     private Integer played;

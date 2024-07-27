@@ -3,6 +3,7 @@ package bg.softuni.footscore.web;
 import bg.softuni.footscore.model.entity.*;
 import bg.softuni.footscore.service.*;
 import bg.softuni.footscore.utils.SeasonUtils;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -90,6 +91,28 @@ public class PlayerController {
         model.addAttribute("players", allPlayers);
 
         return "players";
+    }
+
+    @GetMapping("/player/{playerId}/details")
+    public String details(@PathVariable long playerId,
+                          Model model) {
+
+        Optional<Player> playerOptional = this.playerService.getPlayerById(playerId);
+
+        if (playerOptional.isEmpty()) {
+            return "redirect:/player-details-error";
+        }
+
+        if (playerOptional.get().getRetired() == null) {
+            this.playerService.fillMissingPlayerDetails(playerId);
+        }
+
+        Player player = this.playerService.getPlayerById(playerId).get();
+
+        model.addAttribute("player", player);
+        model.addAttribute("birthdate", player);
+
+        return "player-details";
     }
 
     private static Long getId(Long seasonId, long currentSeasonId) {

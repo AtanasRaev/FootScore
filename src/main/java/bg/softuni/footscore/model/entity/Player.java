@@ -50,6 +50,12 @@ public class Player {
     @Column
     private String team;
 
+    @Column
+    private Integer number;
+
+    @Column
+    private Boolean isRetired;
+
     public Player(String firstName,
                   String lastName,
                   String name,
@@ -188,5 +194,25 @@ public class Player {
 
     public void setTeam(String team) {
         this.team = team;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+
+    public Boolean getRetired() {
+        return isRetired;
+    }
+
+    public void setRetired(Boolean retired) {
+        isRetired = retired;
     }
 }

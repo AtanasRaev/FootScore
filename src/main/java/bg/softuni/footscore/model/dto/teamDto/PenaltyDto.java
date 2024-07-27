@@ -5,7 +5,6 @@ public class PenaltyDto {
     private PenaltyDetailDto missed;
     private Integer total;
 
-    // Getters and setters
     public PenaltyDetailDto getScored() { return scored; }
     public void setScored(PenaltyDetailDto scored) { this.scored = scored; }
 

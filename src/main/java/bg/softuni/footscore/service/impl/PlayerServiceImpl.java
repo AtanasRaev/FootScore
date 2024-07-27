@@ -1,17 +1,17 @@
 package bg.softuni.footscore.service.impl;
 
 import bg.softuni.footscore.config.ApiConfig;
-import bg.softuni.footscore.model.dto.playerDto.PlayerStatisticsApiDto;
 import bg.softuni.footscore.model.dto.ResponsePlayerApiDto;
-import bg.softuni.footscore.model.dto.SeasonsByPlayerApiDto;
+import bg.softuni.footscore.model.dto.ResponsePlayerDetailsApiDto;
+import bg.softuni.footscore.model.dto.playerDto.PlayerStatisticsApiDto;
 import bg.softuni.footscore.model.entity.Player;
-import bg.softuni.footscore.model.entity.Season;
 import bg.softuni.footscore.model.entity.PlayerTeamSeason;
+import bg.softuni.footscore.model.entity.Season;
 import bg.softuni.footscore.model.entity.Team;
 import bg.softuni.footscore.repository.PlayerRepository;
 import bg.softuni.footscore.service.PlayerService;
-import bg.softuni.footscore.service.SeasonService;
 import bg.softuni.footscore.service.PlayerTeamSeasonService;
+import bg.softuni.footscore.service.SeasonService;
 import bg.softuni.footscore.service.TeamService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -36,8 +36,7 @@ public class PlayerServiceImpl implements PlayerService {
     private final RestClient restClient;
 
     public static final String PLAYERS_BY_TEAM_SEASON_AND_PAGE = "%splayers?team=%d&season=%d&page=%d";
-    public static final String PLAYERS_BY_ID_AND_SEASON = "%splayers?id=%d&season=%d";
-    public static final String PLAYERS_BY_ID_AND_ALL_SEASONS = "%splayers/seasons?player=%d";
+    public static final String PLAYERS_BY_ID = "%splayers/squads?player=%d";
 
     public PlayerServiceImpl(PlayerRepository playerRepository,
                              TeamService teamService,
@@ -124,8 +123,8 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public SeasonsByPlayerApiDto getResponseSeasonsByPlayerApiDto(String query, long id) {
-        String url = String.format(query, this.apiConfig.getUrl(), id);
+    public ResponsePlayerDetailsApiDto getResponsePlayerDetailsApiDto(String query, long playerId) {
+        String url = String.format(query, this.apiConfig.getUrl(), playerId);
 
         return this.restClient
                 .get()
@@ -133,7 +132,7 @@ public class PlayerServiceImpl implements PlayerService {
                 .header("x-rapidapi-key", this.apiConfig.getKey())
                 .header("x-rapidapi-host", this.apiConfig.getUrl())
                 .retrieve()
-                .body(SeasonsByPlayerApiDto.class);
+                .body(ResponsePlayerDetailsApiDto.class);
     }
 
     @Override
@@ -142,8 +141,34 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    public void fillMissingPlayerDetails(long playerApiId) {
+        Optional<Player> optionalPlayer = this.playerRepository.findById(playerApiId);
+        if (optionalPlayer.isPresent()) {
+            ResponsePlayerDetailsApiDto response = getResponsePlayerDetailsApiDto(PLAYERS_BY_ID, optionalPlayer.get().getApiId());
+
+            if (response.getResponse().isEmpty()) {
+                optionalPlayer.get().setRetired(true);
+                optionalPlayer.get().setAge(this.seasonService.getAllSeasons().getLast().getYear() - optionalPlayer.get().getBirthday().getYear());
+            } else {
+                response.getResponse().forEach(dto -> {
+                    Optional<Team> optionalTeam = this.teamService.getTeamByApiId(dto.getTeam().getId());
+                    optionalTeam.ifPresent(team -> optionalPlayer.get().setTeam(team.getName()));
+                    optionalPlayer.get().setRetired(false);
+                    optionalPlayer.get().setNumber(dto.getPlayers().getFirst().getNumber());
+                });
+            }
+            this.playerRepository.save(optionalPlayer.get());
+        }
+    }
+
+    @Override
     public boolean isEmpty() {
         return this.playerRepository.count() == 0;
+    }
+
+    @Override
+    public Optional<Player> getPlayerById(long playerId) {
+        return this.playerRepository.findById(playerId);
     }
 
     private static Player createPlayer(PlayerStatisticsApiDto dto) {
@@ -175,8 +200,7 @@ public class PlayerServiceImpl implements PlayerService {
                 height,
                 weight,
                 dto.getPlayer().getPhoto(),
-                dto.getPlayer().getId()
-        );
+                dto.getPlayer().getId());
     }
 
     private static Integer parseStringToInteger(String heightStr, Integer height) {
@@ -209,11 +233,4 @@ public class PlayerServiceImpl implements PlayerService {
             }
         }
     }
-
-//                        SeasonsByPlayerApiDto responseSeasonsByPlayerApiDto = getResponseSeasonsByPlayerApiDto(PLAYERS_BY_ID_AND_ALL_SEASONS, player.getApiId());
-//                        int year = responseSeasonsByPlayerApiDto.getResponse().getLast();
-//                        ResponsePlayerApiDto responsePlayer = this.getResponsePlayerApiDto(PLAYERS_BY_ID_AND_SEASON, player.getApiId(), year);
-//                        StatisticsApiDto statistics = responsePlayer.getResponse().getFirst().getStatistics().getFirst();
-//
-//                        player.setTeam(statistics.getTeam().getName());
 }

@@ -11,7 +11,7 @@
 <section class="teams-section">
     <div class="teams-container">
         <h1 class="teams-title">Players in <span th:text="${team.name}"></span></h1>
-        <form id="player-season-form" th:method="get" th:action="@{/team/{teamId}/players(teamId=${team.id})}">
+        <form id="player-season-form" th:method="get" th:action="@{/team/{teamId}/players(teamId=${team.id}, seasonId=${selectedSeasonId})}">
             <div class="players-filters">
                 <label for="player-season">Select a season:</label>
                 <select id="player-season" name="seasonId" onchange="this.form.submit()">
@@ -23,14 +23,14 @@
                 </select>
             </div>
             <div class="players-filters">
-                <a th:href="@{/league/{leagueId}/teams(leagueId=${league.id})}" class="team-link" th:each="league : ${leagues}">
+                <a th:href="@{/league/{leagueId}/teams(leagueId=${league.id}, seasonId=${selectedSeasonId})}" class="team-link" th:each="league : ${leagues}">
                     <img th:src="${league.logo}" alt="Team Logo" class="player-logo">
                 </a>
             </div>
             <div class="players-filters">
                 <label for="position">Sort by position:</label>
                 <select id="position" name="position" onchange="this.form.submit()">
-                    <option th:text="'All positions'" th:selected="${selectedPosition == 'All countries'}">All
+                    <option th:text="'All positions'" th:selected="${selectedPosition == 'All positions'}">All
                         positions
                     </option>
                     <option th:each="position : ${positions}"
@@ -40,14 +40,15 @@
                     </option>
                 </select>
                 <input type="hidden" name="teamId" th:value="${team.id}">
+                <input type="hidden" name="seasonId" th:value="${selectedSeasonId}">
             </div>
         </form>
         <div class="team-list">
             <div th:each="player : ${players}" class="player-box">
                 <div>
-                    <a th:href="@{/player/{playerId}(playerId=${player.id})}" class="team-link">
+                    <a th:href="@{/player/{playerId}/details(playerId=${player.id})}" class="team-link">
                         <h2 class="player-name"><span th:text="${player.shortName}"></span></h2>
-                        <img th:src="${player.photo}" alt="Team Logo" class="player-logo">
+                        <img th:src="${player.photo}" alt="Player Photo" class="player-logo">
                         <p class="player-position"><span th:text="${player.position}"></span></p>
                     </a>
                 </div>

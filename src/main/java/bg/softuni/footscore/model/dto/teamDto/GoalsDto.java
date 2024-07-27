@@ -1,6 +1,5 @@
 package bg.softuni.footscore.model.dto.teamDto;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class GoalsDto {

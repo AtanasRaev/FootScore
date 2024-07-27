@@ -4,7 +4,6 @@ public class PenaltyDetailDto {
     private Integer total;
     private String percentage;
 
-    // Getters and setters
     public Integer getTotal() { return total; }
     public void setTotal(Integer total) { this.total = total; }
 

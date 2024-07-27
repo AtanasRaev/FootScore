@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Profile</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<header th:replace="fragments/commons::nav"></header>
+<div class="player-profile">
+    <div class="player-photo">
+        <img th:src="${player.photo}" alt="Player Photo">
+    </div>
+    <div class="player-info">
+        <h1 class="player-name" th:text="${player.fullName}">Player Name</h1>
+
+        <p>
+            <strong>Age:</strong>
+            <span th:if="${player.age != null}" th:text="${player.age}"></span>
+            <span th:unless="${player.age != null}">No data</span>
+        </p>
+
+        <p>
+            <strong>Birth Date:</strong>
+            <span th:if="${player.birthday != null}" th:text="${player.birthday.month.toString()}"></span>
+            <span th:if="${player.birthday != null}" th:text="${player.birthday.dayOfMonth} + ','"></span>
+            <span th:if="${player.birthday != null}" th:text="${player.birthday.year}"></span>
+            <span th:if="${player.birthday == null}">No data</span>
+        </p>
+
+        <p>
+            <strong>Height:</strong>
+            <span th:if="${player.height != null}" th:text="${player.height} + ' cm'"></span>
+            <span th:unless="${player.height != null}">No data</span>
+        </p>
+
+        <p>
+            <strong>Weight:</strong>
+            <span th:if="${player.weight != null}" th:text="${player.weight} + ' kg'"></span>
+            <span th:unless="${player.weight != null}">No data</span>
+        </p>
+
+        <p>
+            <strong>Nationality:</strong>
+            <span th:if="${player.nationality != null}" th:text="${player.nationality}"></span>
+            <span th:unless="${player.nationality != null}">No data</span>
+        </p>
+
+        <p>
+            <strong>Team:</strong>
+            <span th:if="${player.team != null}" th:text="${player.team}"></span>
+            <span th:unless="${player.team != null}">No data</span>
+        </p>
+
+        <p>
+            <strong>Position:</strong>
+            <span th:if="${player.position != null}" th:text="${player.position}"></span>
+            <span th:unless="${player.position != null}">No data</span>
+        </p>
+
+        <p>
+            <strong>Number:</strong>
+            <span th:if="${player.number != null}" th:text="${player.number}"></span>
+            <span th:unless="${player.number != null}">No data</span>
+        </p>
+
+        <p>
+            <strong>Status:</strong>
+            <span th:if="${player.retired == true}"> Retired</span>
+            <span th:if="${player.retired == false}"> Still playing</span>
+            <span th:if="${player.retired == null}">No data</span>
+        </p>
+    </div>
+</div>
+<footer class="player-footer">
+    <p>&copy; 2024 Foot Score. All rights reserved.</p>
+</footer>
+</body>
+</html>

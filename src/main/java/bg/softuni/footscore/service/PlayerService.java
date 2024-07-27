@@ -1,7 +1,7 @@
 package bg.softuni.footscore.service;
 
 import bg.softuni.footscore.model.dto.ResponsePlayerApiDto;
-import bg.softuni.footscore.model.dto.SeasonsByPlayerApiDto;
+import bg.softuni.footscore.model.dto.ResponsePlayerDetailsApiDto;
 import bg.softuni.footscore.model.entity.Player;
 import bg.softuni.footscore.model.entity.Season;
 import bg.softuni.footscore.model.entity.Team;
@@ -13,9 +13,13 @@ public interface PlayerService {
 
     ResponsePlayerApiDto getResponsePlayerApiDto(String query, long id, int seasonYear, int page);
 
-    SeasonsByPlayerApiDto getResponseSeasonsByPlayerApiDto(String query, long id);
+    ResponsePlayerDetailsApiDto getResponsePlayerDetailsApiDto(String query, long playerApiId);
 
     Optional<Player> getPlayerByApiId(long apiId);
 
+    void fillMissingPlayerDetails(long playerId);
+
     boolean isEmpty();
+
+    Optional<Player> getPlayerById(long playerId);
 }
