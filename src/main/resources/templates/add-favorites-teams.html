@@ -26,10 +26,14 @@
                     <h2 class="team-name"><span th:text="${team.name}"></span></h2>
                     <img th:src="${team.logo}" alt="Team Logo" class="team-logo-add">
                     <div class="checkbox-wrapper">
-                        <input type="checkbox" th:id="'favorite-team-' + ${team.id}" class="favorite-checkbox"
-                               th:name="teamIds" th:value="${team.id}">
-                        <label th:for="'favorite-team-' + ${team.id}" class="favorite-button">
-                            <span class="star-icon">&#9733;</span>
+                        <label>
+                            <input type="checkbox" th:id="'favorite-team-' + ${team.id}"
+                                   class="favorite-checkbox"
+                                   th:name="teamIds" th:value="${team.id}"
+                                   th:checked="${favoriteTeams.contains(team)}">
+                            <label th:for="'favorite-team-' + ${team.id}" class="favorite-button">
+                                <span class="star-icon">&#9733;</span>
+                            </label>
                         </label>
                     </div>
                 </div>

@@ -11,13 +11,11 @@ public interface LeagueTeamSeasonService {
 
     Optional<Team> getTeamByLeagueIdAndSeasonIdAndTeamId(long leagueId, long seasonId, long teamId);
 
-    List<LeagueTeamSeason> getTeamsByLeagueIdAndSeasonId(long leagueId, long seasonId);
+    List<LeagueTeamSeason> getByLeagueIdAndSeasonId(long leagueId, long seasonId);
 
-    Optional<LeagueTeamSeason> getByTeamIdAndLeagueId(long teamId, long leagueId);
+    List<LeagueTeamSeason> getByTeamIdAndLeagueId(long teamId, long leagueId);
 
     List<LeagueTeamSeason> getByTeamIdAndSeasonId(long teamId, long seasonId);
-
-    List<LeagueTeamSeason> getByLeagueIdAndSeasonId(long leagueId, long seasonId);
 
     void save(LeagueTeamSeason seasonLeagueTeam);
 }

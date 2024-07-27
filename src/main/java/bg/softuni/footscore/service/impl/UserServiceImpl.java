@@ -7,13 +7,14 @@ import bg.softuni.footscore.model.entity.UserEntity;
 import bg.softuni.footscore.repository.UserEntityRepository;
 import bg.softuni.footscore.service.RoleService;
 import bg.softuni.footscore.service.UserService;
+import bg.softuni.footscore.utils.UserUtils;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -47,6 +48,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Optional<UserEntity> getUserByUsername(String username) {
         return this.userRepository.findByUsername(username);
     }
@@ -54,10 +56,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void addFavoriteTeams(UserEntity user, List<Team> allByIds) {
-        if (allByIds.isEmpty()) {
-            return;
-        }
-        user.getFavoriteTeams().addAll(allByIds);
+        user.getFavoriteTeams().addAll(new LinkedHashSet<>(allByIds));
         this.userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public Optional<UserEntity> getUser() {
+        return getUserByUsername(UserUtils.findUsername());
     }
 }

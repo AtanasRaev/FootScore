@@ -18,12 +18,9 @@ public interface LeagueTeamSeasonRepository extends JpaRepository<LeagueTeamSeas
     @Query("SELECT t FROM LeagueTeamSeason s JOIN s.team t WHERE s.season.id = :seasonId AND s.league.id = :leagueId AND s.team.id = :teamId")
     Optional<Team> findTeamByLeagueIdAndSeasonIdAndTeamId(Long leagueId, Long seasonId, Long teamId);
 
-    Optional<LeagueTeamSeason> findByTeamIdAndLeagueId(long teamId, long leagueId);
-
-    @Query("FROM LeagueTeamSeason s WHERE s.season.id = :seasonId AND s.league.id = :leagueId")
-    List<LeagueTeamSeason> findTeamByLeagueIdAndSeasonId(long leagueId, long seasonId);
-
-    List<LeagueTeamSeason> findByTeamIdAndSeasonId(long teamId, long seasonId);
+    List<LeagueTeamSeason> findByTeamIdAndLeagueId(long teamId, long leagueId);
 
     List<LeagueTeamSeason> findByLeagueIdAndSeasonId(long leagueId, long seasonId);
+
+    List<LeagueTeamSeason> findByTeamIdAndSeasonId(long teamId, long seasonId);
 }

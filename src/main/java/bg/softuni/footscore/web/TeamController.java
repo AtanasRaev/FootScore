@@ -68,8 +68,8 @@ public class TeamController {
     @Transactional
     @PostMapping("/league/{leagueId}/teams")
     public String addTeam(@PathVariable long leagueId,
-                          @RequestParam (required = false) Long seasonId,
-                          @RequestParam (required = false) List<Long> teamIds,
+                          @RequestParam(required = false) Long seasonId,
+                          @RequestParam(required = false) List<Long> teamIds,
                           Model model) {
 
         Optional<League> leagueById = this.leagueService.getLeagueById(leagueId);
@@ -77,42 +77,56 @@ public class TeamController {
             return "redirect:/league-error";
         }
 
-        if (teamIds == null || teamIds.isEmpty() ) {
-            return "redirect:/league/" + leagueId + "/teams";
-        }
 
-        if(seasonId == null) {
+        if (seasonId == null) {
             seasonId = this.seasonService.getAllSeasons().getLast().getId();
         }
 
         model.addAttribute("seasonId", this.seasonService.getSeasonById(seasonId).get());
 
 
-        String username = UserUtils.findUsername();
+        Optional<UserEntity> optionalUser = this.userService.getUser();
 
-        Optional<UserEntity> optionalUser = userService.getUserByUsername(username);
 
         if (optionalUser.isPresent()) {
-            List<Team> allByIds = this.teamService.findAllByIds(teamIds);
-            this.userService.addFavoriteTeams(optionalUser.get(), allByIds);
+            List<Team> allByIds  = new ArrayList<>();
+            if (teamIds != null && !teamIds.isEmpty()) {
+                allByIds = this.teamService.findAllByIds(teamIds);
+            }
+
+            if (!optionalUser.get().getFavoriteTeams().containsAll(allByIds)) {
+                this.userService.addFavoriteTeams(optionalUser.get(), allByIds);
+            }
         }
 
         return "redirect:/league/" + leagueId + "/teams";
     }
 
+    @Transactional
     @GetMapping("/league/{leagueId}/teams/add-favorites")
     public String teamsAddFavorites(@PathVariable long leagueId,
                                     @RequestParam Long seasonId,
                                     Model model) {
 
-        if(seasonId == null) {
+        if (seasonId == null) {
             seasonId = this.seasonService.getAllSeasons().getLast().getId();
         }
         List<LeagueTeamSeason> byLeagueIdAndSeasonId = this.leagueTeamSeasonService.getByLeagueIdAndSeasonId(leagueId, seasonId);
 
-        model.addAttribute("teams", byLeagueIdAndSeasonId.stream().map(LeagueTeamSeason::getTeam).toList());
+        List<Team> teams = byLeagueIdAndSeasonId.stream().map(LeagueTeamSeason::getTeam).toList();
+
+        model.addAttribute("teams", teams);
         model.addAttribute("league", byLeagueIdAndSeasonId.getFirst().getLeague());
         model.addAttribute("season", byLeagueIdAndSeasonId.getFirst().getSeason());
+
+
+        Optional<UserEntity> optionalUser = this.userService.getUser();
+        List<Team> favoriteTeams = new ArrayList<>();
+        if (optionalUser.isPresent()) {
+            favoriteTeams = optionalUser.get().getFavoriteTeams().stream().toList();
+        }
+
+        model.addAttribute("favoriteTeams", favoriteTeams);
 
         return "add-favorites-teams";
     }

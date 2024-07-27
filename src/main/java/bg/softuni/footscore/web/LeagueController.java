@@ -88,7 +88,7 @@ public class LeagueController {
             Optional<League> leagueOptional = this.leagueService.getLeagueById(id);
             for (Season season : this.seasonService.getAllSeasons()) {
                 leagueOptional.ifPresent(league -> {
-                    List<LeagueTeamSeason> optional = this.seasonLeagueTeamService.getTeamsByLeagueIdAndSeasonId(league.getId(), season.getId());
+                    List<LeagueTeamSeason> optional = this.seasonLeagueTeamService.getByLeagueIdAndSeasonId(league.getId(), season.getId());
 
                     if (optional.isEmpty()) {
                         this.teamService.saveApiTeamsForLeagueAndSeason(league, season);
