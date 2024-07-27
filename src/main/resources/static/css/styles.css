@@ -3,6 +3,9 @@ body {
     font-size: 3vh;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     overflow-x: hidden;
 }
 
@@ -240,7 +243,6 @@ body {
     background-color: #2d2d32;
     color: white;
     margin-top: auto;
-    position: absolute;
     width: 100%;
 }
 
@@ -646,7 +648,7 @@ body.add-league-body {
 .standings-footer {
     display: flex;
     font-size: 0.6em;
-    margin-top: 3.1em;
+    margin-top: auto;
     justify-content: center;
     background-color: #2d2d32;
     color: white;
@@ -752,7 +754,7 @@ body.add-league-body {
 }
 
 .team-name {
-    font-size: 22px;
+    font-size: 21px;
     color: #007bff;
     margin-bottom: 10px;
 }
@@ -770,11 +772,10 @@ body.add-league-body {
 footer.teams-footer {
     display: flex;
     font-size: 0.6em;
-    margin-top: 3.1em;
+    margin-top: auto;
     justify-content: center;
     background-color: #2d2d32;
     color: white;
-    position: absolute;
     width: 100%;
 }
 
@@ -1090,7 +1091,7 @@ footer.teams-footer {
 .player-footer {
     display: flex;
     font-size: 0.6em;
-    margin-top: 8.44em;
+    margin-top: auto;
     justify-content: center;
     background-color: #2d2d32;
     color: white;
@@ -1101,11 +1102,11 @@ footer.teams-footer {
 .profile-container {
     width: 80%;
     max-width: 1000px;
-    margin: 5em auto 0;
+    margin: 3.5em auto 0;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    padding: 1.3em;
 }
 
 .profile-header{
@@ -1232,4 +1233,31 @@ footer.teams-footer {
 .team-logo-add {
     max-width: 100%;
     height: auto;
+}
+
+.teams-players-filters {
+    display: flex;
+    justify-content: center;
+}
+
+
+.teams-players-container {
+    width: 80%;
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    align-items: center;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 1.3em;
+    margin: 3.5em auto 1.5em;
+}
+
+.teams-players-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-bottom: 1.5em;
 }

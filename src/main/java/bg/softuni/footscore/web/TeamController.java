@@ -77,16 +77,13 @@ public class TeamController {
             return "redirect:/league-error";
         }
 
-
         if (seasonId == null) {
             seasonId = this.seasonService.getAllSeasons().getLast().getId();
         }
 
         model.addAttribute("seasonId", this.seasonService.getSeasonById(seasonId).get());
 
-
         Optional<UserEntity> optionalUser = this.userService.getUser();
-
 
         if (optionalUser.isPresent()) {
             List<Team> allByIds  = new ArrayList<>();
@@ -115,18 +112,12 @@ public class TeamController {
 
         List<Team> teams = byLeagueIdAndSeasonId.stream().map(LeagueTeamSeason::getTeam).toList();
 
+        Optional<UserEntity> optionalUser = this.userService.getUser();
+        optionalUser.ifPresent(userEntity -> model.addAttribute("favoriteTeams", userEntity.getFavoriteTeams().stream().toList()));
+
         model.addAttribute("teams", teams);
         model.addAttribute("league", byLeagueIdAndSeasonId.getFirst().getLeague());
         model.addAttribute("season", byLeagueIdAndSeasonId.getFirst().getSeason());
-
-
-        Optional<UserEntity> optionalUser = this.userService.getUser();
-        List<Team> favoriteTeams = new ArrayList<>();
-        if (optionalUser.isPresent()) {
-            favoriteTeams = optionalUser.get().getFavoriteTeams().stream().toList();
-        }
-
-        model.addAttribute("favoriteTeams", favoriteTeams);
 
         return "add-favorites-teams";
     }

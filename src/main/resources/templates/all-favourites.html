@@ -3,34 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Favourites</title>
+    <title>Favorites</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
+<header th:replace="fragments/commons::nav"></header>
 <body>
-<div class="profile-container">
-    <header class="page-header">
-        <h1 id="page-title">Favorite Teams</h1>
-    </header>
-    <div id="favorites-list" class="favorites-container">
+<div class="teams-players-container">
+    <form id="season-form" th:method="get" th:action="@{/show-all}">
+        <div class="teams-players-filters">
+            <label for="season">Filter:</label>
+            <select id="season" name="filter" onchange="this.form.submit()">
+                <option th:each="favorite : ${favorites}"
+                        th:value="${favorite}"
+                        th:text="${favorite}"
+                        th:selected="${favorite.equals(selectedFilter)}">
+                </option>
+            </select>
+        </div>
+    </form>
 
-        <a href="/teams/team-c" class="favorite-item">
-            <img src="/images/team-c.jpg" alt="Team C" class="favorite-photo">
-            <p>Team C</p>
-        </a>
-        <a href="/teams/team-d" class="favorite-item">
-            <img src="/images/team-d.jpg" alt="Team D" class="favorite-photo">
-            <p>Team D</p>
-        </a>
-        <a href="/players/player-3" class="favorite-item">
-            <img src="/images/player-3.jpg" alt="Player 3" class="favorite-photo">
-            <p>Player 3</p>
-        </a>
-        <a href="/players/player-4" class="favorite-item">
-            <img src="/images/player-4.jpg" alt="Player 4" class="favorite-photo">
-            <p>Player 4</p>
-        </a>
+    <div class="teams-players-list">
+        <div th:each="item : ${collection}" class="team-box">
+            <a th:href="@{${selectedFilter == 'Teams' ? '/team/' + item.id + '/details' : '/player/' + item.id + '/details'}}"
+               class="team-link">
+                <h2 class="team-name" th:text="${selectedFilter == 'Teams' ? item.name : item.shortName}"></h2>
+                <img th:src="${selectedFilter == 'Teams' ? item.logo : item.photo}" alt="Photo" class="team-logo">
+            </a>
+        </div>
     </div>
     <a href="/profile" class="back-button">Back to Profile</a>
 </div>
+<footer class="teams-footer">
+    <p>&copy; 2024 Foot Score. All rights reserved.</p>
+</footer>
 </body>
 </html>

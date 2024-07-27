@@ -3,6 +3,7 @@ package bg.softuni.footscore.model.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -33,15 +34,15 @@ public class UserEntity {
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Team> favoriteTeams;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Player> favoritePlayers;
 
     public UserEntity() {
-        this.favoriteTeams = new LinkedHashSet<>();
-        this.favoritePlayers = new LinkedHashSet<>();
+        this.favoriteTeams = new HashSet<>();
+        this.favoritePlayers = new HashSet<>();
     }
 
     public Set<Team> getFavoriteTeams() {

@@ -27,15 +27,8 @@
     </header>
     <div class="favorites-container">
         <section class="favorites-section">
-            <h2>Favorite Teams</h2>
             <div id="favorite-teams" class="favorites-list">
-                <a href="/show-all?type=teams" class="show-more">Show All</a>
-            </div>
-        </section>
-        <section class="favorites-section">
-            <h2>Favorite Players</h2>
-            <div id="favorite-players" class="favorites-list">
-                <a href="/show-all?type=players" class="show-more">Show All</a>
+                <a th:href="@{/show-all}" class="show-more">Show favorites</a>
             </div>
         </section>
     </div>

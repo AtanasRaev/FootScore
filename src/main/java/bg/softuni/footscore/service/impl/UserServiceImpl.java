@@ -48,20 +48,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public Optional<UserEntity> getUserByUsername(String username) {
         return this.userRepository.findByUsername(username);
     }
 
     @Override
-    @Transactional
     public void addFavoriteTeams(UserEntity user, List<Team> allByIds) {
-        user.getFavoriteTeams().addAll(new LinkedHashSet<>(allByIds));
+        user.getFavoriteTeams().addAll(new HashSet<>(allByIds));
         this.userRepository.save(user);
     }
 
     @Override
-    @Transactional
     public Optional<UserEntity> getUser() {
         return getUserByUsername(UserUtils.findUsername());
     }
