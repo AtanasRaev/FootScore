@@ -26,10 +26,9 @@
 
     <div class="team-details-league-details">
         <div class="team-details-league-info" th:each="league : ${leagues}">
-            <a th:href="@{/team/{teamId}/players(teamId=${team.id}, seasonId=${selectedSeasonId})}">
-                <h3 class="team-details-league-name" th:if="${league.selected == true}" th:text="${league.name}"></h3>
-                <img class="team-details-league-logo" th:if="${league.selected == true}" th:src="${league.logo}"
-                     alt="League Logo">
+            <a th:href="@{/team/{teamId}/details(teamId=${team.id}, seasonId=${selectedSeasonId}, leagueId=${league.id})}">
+                <h3 class="team-details-league-name" th:text="${league.name}"></h3>
+                <img class="team-details-league-logo" th:src="${league.logo}" alt="League Logo">
             </a>
         </div>
     </div>

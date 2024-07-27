@@ -29,7 +29,7 @@
         </form>
         <div class="team-list">
             <div th:each="team : ${teams}" class="team-box">
-                <a th:href="@{/team/{teamId}/details(teamId=${team.id})}" class="team-link">
+                <a th:href="@{/team/{teamId}/details(teamId=${team.id}, seasonId=${selectedSeasonId})}" class="team-link">
                     <h2 class="team-name"><span th:text="${team.name}"></span></h2>
                     <img th:src="${team.logo}" alt="Team Logo" class="team-logo">
                 </a>
