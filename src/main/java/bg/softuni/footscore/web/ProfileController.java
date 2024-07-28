@@ -3,8 +3,8 @@ package bg.softuni.footscore.web;
 import bg.softuni.footscore.model.dto.UserEntityPageDto;
 import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
-import bg.softuni.footscore.model.entity.Player;
-import bg.softuni.footscore.model.entity.Team;
+import bg.softuni.footscore.service.PlayerService;
+import bg.softuni.footscore.service.TeamService;
 import bg.softuni.footscore.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,16 +12,25 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Comparator;
+import java.util.List;
 
 @Controller
 public class ProfileController {
     private final UserService userService;
+    private final TeamService teamService;
+    private final PlayerService playerService;
+    private static final String[] FAVORITES = {"Teams", "Players"};
 
-    public ProfileController(UserService userService) {
+    public ProfileController(UserService userService,
+                             TeamService teamService,
+                             PlayerService playerService) {
         this.userService = userService;
+        this.teamService = teamService;
+        this.playerService = playerService;
     }
 
     @GetMapping("/profile")
@@ -40,9 +49,54 @@ public class ProfileController {
 
     @GetMapping("/show-all")
     public String showAll(@RequestParam(required = false, defaultValue = "Teams") String filter,
+                          @RequestParam(required = false) String selectedFilter,
                           Model model) {
-        String[] favorites = {"Teams", "Players"};
-        model.addAttribute("favorites", favorites);
+        if (selectedFilter != null) {
+            filter = selectedFilter;
+        }
+        return getAllFavorite(filter, model, "all-favorites");
+    }
+
+    @PostMapping("/show-all")
+    public String removeLeague(@RequestParam(required = false, defaultValue = "Teams") String filter,
+                               @RequestParam(required = false) List<Long> itemIds,
+                               @RequestParam(required = false) String selectedFilter,
+                               Model model) {
+
+        if (itemIds == null) {
+            return "redirect:/show-all";
+        }
+
+        if (selectedFilter != null) {
+            filter = selectedFilter;
+        }
+
+        UserEntityPageDto user = this.userService.getUser();
+
+        if ("Teams".equals(filter)) {
+            List<TeamPageDto> teamsToRemove = this.teamService.findAllByIds(itemIds);
+            this.userService.removeFavoriteTeams(user, teamsToRemove);
+        } else {
+            List<PlayerPageDto> playersToRemove = this.playerService.getAllByIds(itemIds);
+            this.userService.removeFavoritePlayers(user, playersToRemove);
+        }
+        model.addAttribute("selectedFilter", filter);
+        return "redirect:/show-all";
+    }
+
+
+    @GetMapping("/show-all/edit")
+    public String showAllEdit(@RequestParam(required = false, defaultValue = "Teams") String filter,
+                              @RequestParam(required = false) String selectedFilter,
+                              Model model) {
+        if (selectedFilter != null) {
+            filter = selectedFilter;
+        }
+        return getAllFavorite(filter, model, "edit-favorites");
+    }
+
+    private String getAllFavorite(String filter, Model model, String template) {
+        model.addAttribute("favorites", FAVORITES);
         model.addAttribute("selectedFilter", filter);
 
         UserEntityPageDto user = userService.getUser();
@@ -57,7 +111,6 @@ public class ProfileController {
                         .sorted(Comparator.comparing(PlayerPageDto::getShortName)));
             }
         }
-
-        return "all-favourites";
+        return template;
     }
 }

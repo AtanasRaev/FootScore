@@ -12,13 +12,13 @@ public interface UserService {
 
     UserEntityPageDto getUserByUsername(String username);
 
-    void updateFavoriteTeams(UserEntityPageDto userEntityPageDto);
-
-    void updateFavoritePlayers(UserEntityPageDto userEntityPageDto);
-
     void addFavoriteTeams(UserEntityPageDto user, List<TeamPageDto> allByIds);
 
-    UserEntityPageDto getUser();
-
     void addFavoritePlayers(UserEntityPageDto user, List<PlayerPageDto> allByIds);
+
+    void removeFavoriteTeams(UserEntityPageDto user, List<TeamPageDto> allByIds);
+
+    void removeFavoritePlayers(UserEntityPageDto user, List<PlayerPageDto> allByIds);
+
+    UserEntityPageDto getUser();
 }

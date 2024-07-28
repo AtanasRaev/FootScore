@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorites</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<header th:replace="fragments/commons::nav"></header>
+<body>
+<div class="teams-players-container">
+    <form id="season-form" th:method="get" th:action="@{/show-all/edit(selectedFilter=${selectedFilter})}">
+        <div class="teams-players-filters">
+            <label for="season">Filter:</label>
+            <select id="season" name="filter" onchange="this.form.submit()">
+                <option th:each="favorite : ${favorites}"
+                        th:value="${favorite}"
+                        th:text="${favorite}"
+                        th:selected="${favorite.equals(selectedFilter)}">
+                </option>
+            </select>
+        </div>
+    </form>
+
+    <form th:method="post" th:action="@{/show-all(selectedFilter=${selectedFilter})}">
+        <div class="leagues-button-admin">
+            <button class="add-leagues-button">Done</button>
+        </div>
+        <div class="team-list">
+            <div th:each="item : ${collection}" class="team-box-add">
+                <h2 class="team-name"><span th:text="${selectedFilter == 'Teams' ? item.name : item.shortName}"></span></h2>
+                <img th:src="${selectedFilter == 'Teams' ? item.logo : item.photo}" alt="Team Logo" class="team-logo-add">
+                <div class="edit-checkbox-wrapper">
+                    <label>
+                        <input type="checkbox" th:id="'edit-favorite-team-' + ${item.id}" class="edit-favorite-checkbox" th:name="itemIds" th:value="${item.id}">
+                        <label th:for="'edit-favorite-team-' + ${item.id}" class="edit-favorite-button">
+                            <span class="edit-star-icon">Remove</span>
+                        </label>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<footer class="teams-footer">
+    <p>&copy; 2024 Foot Score. All rights reserved.</p>
+</footer>
+</body>
+</html>

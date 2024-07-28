@@ -60,11 +60,12 @@ public class UserServiceImpl implements UserService {
                 .orElse(null);
     }
 
-    @Override
-    public void updateFavoriteTeams(UserEntityPageDto userEntityPageDto) {
+    public void updateAddFavoriteTeams(UserEntityPageDto userEntityPageDto) {
         Optional<UserEntity> byUsername = this.userRepository.findByUsername(userEntityPageDto.getUsername());
+
         Set<TeamPageDto> favoriteTeams = userEntityPageDto.getFavoriteTeams();
         Set<Team> collect = favoriteTeams.stream().map(t -> this.modelMapper.map(t, Team.class)).collect(Collectors.toSet());
+
         byUsername.ifPresent(user -> {
             user.getFavoriteTeams().addAll(collect);
             this.userRepository.save(user);
@@ -72,11 +73,12 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public void updateFavoritePlayers(UserEntityPageDto userEntityPageDto) {
+    public void updateAddFavoritePlayers(UserEntityPageDto userEntityPageDto) {
         Optional<UserEntity> byUsername = this.userRepository.findByUsername(userEntityPageDto.getUsername());
+
         Set<PlayerPageDto> favoritePlayers = userEntityPageDto.getFavoritePlayers();
         Set<Player> collect = favoritePlayers.stream().map(p -> this.modelMapper.map(p, Player.class)).collect(Collectors.toSet());
+
         byUsername.ifPresent(user -> {
             user.getFavoritePlayers().addAll(collect);
             this.userRepository.save(user);
@@ -86,7 +88,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addFavoriteTeams(UserEntityPageDto dto, List<TeamPageDto> allByIds) {
         dto.getFavoriteTeams().addAll(new HashSet<>(allByIds));
-        this.updateFavoriteTeams(dto);
+        this.updateAddFavoriteTeams(dto);
     }
 
     @Override
@@ -97,6 +99,46 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addFavoritePlayers(UserEntityPageDto dto, List<PlayerPageDto> allByIds) {
         dto.getFavoritePlayers().addAll(new HashSet<>(allByIds));
-        this.updateFavoritePlayers(dto);
+        this.updateAddFavoritePlayers(dto);
+    }
+
+    @Override
+    public void removeFavoriteTeams(UserEntityPageDto user, List<TeamPageDto> allByIds) {
+        for (TeamPageDto allById : allByIds) {
+            user.getFavoriteTeams().removeIf(favoriteTeam -> allById.getId() == favoriteTeam.getId());
+        }
+        this.removeTeamsAndSaveUser(user);
+    }
+
+    private void removeTeamsAndSaveUser(UserEntityPageDto user) {
+        Optional<UserEntity> byUsername = this.userRepository.findByUsername(user.getUsername());
+
+        Set<TeamPageDto> dtoFavoriteTeams = new HashSet<>(user.getFavoriteTeams());
+        Set<Team> collect = dtoFavoriteTeams.stream().map(dto -> this.modelMapper.map(dto, Team.class)).collect(Collectors.toSet());
+
+        byUsername.ifPresent(userEntity -> {
+            userEntity.setFavoriteTeams(collect);
+            this.userRepository.save(userEntity);
+        });
+    }
+
+    @Override
+    public void removeFavoritePlayers(UserEntityPageDto user, List<PlayerPageDto> allByIds) {
+        for (PlayerPageDto allById : allByIds) {
+            user.getFavoritePlayers().removeIf(favoritePlayer -> allById.getId() == favoritePlayer.getId());
+        }
+        this.removePlayersAndSaveUser(user);
+    }
+
+    private void removePlayersAndSaveUser(UserEntityPageDto user) {
+        Optional<UserEntity> byUsername = this.userRepository.findByUsername(user.getUsername());
+
+        Set<PlayerPageDto> dtoFavoritePlayers = new HashSet<>(user.getFavoritePlayers());
+        Set<Player> collect = dtoFavoritePlayers.stream().map(dto -> this.modelMapper.map(dto, Player.class)).collect(Collectors.toSet());
+
+        byUsername.ifPresent(userEntity -> {
+                userEntity.setFavoritePlayers(collect);
+                this.userRepository.save(userEntity);
+        });
     }
 }

@@ -1261,3 +1261,51 @@ footer.teams-footer {
     gap: 20px;
     padding-bottom: 1.5em;
 }
+
+/* Add this to your CSS file */
+
+.edit-checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.edit-favorite-checkbox {
+    display: none;
+}
+
+.edit-favorite-button {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.edit-favorite-checkbox:checked + .edit-favorite-button {
+    background-color: red;
+    color: white;
+}
+
+.edit-favorite-button .edit-star-icon {
+    display: inline-block;
+    padding-left: 5px;
+}
+
+.edit-remove-selected-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.edit-remove-selected-button:hover {
+    background-color: #0056b3;
+}

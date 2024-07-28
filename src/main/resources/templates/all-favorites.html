@@ -22,6 +22,12 @@
         </div>
     </form>
 
+    <form th:mthod="get"
+          th:action="@{/show-all/edit(selectedFilter=${selectedFilter})}">
+        <button class="add-leagues-button">Edit</button>
+        <input type="hidden" name="selectedFilter" th:value="${selectedFilter}">
+    </form>
+
     <div class="teams-players-list">
         <div th:each="item : ${collection}" class="team-box">
             <a th:href="@{${selectedFilter == 'Teams' ? '/team/' + item.id + '/details' : '/player/' + item.id + '/details'}}"
