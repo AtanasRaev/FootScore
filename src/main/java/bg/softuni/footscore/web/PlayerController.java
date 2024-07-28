@@ -1,5 +1,6 @@
 package bg.softuni.footscore.web;
 
+import bg.softuni.footscore.model.dto.LeagueTeamSeasonPageDto;
 import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
@@ -7,7 +8,6 @@ import bg.softuni.footscore.model.entity.*;
 import bg.softuni.footscore.service.*;
 import bg.softuni.footscore.utils.SeasonUtils;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,7 +55,7 @@ public class PlayerController {
 
         seasonId = getId(seasonId, currentSeasons.stream().toList().getLast().getId());
 
-        List<LeagueTeamSeason> byTeamIdAndSeasonId = this.leagueTeamSeasonService.getByTeamIdAndSeasonId(teamId, seasonId);
+        List<LeagueTeamSeasonPageDto> byTeamIdAndSeasonId = this.leagueTeamSeasonService.getByTeamIdAndSeasonId(teamId, seasonId);
 
         if (byTeamIdAndSeasonId.isEmpty()) {
             throw new EntityNotFoundException("Not found team or season");

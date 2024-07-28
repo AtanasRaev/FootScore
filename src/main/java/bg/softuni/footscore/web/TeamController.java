@@ -1,12 +1,15 @@
 package bg.softuni.footscore.web;
 
+import bg.softuni.footscore.model.dto.LeagueTeamSeasonPageDto;
 import bg.softuni.footscore.model.dto.SeasonPageDto;
+import bg.softuni.footscore.model.dto.UserEntityPageDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 import bg.softuni.footscore.model.entity.*;
 import bg.softuni.footscore.service.*;
 import bg.softuni.footscore.utils.SeasonUtils;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,19 +30,22 @@ public class TeamController {
     private final TeamStatisticsService teamStatisticsService;
     private final TeamService teamService;
     private final UserService userService;
+    private final ModelMapper modelMapper;
 
     public TeamController(LeagueService leagueService,
                           SeasonService seasonService,
                           LeagueTeamSeasonService seasonLeagueTeamService,
                           TeamStatisticsService teamStatisticsService,
                           TeamService teamService,
-                          UserService userService) {
+                          UserService userService,
+                          ModelMapper modelMapper) {
         this.leagueService = leagueService;
         this.seasonService = seasonService;
         this.leagueTeamSeasonService = seasonLeagueTeamService;
         this.teamStatisticsService = teamStatisticsService;
         this.teamService = teamService;
         this.userService = userService;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/league/{leagueId}/teams")
@@ -64,7 +70,8 @@ public class TeamController {
         model.addAttribute("seasons", currentSeasons.stream().toList().reversed());
         model.addAttribute("selectedSeasonId", seasonId);
 
-        List<Team> allTeams = this.leagueTeamSeasonService.getAllByLeagueIdAndSeasonId(leagueId, seasonId).stream().map(LeagueTeamSeason::getTeam).toList();
+        List<TeamPageDto> allTeams = this.leagueTeamSeasonService.getAllByLeagueIdAndSeasonId(leagueId, seasonId).stream().map(LeagueTeamSeasonPageDto::getTeam).toList();
+
         model.addAttribute("teams", allTeams);
 
         return "teams";
@@ -87,16 +94,16 @@ public class TeamController {
 
         model.addAttribute("seasonId", this.seasonService.getSeasonById(seasonId));
 
-        Optional<UserEntity> optionalUser = this.userService.getUser();
+        UserEntityPageDto user = this.userService.getUser();
 
-        if (optionalUser.isPresent()) {
+        if (user != null) {
             List<TeamPageDto> allByIds  = new ArrayList<>();
             if (teamIds != null && !teamIds.isEmpty()) {
                 allByIds = this.teamService.findAllByIds(teamIds);
             }
 
-            if (!optionalUser.get().getFavoriteTeams().containsAll(allByIds)) {
-                this.userService.addFavoriteTeams(optionalUser.get(), allByIds);
+            if (!user.getFavoriteTeams().containsAll(allByIds)) {
+                this.userService.addFavoriteTeams(user, allByIds);
             }
         }
 
@@ -112,12 +119,22 @@ public class TeamController {
         if (seasonId == null) {
             seasonId = this.seasonService.getAllSeasons().getLast().getId();
         }
-        List<LeagueTeamSeason> byLeagueIdAndSeasonId = this.leagueTeamSeasonService.getByLeagueIdAndSeasonId(leagueId, seasonId);
+        List<LeagueTeamSeasonPageDto> byLeagueIdAndSeasonId = this.leagueTeamSeasonService.getByLeagueIdAndSeasonId(leagueId, seasonId);
+        List<TeamPageDto> teams = byLeagueIdAndSeasonId.stream().map(s -> this.modelMapper.map(s.getTeam(), TeamPageDto.class)).toList();
 
-        List<Team> teams = byLeagueIdAndSeasonId.stream().map(LeagueTeamSeason::getTeam).toList();
+        UserEntityPageDto user = this.userService.getUser();
+        if (user != null) {
+            List<TeamPageDto> list = new ArrayList<>();
+            for (TeamPageDto team : teams) {
+                for (TeamPageDto favorite : user.getFavoriteTeams().stream().toList()) {
+                    if (team.getId() == favorite.getId()) {
+                        list.add(team);
+                    }
+                }
 
-        Optional<UserEntity> optionalUser = this.userService.getUser();
-        optionalUser.ifPresent(userEntity -> model.addAttribute("favoriteTeams", userEntity.getFavoriteTeams().stream().toList()));
+            }
+            model.addAttribute("favoriteTeams", list);
+        }
 
         model.addAttribute("teams", teams);
         model.addAttribute("league", byLeagueIdAndSeasonId.getFirst().getLeague());
@@ -142,11 +159,11 @@ public class TeamController {
         SeasonPageDto seasonOptional = this.seasonService.getSeasonById(seasonId);
 
         if (teamOptional != null&& seasonOptional != null) {
-            List<LeagueTeamSeason> list = this.leagueTeamSeasonService.getByTeamIdAndSeasonId(teamId, seasonId);
-            List<League> leagues = new ArrayList<>();
+            List<LeagueTeamSeasonPageDto> list = this.leagueTeamSeasonService.getByTeamIdAndSeasonId(teamId, seasonId);
+            List<LeaguePageDto> leagues = new ArrayList<>();
 
-            for (LeagueTeamSeason leagueTeamSeason : list) {
-                League league = leagueTeamSeason.getLeague();
+            for (LeagueTeamSeasonPageDto leagueTeamSeason : list) {
+                LeaguePageDto league = leagueTeamSeason.getLeague();
                 this.teamStatisticsService.saveApiStatistics(league.getApiId(), teamOptional.getApiId(), seasonOptional.getYear());
                 leagues.add(league);
             }

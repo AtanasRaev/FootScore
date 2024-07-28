@@ -1,8 +1,10 @@
 package bg.softuni.footscore.web;
 
+import bg.softuni.footscore.model.dto.UserEntityPageDto;
+import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
+import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 import bg.softuni.footscore.model.entity.Player;
 import bg.softuni.footscore.model.entity.Team;
-import bg.softuni.footscore.model.entity.UserEntity;
 import bg.softuni.footscore.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,10 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class ProfileController {
@@ -32,8 +31,10 @@ public class ProfileController {
             throw new RuntimeException("User is not authenticated");
         }
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        Optional<UserEntity> optionalUser = userService.getUserByUsername(username);
-        optionalUser.ifPresent(userEntity -> model.addAttribute("user", userEntity));
+        UserEntityPageDto user = userService.getUserByUsername(username);
+        if (user != null) {
+            model.addAttribute("user", user);
+        }
         return "profile";
     }
 
@@ -44,14 +45,18 @@ public class ProfileController {
         model.addAttribute("favorites", favorites);
         model.addAttribute("selectedFilter", filter);
 
-        Optional<UserEntity> optionalUser = userService.getUser();
-        optionalUser.ifPresent(userEntity -> {
+        UserEntityPageDto user = userService.getUser();
+        if (user != null) {
             if ("Teams".equals(filter)) {
-                model.addAttribute("collection", userEntity.getFavoriteTeams().stream().sorted(Comparator.comparing(Team::getName)));
+                model.addAttribute("collection", user.getFavoriteTeams()
+                        .stream()
+                        .sorted(Comparator.comparing(TeamPageDto::getName)));
             } else {
-                model.addAttribute("collection", userEntity.getFavoritePlayers().stream().sorted(Comparator.comparing(Player::getShortName)));
+                model.addAttribute("collection", user.getFavoritePlayers()
+                        .stream()
+                        .sorted(Comparator.comparing(PlayerPageDto::getShortName)));
             }
-        });
+        }
 
         return "all-favourites";
     }

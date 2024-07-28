@@ -1,6 +1,7 @@
 package bg.softuni.footscore.service.impl;
 
 import bg.softuni.footscore.config.ApiConfig;
+import bg.softuni.footscore.model.dto.LeagueTeamSeasonPageDto;
 import bg.softuni.footscore.model.dto.ResponseTeamApiDto;
 import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
@@ -84,8 +85,8 @@ public class TeamServiceImpl implements TeamService {
             response.getResponse().forEach(dto -> {
                 Optional<Team> team = this.teamRepository.findByApiId(dto.getTeam().getId());
                 if (team.isPresent()) {
-                    List<LeagueTeamSeason> byLeagueIdAndSeasonId = this.leagueTeamSeasonService.getByLeagueIdAndSeasonId(league.getId(), season.getId());
-                    List<Team> teams = byLeagueIdAndSeasonId.stream().map(LeagueTeamSeason::getTeam).toList();
+                    List<LeagueTeamSeasonPageDto> byLeagueIdAndSeasonId = this.leagueTeamSeasonService.getByLeagueIdAndSeasonId(league.getId(), season.getId());
+                    List<Team> teams = byLeagueIdAndSeasonId.stream().map(s -> this.modelMapper.map(s.getTeam(), Team.class)).toList();
 
                     if (teams.isEmpty() || !teams.contains(team.get())) {
                         LeagueTeamSeason seasonLeagueTeam = new LeagueTeamSeason();
@@ -160,7 +161,7 @@ public class TeamServiceImpl implements TeamService {
         }
         seasons.forEach(season -> {
             leagues.forEach(league -> {
-                List<LeagueTeamSeason> list = this.leagueTeamSeasonService.getByLeagueIdAndSeasonId(league.getId(), season.getId());
+                List<LeagueTeamSeasonPageDto> list = this.leagueTeamSeasonService.getByLeagueIdAndSeasonId(league.getId(), season.getId());
                 if (list.isEmpty()) {
                     saveApiTeamsForLeagueAndSeason(league, season);
                 }

@@ -1,19 +1,19 @@
 package bg.softuni.footscore.service;
 
 import bg.softuni.footscore.model.dto.RegisterUserDto;
+import bg.softuni.footscore.model.dto.UserEntityPageDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
-import bg.softuni.footscore.model.entity.Team;
-import bg.softuni.footscore.model.entity.UserEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
     void registerUser(RegisterUserDto registrationUserDto);
 
-    Optional<UserEntity> getUserByUsername(String username);
+    UserEntityPageDto getUserByUsername(String username);
 
-    void addFavoriteTeams(UserEntity user, List<TeamPageDto> allByIds);
+    void updateUser(UserEntityPageDto userEntityPageDto);
 
-    Optional<UserEntity> getUser();
+    void addFavoriteTeams(UserEntityPageDto user, List<TeamPageDto> allByIds);
+
+    UserEntityPageDto getUser();
 }

@@ -1,6 +1,7 @@
 package bg.softuni.footscore.service.impl;
 
 import bg.softuni.footscore.model.dto.RegisterUserDto;
+import bg.softuni.footscore.model.dto.UserEntityPageDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 import bg.softuni.footscore.model.entity.Role;
 import bg.softuni.footscore.model.entity.Team;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,18 +52,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserEntity> getUserByUsername(String username) {
-        return this.userRepository.findByUsername(username);
+    public UserEntityPageDto getUserByUsername(String username) {
+        return this.userRepository.findByUsername(username)
+                .map(u -> this.modelMapper.map(u, UserEntityPageDto.class))
+                .orElse(null);
     }
 
     @Override
-    public void addFavoriteTeams(UserEntity user, List<TeamPageDto> allByIds) {
-        user.getFavoriteTeams().addAll(new HashSet<>(allByIds.stream().map(t -> this.modelMapper.map(t, Team.class)).collect(Collectors.toSet())));
-        this.userRepository.save(user);
+    public void updateUser(UserEntityPageDto userEntityPageDto) {
+        Optional<UserEntity> byUsername = this.userRepository.findByUsername(userEntityPageDto.getUsername());
+        Set<TeamPageDto> favoriteTeams = userEntityPageDto.getFavoriteTeams();
+        Set<Team> collect = favoriteTeams.stream().map(t -> this.modelMapper.map(t, Team.class)).collect(Collectors.toSet());
+        byUsername.ifPresent(user -> {
+            user.getFavoriteTeams().addAll(collect);
+            this.userRepository.save(user);
+        });
+
     }
 
     @Override
-    public Optional<UserEntity> getUser() {
+    public void addFavoriteTeams(UserEntityPageDto dto, List<TeamPageDto> allByIds) {
+        dto.getFavoriteTeams().addAll(new HashSet<>(allByIds));
+        this.updateUser(dto);
+    }
+
+    @Override
+    public UserEntityPageDto getUser() {
         return getUserByUsername(UserUtils.findUsername());
     }
 }

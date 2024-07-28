@@ -1,19 +1,18 @@
 package bg.softuni.footscore.service;
 
+import bg.softuni.footscore.model.dto.LeagueTeamSeasonPageDto;
 import bg.softuni.footscore.model.entity.LeagueTeamSeason;
-import bg.softuni.footscore.model.entity.Team;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface LeagueTeamSeasonService {
-    List<LeagueTeamSeason> getAllByLeagueIdAndSeasonId(long leagueId, long seasonId);;
+    List<LeagueTeamSeasonPageDto> getAllByLeagueIdAndSeasonId(Long leagueId, Long seasonId);
 
-    List<LeagueTeamSeason> getByLeagueIdAndSeasonId(long leagueId, long seasonId);
+    List<LeagueTeamSeasonPageDto> getByLeagueIdAndSeasonId(Long leagueId, Long seasonId);
 
-    List<LeagueTeamSeason> getByTeamIdAndLeagueId(long teamId, long leagueId);
+    List<LeagueTeamSeasonPageDto> getByTeamIdAndLeagueId(Long teamId, Long leagueId);
 
-    List<LeagueTeamSeason> getByTeamIdAndSeasonId(long teamId, long seasonId);
+    List<LeagueTeamSeasonPageDto> getByTeamIdAndSeasonId(Long teamId, Long seasonId);
 
     void save(LeagueTeamSeason seasonLeagueTeam);
 }

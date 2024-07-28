@@ -3,12 +3,12 @@ package bg.softuni.footscore.model.dto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 
-public class LeagueTeamSeasonDto {
+public class LeagueTeamSeasonPageDto {
     private TeamPageDto team;
     private SeasonPageDto season;
     private LeaguePageDto league;
 
-    public LeagueTeamSeasonDto() {
+    public LeagueTeamSeasonPageDto() {
     }
 
     public TeamPageDto getTeam() {
