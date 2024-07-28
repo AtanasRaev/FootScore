@@ -1,6 +1,7 @@
 package bg.softuni.footscore.service.impl;
 
 import bg.softuni.footscore.config.ApiConfig;
+import bg.softuni.footscore.model.dto.FormationDto;
 import bg.softuni.footscore.model.dto.ResponseTeamStatisticsSeason;
 import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
@@ -19,7 +20,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class TeamStatisticsServiceImpl implements TeamStatisticsService {
@@ -115,6 +120,16 @@ public class TeamStatisticsServiceImpl implements TeamStatisticsService {
     @Override
     public Optional<TeamStatistics> getByTeamIdAndSeasonYearAndLeagueId(long teamId, int seasonYear, long leagueId) {
         return this.teamStatisticsRepository.findByTeamIdAndSeasonYearAndLeagueId(teamId, seasonYear, leagueId);
+    }
+
+    @Override
+    public List<FormationDto> getAllFormations() {
+        return this.teamStatisticsRepository
+                .findAll()
+                .stream()
+                .flatMap(teamStatistics -> teamStatistics.getLineups().keySet().stream())
+                .map(FormationDto::new)
+                .toList();
     }
 
     public void setGoalsStatistics(TeamStatistics teamStatistic, TeamStatisticsDetailsApiDto dto) {

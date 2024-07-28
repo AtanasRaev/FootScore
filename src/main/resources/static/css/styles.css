@@ -1138,7 +1138,8 @@ footer.teams-footer {
 }
 
 .favorites-section {
-    width: 48%;
+    display: flex;
+    flex-direction: row;
 }
 
 .favorites-section h2, .page-header h1 {
@@ -1179,16 +1180,14 @@ footer.teams-footer {
 }
 
 .show-more {
-    display: block;
-    width: 100%;
-    max-width: 200px;
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
     background-color: #007bff;
     color: white;
-    text-align: center;
-    border-radius: 4px;
-    padding: 10px;
     text-decoration: none;
-    margin-top: 10px;
+    border-radius: 4px;
+    text-align: center;
     transition: background-color 0.3s;
 }
 
@@ -1217,7 +1216,7 @@ footer.teams-footer {
 .team-box-add {
     display: flex;
     width: 200px;
-    height: 250px;
+    height: 290px;
     flex-direction: column;
     align-items: center;
     padding: 20px;
@@ -1261,8 +1260,6 @@ footer.teams-footer {
     gap: 20px;
     padding-bottom: 1.5em;
 }
-
-/* Add this to your CSS file */
 
 .edit-checkbox-wrapper {
     display: flex;

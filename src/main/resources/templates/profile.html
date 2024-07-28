@@ -11,7 +11,7 @@
 <div class="profile-container">
     <header class="profile-header">
         <div class="user-info">
-            <h1 id="name" th:text="${user.firstName} + ' ' + ${user.lastName}"></h1>
+            <strong id="name" th:text="${user.firstName} + ' ' + ${user.lastName}"></strong>
 
             <p id="username">
                 <strong>Username:</strong>
@@ -22,12 +22,23 @@
                 <strong>Email:</strong>
                 <span th:text="${user.email}"></span>
             </p>
+            <p>
+                <strong>Favorite Teams:</strong>
+                <span th:text="${user.favoriteTeams.size()}"></span>
+            </p>
+            <p>
+                <strong>Favorite Players:</strong>
+                <span th:text="${user.favoritePlayers.size()}"></span>
+            </p>
         </div>
     </header>
     <div class="favorites-container">
         <section class="favorites-section">
             <div id="favorite-teams" class="favorites-list">
-                <a th:href="@{/show-all}" class="show-more">Show favorites</a>
+                <a th:href="@{/show-all}" class="show-more">Favorites</a>
+            </div>
+            <div id="dream-teams" class="dream-teams-list">
+                <a th:href="@{/show-dream-teams}" class="show-more">Dream Teams</a>
             </div>
         </section>
     </div>

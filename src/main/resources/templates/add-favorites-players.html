@@ -40,6 +40,7 @@
                 <div th:each="player : ${players}" class="team-box-add">
                     <h2 class="team-name"><span th:text="${player.shortName}"></span></h2>
                     <img th:src="${player.photo}" alt="Team Logo" class="team-logo-add">
+                    <p class="player-position"><span th:text="${player.position}"></span></p>
                     <div class="checkbox-wrapper">
                         <label>
                             <input type="checkbox" th:id="'favorite-team-' + ${player.id}"

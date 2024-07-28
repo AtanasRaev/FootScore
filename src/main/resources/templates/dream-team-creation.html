@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Dream Team</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="dream-team-container">
+    <h1>Create Your Dream Team</h1>
+    <div class="teams-container">
+        <form id="players-form" th:method="post" th:action="@{/create/dream-team}">
+            <div class="players-filters">
+                <label for="position">Choose Formation:</label>
+                <select id="position" name="formations">
+                    <option th:each="formation : ${formations}" th:value="${formation}" th:text="${formation}"></option>
+                </select>
+            </div>
+            <div class="team-list">
+                <div th:each="player : ${players}" class="team-box-add">
+                    <h2 class="team-name"><span th:text="${player.shortName}"></span></h2>
+                    <img th:src="${player.photo}" alt="Team Logo" class="team-logo-add">
+                    <p class="player-position"><span th:text="${player.position}"></span></p>
+                    <div class="checkbox-wrapper">
+                        <label>
+                            <input type="checkbox" th:id="'favorite-team-' + ${player.id}"
+                                   class="favorite-checkbox"
+                                   th:name="playerIds" th:value="${player.id}">
+                            <label th:for="'favorite-team-' + ${player.id}" class="favorite-button">
+                                <span class="star-icon">&#9733;</span>
+                            </label>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="submit-buttons">
+                <button type="submit">Create Dream Team</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

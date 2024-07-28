@@ -206,6 +206,11 @@ public class PlayerServiceImpl implements PlayerService {
                 .toList();
     }
 
+    @Override
+    public List<PlayerPageDto> getAllPLayers() {
+        return this.playerRepository.findAll().stream().map(p -> this.modelMapper.map(p, PlayerPageDto.class)).toList();
+    }
+
     private static Player createPlayer(PlayerStatisticsApiDto dto) {
         String heightStr = dto.getPlayer().getHeight();
         String weightStr = dto.getPlayer().getWeight();

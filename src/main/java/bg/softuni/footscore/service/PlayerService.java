@@ -24,4 +24,6 @@ public interface PlayerService {
     PlayerPageDto getPlayerById(Long playerId);
 
     List<PlayerPageDto> getAllByIds(List<Long> playerIds);
+
+    List<PlayerPageDto> getAllPLayers();
 }
