@@ -1,5 +1,6 @@
 package bg.softuni.footscore.web;
 
+import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.entity.League;
 import bg.softuni.footscore.model.entity.Season;
@@ -49,16 +50,16 @@ public class StandingsController {
             return "redirect:/leagues-error";
         }
 
-        List<Season> seasons = this.seasonService.getAllSeasons();
-        Set<Season> currentSeasons = SeasonUtils.getCurrentSeasonsForLeague(leagueId, leagueTeamSeasonService, seasons);
+        List<SeasonPageDto> seasons = this.seasonService.getAllSeasons();
+        Set<SeasonPageDto> currentSeasons = SeasonUtils.getCurrentSeasonsForLeague(leagueId, leagueTeamSeasonService, seasons);
 
         seasonId = getId(seasonId, currentSeasons.stream().toList().getLast().getId());
 
-        Optional<Season> seasonOptional = this.seasonService.getSeasonById(seasonId);
-        if (seasonOptional.isPresent()) {
-            model.addAttribute("selectedSeasonId", seasonOptional.get().getId());
-            model.addAttribute("selectedSeason", seasonOptional.get());
-            model.addAttribute("seasonYear", seasonOptional.get().getYear());
+        SeasonPageDto seasonOptional = this.seasonService.getSeasonById(seasonId);
+        if (seasonOptional != null) {
+            model.addAttribute("selectedSeasonId", seasonOptional.getId());
+            model.addAttribute("selectedSeason", seasonOptional);
+            model.addAttribute("seasonYear", seasonOptional.getYear());
             model.addAttribute("apiKey", apiKey);
             model.addAttribute("seasons", currentSeasons.stream().toList().reversed());
             model.addAttribute("leagueName", leagueById.getName());

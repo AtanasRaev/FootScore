@@ -1,5 +1,6 @@
 package bg.softuni.footscore.web;
 
+import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.entity.*;
 import bg.softuni.footscore.service.*;
@@ -48,8 +49,8 @@ public class PlayerController {
             return "redirect:/team-error";
         }
 
-        List<Season> seasons = this.seasonService.getAllSeasons();
-        Set<Season> currentSeasons = SeasonUtils.getCurrentSeasonsForTeam(teamId, leagueTeamSeasonService, seasons);
+        List<SeasonPageDto> seasons = this.seasonService.getAllSeasons();
+        Set<SeasonPageDto> currentSeasons = SeasonUtils.getCurrentSeasonsForTeam(teamId, leagueTeamSeasonService, seasons);
 
         seasonId = getId(seasonId, currentSeasons.stream().toList().getLast().getId());
 
@@ -78,8 +79,10 @@ public class PlayerController {
         List<Player> allPlayers = this.playerTeamSeasonService.getAllPlayersBySeasonIdAndTeamId(teamId, seasonId);
 
         if (allPlayers.isEmpty()) {
-            Optional<Season> seasonOptional = this.seasonService.getSeasonById(seasonId);
-            seasonOptional.ifPresent(season -> this.playerService.saveApiPlayersForTeamAndSeason(teamOptional.get(), season));
+            SeasonPageDto seasonOptional = this.seasonService.getSeasonById(seasonId);
+            if (seasonOptional != null) {
+                this.playerService.saveApiPlayersForTeamAndSeason(teamOptional.get(), seasonOptional);
+            }
             allPlayers = this.playerTeamSeasonService.getAllPlayersBySeasonIdAndTeamId(teamId, seasonId);
         }
 

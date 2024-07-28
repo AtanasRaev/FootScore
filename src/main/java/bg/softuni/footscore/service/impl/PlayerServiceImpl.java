@@ -3,6 +3,7 @@ package bg.softuni.footscore.service.impl;
 import bg.softuni.footscore.config.ApiConfig;
 import bg.softuni.footscore.model.dto.ResponsePlayerApiDto;
 import bg.softuni.footscore.model.dto.ResponsePlayerDetailsApiDto;
+import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.playerDto.PlayerStatisticsApiDto;
 import bg.softuni.footscore.model.entity.Player;
 import bg.softuni.footscore.model.entity.PlayerTeamSeason;
@@ -57,7 +58,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     @Transactional
-    public void saveApiPlayersForTeamAndSeason(Team team, Season season) {
+    public void saveApiPlayersForTeamAndSeason(Team team, SeasonPageDto season) {
 
         ResponsePlayerApiDto responseList = this.getResponsePlayerApiDto(PLAYERS_BY_TEAM_SEASON_AND_PAGE, team.getApiId(), season.getYear(), 1);
 
@@ -96,7 +97,7 @@ public class PlayerServiceImpl implements PlayerService {
                         Optional<Player> optionalPlayer = this.playerTeamSeasonService.getPlayerByTeamIdAndSeasonId(team.getId(), season.getId(), player.get().getId());
                         if (optionalPlayer.isEmpty()) {
                             PlayerTeamSeason seasonTeamPlayer = new PlayerTeamSeason();
-                            seasonTeamPlayer.setSeason(season);
+                            seasonTeamPlayer.setSeason(this.modelMapper.map(season, Season.class));
                             seasonTeamPlayer.setTeam(team);
                             seasonTeamPlayer.setPlayer(player.get());
 

@@ -4,6 +4,8 @@ public class TeamPageDto {
     private long id;
     private String name;
     private String logo;
+    private long apiId;
+    private VenuePageDto venue;
 
     public TeamPageDto() {
     }
@@ -30,5 +32,21 @@ public class TeamPageDto {
 
     public void setLogo(String logo) {
         this.logo = logo;
+    }
+
+    public long getApiId() {
+        return apiId;
+    }
+
+    public void setApiId(long apiId) {
+        this.apiId = apiId;
+    }
+
+    public VenuePageDto getVenue() {
+        return venue;
+    }
+
+    public void setVenue(VenuePageDto venue) {
+        this.venue = venue;
     }
 }

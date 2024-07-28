@@ -1,10 +1,10 @@
 package bg.softuni.footscore.web;
 
+import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.entity.*;
 import bg.softuni.footscore.service.*;
 import bg.softuni.footscore.utils.SeasonUtils;
-import bg.softuni.footscore.utils.UserUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,8 +54,8 @@ public class TeamController {
             return "redirect:/league-error";
         }
 
-        List<Season> seasons = this.seasonService.getAllSeasons();
-        Set<Season> currentSeasons = SeasonUtils.getCurrentSeasonsForLeague(leagueId, leagueTeamSeasonService, seasons);
+        List<SeasonPageDto> seasons = this.seasonService.getAllSeasons();
+        Set<SeasonPageDto> currentSeasons = SeasonUtils.getCurrentSeasonsForLeague(leagueId, leagueTeamSeasonService, seasons);
 
         seasonId = getId(seasonId, currentSeasons.stream().toList().getLast().getId());
 
@@ -63,7 +63,7 @@ public class TeamController {
         model.addAttribute("seasons", currentSeasons.stream().toList().reversed());
         model.addAttribute("selectedSeasonId", seasonId);
 
-        List<Team> allTeams = this.leagueTeamSeasonService.getAllTeamsBySeasonIdAndLeagueId(leagueId, seasonId);
+        List<Team> allTeams = this.leagueTeamSeasonService.getAllByLeagueIdAndSeasonId(leagueId, seasonId).stream().map(LeagueTeamSeason::getTeam).toList();
         model.addAttribute("teams", allTeams);
 
         return "teams";
@@ -84,7 +84,7 @@ public class TeamController {
             seasonId = this.seasonService.getAllSeasons().getLast().getId();
         }
 
-        model.addAttribute("seasonId", this.seasonService.getSeasonById(seasonId).get());
+        model.addAttribute("seasonId", this.seasonService.getSeasonById(seasonId));
 
         Optional<UserEntity> optionalUser = this.userService.getUser();
 
@@ -132,27 +132,27 @@ public class TeamController {
                               @RequestParam(required = false) Long leagueId,
                               Model model) {
 
-        List<Season> seasons = this.seasonService.getAllSeasons();
-        Set<Season> currentSeasons = SeasonUtils.getCurrentSeasonsForTeam(teamId, leagueTeamSeasonService, seasons);
+        List<SeasonPageDto> seasons = this.seasonService.getAllSeasons();
+        Set<SeasonPageDto> currentSeasons = SeasonUtils.getCurrentSeasonsForTeam(teamId, leagueTeamSeasonService, seasons);
 
         seasonId = getId(seasonId, currentSeasons.stream().toList().getLast().getId());
 
         Optional<Team> teamOptional = this.teamService.findById(teamId);
-        Optional<Season> seasonOptional = this.seasonService.getSeasonById(seasonId);
+        SeasonPageDto seasonOptional = this.seasonService.getSeasonById(seasonId);
 
-        if (teamOptional.isPresent() && seasonOptional.isPresent()) {
+        if (teamOptional.isPresent() && seasonOptional != null) {
             List<LeagueTeamSeason> list = this.leagueTeamSeasonService.getByTeamIdAndSeasonId(teamId, seasonId);
             List<League> leagues = new ArrayList<>();
 
             for (LeagueTeamSeason leagueTeamSeason : list) {
                 League league = leagueTeamSeason.getLeague();
-                this.teamStatisticsService.saveApiStatistics(league.getApiId(), teamOptional.get().getApiId(), seasonOptional.get().getYear());
+                this.teamStatisticsService.saveApiStatistics(league.getApiId(), teamOptional.get().getApiId(), seasonOptional.getYear());
                 leagues.add(league);
             }
 
             leagueId = getId(leagueId, leagues.getLast().getId());
 
-            Optional<TeamStatistics> optional = this.teamStatisticsService.getByTeamIdAndSeasonYearAndLeagueId(teamId, seasonOptional.get().getYear(), leagueId);
+            Optional<TeamStatistics> optional = this.teamStatisticsService.getByTeamIdAndSeasonYearAndLeagueId(teamId, seasonOptional.getYear(), leagueId);
 
             model.addAttribute("selectedSeasonId", seasonId);
             model.addAttribute("seasons", currentSeasons.stream().toList().reversed());

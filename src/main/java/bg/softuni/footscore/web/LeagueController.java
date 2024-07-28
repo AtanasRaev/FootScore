@@ -1,5 +1,6 @@
 package bg.softuni.footscore.web;
 
+import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeagueAddDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.dto.leagueDto.SelectedLeaguesDto;
@@ -84,7 +85,7 @@ public class LeagueController {
     @PostMapping("/saveSelected")
     public String saveSelectedLeagues(@RequestParam List<Long> leagueIds) {
 
-        List<Season> seasons = this.seasonService.getAllSeasons();
+        List<SeasonPageDto> seasons = this.seasonService.getAllSeasons();
 
         if (leagueIds == null || leagueIds.isEmpty() || seasons == null || seasons.isEmpty()) {
             return "redirect:/leagues/error";

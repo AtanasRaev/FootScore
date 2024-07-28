@@ -2,6 +2,7 @@ package bg.softuni.footscore.service.impl;
 
 import bg.softuni.footscore.config.ApiConfig;
 import bg.softuni.footscore.model.dto.ResponseTeamApiDto;
+import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.entity.*;
 import bg.softuni.footscore.repository.TeamRepository;
@@ -44,7 +45,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     @Transactional
-    public void saveApiTeamsForLeagueAndSeason(League league, Season season) {
+    public void saveApiTeamsForLeagueAndSeason(LeaguePageDto league, SeasonPageDto season) {
 
         ResponseTeamApiDto response = this.getResponse(league.getApiId(), season.getYear());
 
@@ -82,11 +83,13 @@ public class TeamServiceImpl implements TeamService {
             response.getResponse().forEach(dto -> {
                 Optional<Team> team = this.teamRepository.findByApiId(dto.getTeam().getId());
                 if (team.isPresent()) {
-                    Optional<Team> optionalTeam = this.leagueTeamSeasonService.getTeamByLeagueIdAndSeasonIdAndTeamId(league.getId(), season.getId(), team.get().getId());
-                    if (optionalTeam.isEmpty()) {
+                    List<LeagueTeamSeason> byLeagueIdAndSeasonId = this.leagueTeamSeasonService.getByLeagueIdAndSeasonId(league.getId(), season.getId());
+                    List<Team> teams = byLeagueIdAndSeasonId.stream().map(LeagueTeamSeason::getTeam).toList();
+
+                    if (teams.isEmpty() || !teams.contains(team.get())) {
                         LeagueTeamSeason seasonLeagueTeam = new LeagueTeamSeason();
-                        seasonLeagueTeam.setSeason(season);
-                        seasonLeagueTeam.setLeague(league);
+                        seasonLeagueTeam.setSeason(this.modelMapper.map(season, Season.class));
+                        seasonLeagueTeam.setLeague(this.modelMapper.map(league, League.class));
                         seasonLeagueTeam.setTeam(team.get());
 
                         this.leagueTeamSeasonService.save(seasonLeagueTeam);
@@ -142,14 +145,12 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     @Transactional
-    public void fetchTeams(List<LeaguePageDto> leagues, List<Season> seasons) {
+    public void fetchTeams(List<LeaguePageDto> leagues, List<SeasonPageDto> seasons) {
         if (leagues == null || leagues.isEmpty() || seasons == null || seasons.isEmpty()) {
             throw new EntityNotFoundException("Not found leagues or seasons");
         }
-
-        List<League> leaguesList = leagues.stream().map(league -> this.modelMapper.map(league, League.class)).toList();
         seasons.forEach(season -> {
-            leaguesList.forEach(league -> {
+            leagues.forEach(league -> {
                 List<LeagueTeamSeason> list = this.leagueTeamSeasonService.getByLeagueIdAndSeasonId(league.getId(), season.getId());
                 if (list.isEmpty()) {
                     saveApiTeamsForLeagueAndSeason(league, season);

@@ -2,6 +2,8 @@ package bg.softuni.footscore.service.impl;
 
 import bg.softuni.footscore.config.ApiConfig;
 import bg.softuni.footscore.model.dto.ResponseCountryLeagueSeasonsApiDto;
+import bg.softuni.footscore.model.dto.SeasonPageDto;
+import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.entity.Season;
 import bg.softuni.footscore.repository.SeasonRepository;
 import bg.softuni.footscore.service.SeasonService;
@@ -43,8 +45,8 @@ public class SeasonServiceImpl implements SeasonService {
     }
 
     @Override
-    public List<Season> getAllSeasons() {
-        return this.seasonRepository.findAll();
+    public List<SeasonPageDto> getAllSeasons() {
+        return this.seasonRepository.findAll().stream().map(s -> this.modelMapper.map(s, SeasonPageDto.class)).toList();
     }
 
     @Override
@@ -66,12 +68,18 @@ public class SeasonServiceImpl implements SeasonService {
     }
 
     @Override
-    public Optional<Season> getSeasonByYear(int seasonYear) {
-        return this.seasonRepository.findByYear(seasonYear);
+    public SeasonPageDto getSeasonByYear(Integer seasonYear) {
+        return this.seasonRepository
+                .findByYear(seasonYear)
+                .map(season -> this.modelMapper.map(season, SeasonPageDto.class))
+                .orElse(null);
     }
 
     @Override
-    public Optional<Season> getSeasonById(long id) {
-        return this.seasonRepository.findById(id);
+    public SeasonPageDto getSeasonById(Long id) {
+        return this.seasonRepository
+                .findById(id)
+                .map(season -> this.modelMapper.map(season, SeasonPageDto.class))
+                .orElse(null);
     }
 }

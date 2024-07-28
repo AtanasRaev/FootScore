@@ -61,7 +61,6 @@ public class LeagueServiceImpl implements LeagueService {
                     LeaguePageDto map = this.modelMapper.map(l, LeaguePageDto.class);
                     list.add(map);
                 });
-
         return list;
     }
 

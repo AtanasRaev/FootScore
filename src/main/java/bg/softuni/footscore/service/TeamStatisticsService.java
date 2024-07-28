@@ -6,7 +6,7 @@ import bg.softuni.footscore.model.entity.TeamStatistics;
 import java.util.Optional;
 
 public interface TeamStatisticsService {
-    void saveApiStatistics(long leagueApiId, long teamApiId, int seasonYear);
+    void saveApiStatistics(Long leagueApiId, Long teamApiId, Integer seasonYear);
 
     ResponseTeamStatisticsSeason getResponse(long leagueApiId, long teamApiId, int seasonYear);
 
