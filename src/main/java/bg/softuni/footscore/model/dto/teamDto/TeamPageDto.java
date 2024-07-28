@@ -1,11 +1,21 @@
 package bg.softuni.footscore.model.dto.teamDto;
 
+import java.util.List;
+
 public class TeamPageDto {
     private long id;
     private String name;
     private String logo;
     private long apiId;
     private VenuePageDto venue;
+    private List<TeamStatisticsPageDto> statistics;
+
+    public TeamPageDto(String name, String logo, VenuePageDto venue, long apiId) {
+        this.name = name;
+        this.logo = logo;
+        this.venue = venue;
+        this.apiId = apiId;
+    }
 
     public TeamPageDto() {
     }
@@ -48,5 +58,13 @@ public class TeamPageDto {
 
     public void setVenue(VenuePageDto venue) {
         this.venue = venue;
+    }
+
+    public List<TeamStatisticsPageDto> getStatistics() {
+        return statistics;
+    }
+
+    public void setStatistics(List<TeamStatisticsPageDto> statistics) {
+        this.statistics = statistics;
     }
 }

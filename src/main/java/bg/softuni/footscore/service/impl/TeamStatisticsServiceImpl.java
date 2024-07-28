@@ -62,16 +62,16 @@ public class TeamStatisticsServiceImpl implements TeamStatisticsService {
             ResponseTeamStatisticsSeason response = this.getResponse(leagueApiId, teamApiId, seasonYear);
 
             if (response.getResponse() != null) {
-                TeamStatisticsDetailsDto dto = response.getResponse();
+                TeamStatisticsDetailsApiDto dto = response.getResponse();
                 TeamStatistics teamStatistic = this.modelMapper.map(dto, TeamStatistics.class);
 
-                Optional<Team> optionalTeam = this.teamService.getTeamByApiId(dto.getTeam().getId());
+                TeamPageDto optionalTeam = this.teamService.getTeamByApiId(dto.getTeam().getId());
                 LeaguePageDto leagueByApiId = this.leagueService.getLeagueByApiId(dto.getLeague().getId());
                 SeasonPageDto seasonByYear = this.seasonService.getSeasonByYear(seasonYear);
 
-                if (optionalTeam.isPresent() && seasonByYear != null && leagueByApiId != null) {
+                if (optionalTeam != null && seasonByYear != null && leagueByApiId != null) {
                     teamStatistic.setSeason(this.modelMapper.map(seasonByYear, Season.class));
-                    teamStatistic.setTeam(optionalTeam.get());
+                    teamStatistic.setTeam(this.modelMapper.map(optionalTeam, Team.class));
                     teamStatistic.setLeague(this.modelMapper.map(leagueByApiId, League.class));
                     this.setGoalsStatistics(teamStatistic, dto);
 
@@ -81,11 +81,11 @@ public class TeamStatisticsServiceImpl implements TeamStatisticsService {
 
                     teamStatistic.setCleanSheetsTotal(dto.getCleanSheet().getTotal());
 
-                    if (!optionalTeam.get().getStatistics().contains(teamStatistic)) {
+                    if (!optionalTeam.getStatistics().contains(this.modelMapper.map(teamStatistic, TeamStatisticsPageDto.class))) {
                         this.teamStatisticsRepository.save(teamStatistic);
 
-                        optionalTeam.get().getStatistics().add(teamStatistic);
-                        this.teamService.updateTeam(optionalTeam.get());
+                        optionalTeam.getStatistics().add(this.modelMapper.map(teamStatistic, TeamStatisticsPageDto.class));
+                        this.teamService.updateTeam(optionalTeam);
                     }
                 }
             }
@@ -117,7 +117,7 @@ public class TeamStatisticsServiceImpl implements TeamStatisticsService {
         return this.teamStatisticsRepository.findByTeamIdAndSeasonYearAndLeagueId(teamId, seasonYear, leagueId);
     }
 
-    public void setGoalsStatistics(TeamStatistics teamStatistic, TeamStatisticsDetailsDto dto) {
+    public void setGoalsStatistics(TeamStatistics teamStatistic, TeamStatisticsDetailsApiDto dto) {
         GoalsDto goals = dto.getGoals();
         GoalsDetailDto forGoals = goals.getForGoals();
         TotalDto forTotal = forGoals.getTotal();

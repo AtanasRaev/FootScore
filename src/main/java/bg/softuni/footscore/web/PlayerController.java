@@ -2,6 +2,7 @@ package bg.softuni.footscore.web;
 
 import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
+import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 import bg.softuni.footscore.model.entity.*;
 import bg.softuni.footscore.service.*;
 import bg.softuni.footscore.utils.SeasonUtils;
@@ -44,8 +45,8 @@ public class PlayerController {
                           @RequestParam(required = false) String position,
                           Model model) {
 
-        Optional<Team> teamOptional = this.teamService.getTeamById(teamId);
-        if (teamOptional.isEmpty()) {
+        TeamPageDto teamOptional = this.teamService.getTeamById(teamId);
+        if (teamOptional == null) {
             return "redirect:/team-error";
         }
 
@@ -70,7 +71,7 @@ public class PlayerController {
             }
         });
 
-        model.addAttribute("team", teamOptional.get());
+        model.addAttribute("team", teamOptional);
         model.addAttribute("seasons", currentSeasons.stream().toList().reversed());
         model.addAttribute("selectedSeasonId", seasonId);
         model.addAttribute("positions", positions);
@@ -81,7 +82,7 @@ public class PlayerController {
         if (allPlayers.isEmpty()) {
             SeasonPageDto seasonOptional = this.seasonService.getSeasonById(seasonId);
             if (seasonOptional != null) {
-                this.playerService.saveApiPlayersForTeamAndSeason(teamOptional.get(), seasonOptional);
+                this.playerService.saveApiPlayersForTeamAndSeason(teamOptional, seasonOptional);
             }
             allPlayers = this.playerTeamSeasonService.getAllPlayersBySeasonIdAndTeamId(teamId, seasonId);
         }

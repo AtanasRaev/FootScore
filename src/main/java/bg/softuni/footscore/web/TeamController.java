@@ -2,6 +2,7 @@ package bg.softuni.footscore.web;
 
 import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
+import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 import bg.softuni.footscore.model.entity.*;
 import bg.softuni.footscore.service.*;
 import bg.softuni.footscore.utils.SeasonUtils;
@@ -89,7 +90,7 @@ public class TeamController {
         Optional<UserEntity> optionalUser = this.userService.getUser();
 
         if (optionalUser.isPresent()) {
-            List<Team> allByIds  = new ArrayList<>();
+            List<TeamPageDto> allByIds  = new ArrayList<>();
             if (teamIds != null && !teamIds.isEmpty()) {
                 allByIds = this.teamService.findAllByIds(teamIds);
             }
@@ -137,16 +138,16 @@ public class TeamController {
 
         seasonId = getId(seasonId, currentSeasons.stream().toList().getLast().getId());
 
-        Optional<Team> teamOptional = this.teamService.findById(teamId);
+        TeamPageDto teamOptional = this.teamService.findById(teamId);
         SeasonPageDto seasonOptional = this.seasonService.getSeasonById(seasonId);
 
-        if (teamOptional.isPresent() && seasonOptional != null) {
+        if (teamOptional != null&& seasonOptional != null) {
             List<LeagueTeamSeason> list = this.leagueTeamSeasonService.getByTeamIdAndSeasonId(teamId, seasonId);
             List<League> leagues = new ArrayList<>();
 
             for (LeagueTeamSeason leagueTeamSeason : list) {
                 League league = leagueTeamSeason.getLeague();
-                this.teamStatisticsService.saveApiStatistics(league.getApiId(), teamOptional.get().getApiId(), seasonOptional.getYear());
+                this.teamStatisticsService.saveApiStatistics(league.getApiId(), teamOptional.getApiId(), seasonOptional.getYear());
                 leagues.add(league);
             }
 
@@ -156,7 +157,7 @@ public class TeamController {
 
             model.addAttribute("selectedSeasonId", seasonId);
             model.addAttribute("seasons", currentSeasons.stream().toList().reversed());
-            model.addAttribute("team", teamOptional.get());
+            model.addAttribute("team", teamOptional);
             model.addAttribute("leagues", leagues);
 
             optional.ifPresent(statistics -> {

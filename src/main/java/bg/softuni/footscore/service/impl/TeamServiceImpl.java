@@ -4,17 +4,20 @@ import bg.softuni.footscore.config.ApiConfig;
 import bg.softuni.footscore.model.dto.ResponseTeamApiDto;
 import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
+import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
+import bg.softuni.footscore.model.dto.teamDto.VenuePageDto;
 import bg.softuni.footscore.model.entity.*;
 import bg.softuni.footscore.repository.TeamRepository;
-import bg.softuni.footscore.repository.VenueRepository;
 import bg.softuni.footscore.service.LeagueTeamSeasonService;
 import bg.softuni.footscore.service.TeamService;
+import bg.softuni.footscore.service.VenueService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,23 +25,23 @@ import java.util.Optional;
 @Service
 public class TeamServiceImpl implements TeamService {
     private final TeamRepository teamRepository;
-    private final VenueRepository venueRepository;
+    private final VenueService venueService;
     private final ModelMapper modelMapper;
     private final ApiConfig apiConfig;
     private final RestClient restClient;
     private final LeagueTeamSeasonService leagueTeamSeasonService;
 
     public TeamServiceImpl(TeamRepository teamRepository,
+                           VenueService venueService,
                            ModelMapper modelMapper,
                            ApiConfig apiConfig,
                            RestClient restClient,
-                           VenueRepository venueRepository,
                            LeagueTeamSeasonService seasonLeagueTeamService) {
         this.teamRepository = teamRepository;
+        this.venueService = venueService;
         this.modelMapper = modelMapper;
         this.apiConfig = apiConfig;
         this.restClient = restClient;
-        this.venueRepository = venueRepository;
         this.leagueTeamSeasonService = seasonLeagueTeamService;
     }
 
@@ -47,20 +50,24 @@ public class TeamServiceImpl implements TeamService {
     @Transactional
     public void saveApiTeamsForLeagueAndSeason(LeaguePageDto league, SeasonPageDto season) {
 
+        if (league == null || season == null) {
+            throw new InvalidParameterException("League and Season are required");
+        }
+
         ResponseTeamApiDto response = this.getResponse(league.getApiId(), season.getYear());
 
         if (!response.getResponse().isEmpty()) {
-            List<Team> teamsToSave = new ArrayList<>();
-            List<Venue> venuesToSave = new ArrayList<>();
+            List<TeamPageDto> teamsToSave = new ArrayList<>();
+            List<VenuePageDto> venuesToSave = new ArrayList<>();
 
             response.getResponse().forEach(dto -> {
-                if (this.getTeamByApiId(dto.getTeam().getId()).isEmpty()) {
-                    Venue venue = new Venue(dto.getVenue().getName(), dto.getVenue().getCity(), dto.getVenue().getCapacity());
-                    Team team = new Team(dto.getTeam().getName(), dto.getTeam().getLogo(), venue, dto.getTeam().getId());
+                if (this.getTeamByApiId(dto.getTeam().getId()) == null) {
+                    VenuePageDto venue = new VenuePageDto(dto.getVenue().getName(), dto.getVenue().getCity(), dto.getVenue().getCapacity());
+                    TeamPageDto team = new TeamPageDto(dto.getTeam().getName(), dto.getTeam().getLogo(), venue, dto.getTeam().getId());
 
-                    Optional<Team> optional = this.teamRepository.findByApiId(team.getApiId());
+                    TeamPageDto teamByApiId = this.getTeamByApiId(team.getApiId());
 
-                    if (optional.isEmpty()) {
+                    if (teamByApiId == null) {
                         teamsToSave.add(team);
                         if (!venuesToSave.contains(venue)) {
                             venuesToSave.add(venue);
@@ -69,15 +76,9 @@ public class TeamServiceImpl implements TeamService {
                 }
             });
 
-            teamsToSave.forEach(team -> {
-                Optional<Team> optional = this.teamRepository.findByApiId(team.getApiId());
-
-                optional.ifPresent(teamsToSave::remove);
-            });
-
             if (!venuesToSave.isEmpty() && !teamsToSave.isEmpty()) {
-                this.venueRepository.saveAll(venuesToSave);
-                this.teamRepository.saveAll(teamsToSave);
+                this.venueService.saveAll(venuesToSave);
+                this.saveAll(teamsToSave);
             }
 
             response.getResponse().forEach(dto -> {
@@ -101,7 +102,7 @@ public class TeamServiceImpl implements TeamService {
 
 
     @Override
-    public ResponseTeamApiDto getResponse(long leagueApiId, int seasonYear) {
+    public ResponseTeamApiDto getResponse(Long leagueApiId, Integer seasonYear) {
         String url = this.apiConfig.getUrl() + "teams?league=" + leagueApiId + "&season=" + seasonYear;
 
         return this.restClient
@@ -119,28 +120,36 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public List<Team> findAllByIds(List<Long> ids) {
-        return this.teamRepository.findAllById(ids);
+    public List<TeamPageDto> findAllByIds(List<Long> ids) {
+        return this.teamRepository.findAllById(ids).stream().map(t -> this.modelMapper.map(t, TeamPageDto.class)).toList();
     }
 
     @Override
-    public Optional<Team> findById(long teamId) {
-        return this.teamRepository.findById(teamId);
+    public TeamPageDto findById(Long teamId) {
+        return this.teamRepository.findById(teamId)
+                .map(t -> this.modelMapper.map(t, TeamPageDto.class))
+                .orElse(null);
     }
 
     @Override
-    public Optional<Team> getTeamByApiId(long apiId) {
-        return this.teamRepository.findByApiId(apiId);
+    public TeamPageDto getTeamByApiId(Long apiId) {
+        return this.teamRepository.findByApiId(apiId)
+                .map(t -> this.modelMapper.map(t, TeamPageDto.class))
+                .orElse(null);
     }
 
     @Override
-    public Optional<Team> getTeamById(long teamId) {
-        return this.teamRepository.findById(teamId);
+    public TeamPageDto getTeamById(Long teamId) {
+        return this.teamRepository.findById(teamId)
+                .map(t -> this.modelMapper.map(t, TeamPageDto.class))
+                .orElse(null);
     }
 
     @Override
-    public void updateTeam(Team team) {
-        this.teamRepository.save(team);
+    public void updateTeam(TeamPageDto team) {
+        Team map = this.modelMapper.map(team, Team.class);
+        map.setVenue(this.modelMapper.map(team.getVenue(), Venue.class));
+        this.teamRepository.save(map);
     }
 
     @Override
@@ -157,5 +166,10 @@ public class TeamServiceImpl implements TeamService {
                 }
             });
         });
+    }
+
+    @Override
+    public void saveAll(List<TeamPageDto> teamsToSave) {
+        this.teamRepository.saveAll(teamsToSave.stream().map(t -> this.modelMapper.map(t, Team.class)).toList());
     }
 }

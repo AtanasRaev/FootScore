@@ -1,6 +1,7 @@
 package bg.softuni.footscore.service;
 
 import bg.softuni.footscore.model.dto.RegisterUserDto;
+import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 import bg.softuni.footscore.model.entity.Team;
 import bg.softuni.footscore.model.entity.UserEntity;
 
@@ -12,7 +13,7 @@ public interface UserService {
 
     Optional<UserEntity> getUserByUsername(String username);
 
-    void addFavoriteTeams(UserEntity user, List<Team> allByIds);
+    void addFavoriteTeams(UserEntity user, List<TeamPageDto> allByIds);
 
     Optional<UserEntity> getUser();
 }

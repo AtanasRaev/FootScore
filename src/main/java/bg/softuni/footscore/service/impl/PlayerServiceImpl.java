@@ -5,6 +5,7 @@ import bg.softuni.footscore.model.dto.ResponsePlayerApiDto;
 import bg.softuni.footscore.model.dto.ResponsePlayerDetailsApiDto;
 import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.playerDto.PlayerStatisticsApiDto;
+import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 import bg.softuni.footscore.model.entity.Player;
 import bg.softuni.footscore.model.entity.PlayerTeamSeason;
 import bg.softuni.footscore.model.entity.Season;
@@ -58,7 +59,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     @Transactional
-    public void saveApiPlayersForTeamAndSeason(Team team, SeasonPageDto season) {
+    public void saveApiPlayersForTeamAndSeason(TeamPageDto team, SeasonPageDto season) {
 
         ResponsePlayerApiDto responseList = this.getResponsePlayerApiDto(PLAYERS_BY_TEAM_SEASON_AND_PAGE, team.getApiId(), season.getYear(), 1);
 
@@ -98,7 +99,7 @@ public class PlayerServiceImpl implements PlayerService {
                         if (optionalPlayer.isEmpty()) {
                             PlayerTeamSeason seasonTeamPlayer = new PlayerTeamSeason();
                             seasonTeamPlayer.setSeason(this.modelMapper.map(season, Season.class));
-                            seasonTeamPlayer.setTeam(team);
+                            seasonTeamPlayer.setTeam(this.modelMapper.map(team, Team.class));
                             seasonTeamPlayer.setPlayer(player.get());
 
                             this.playerTeamSeasonService.save(seasonTeamPlayer);
@@ -152,8 +153,10 @@ public class PlayerServiceImpl implements PlayerService {
                 optionalPlayer.get().setAge(this.seasonService.getAllSeasons().getLast().getYear() - optionalPlayer.get().getBirthday().getYear());
             } else {
                 response.getResponse().forEach(dto -> {
-                    Optional<Team> optionalTeam = this.teamService.getTeamByApiId(dto.getTeam().getId());
-                    optionalTeam.ifPresent(team -> optionalPlayer.get().setTeam(team.getName()));
+                    TeamPageDto optionalTeam = this.teamService.getTeamByApiId(dto.getTeam().getId());
+                    if (optionalTeam != null) {
+                        optionalPlayer.get().setTeam(optionalTeam.getName());
+                    }
                     optionalPlayer.get().setRetired(false);
                     optionalPlayer.get().setNumber(dto.getPlayers().getFirst().getNumber());
                 });

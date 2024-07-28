@@ -1,15 +1,15 @@
 package bg.softuni.footscore.model.dto;
 
-import bg.softuni.footscore.model.dto.teamDto.TeamStatisticsDetailsDto;
+import bg.softuni.footscore.model.dto.teamDto.TeamStatisticsDetailsApiDto;
 
 public class ResponseTeamStatisticsSeason {
-    TeamStatisticsDetailsDto response;
+    TeamStatisticsDetailsApiDto response;
 
-    public TeamStatisticsDetailsDto getResponse() {
+    public TeamStatisticsDetailsApiDto getResponse() {
         return response;
     }
 
-    public void setResponse(TeamStatisticsDetailsDto response) {
+    public void setResponse(TeamStatisticsDetailsApiDto response) {
         this.response = response;
     }
 }

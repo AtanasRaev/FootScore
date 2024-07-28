@@ -3,29 +3,28 @@ package bg.softuni.footscore.service;
 import bg.softuni.footscore.model.dto.ResponseTeamApiDto;
 import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
-import bg.softuni.footscore.model.entity.League;
-import bg.softuni.footscore.model.entity.Season;
-import bg.softuni.footscore.model.entity.Team;
+import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface TeamService {
     void saveApiTeamsForLeagueAndSeason(LeaguePageDto league, SeasonPageDto season);
 
-    ResponseTeamApiDto getResponse(long leagueApiId, int seasonYear);
+    ResponseTeamApiDto getResponse(Long leagueApiId, Integer seasonYear);
 
     boolean isEmpty();
 
-    List<Team> findAllByIds(List<Long> teams);
+    List<TeamPageDto> findAllByIds(List<Long> teams);
 
-    Optional<Team> findById(long teamId);
+    TeamPageDto findById(Long teamId);
 
-    Optional<Team> getTeamByApiId(long apiId);
+    TeamPageDto getTeamByApiId(Long apiId);
 
-    Optional<Team> getTeamById(long teamId);
+    TeamPageDto getTeamById(Long teamId);
 
-    void updateTeam(Team team);
+    void updateTeam(TeamPageDto team);
 
     void fetchTeams(List<LeaguePageDto> leagues, List<SeasonPageDto> seasons);
+
+    void saveAll(List<TeamPageDto> teamsToSave);
 }

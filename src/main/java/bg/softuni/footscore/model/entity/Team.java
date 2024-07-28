@@ -18,13 +18,13 @@ public class Team {
     @Column
     private String logo;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Venue venue;
 
     @Column
     private Long apiId;
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(mappedBy = "team", fetch = FetchType.EAGER)
     private List<TeamStatistics> statistics;
 
     public Team() {

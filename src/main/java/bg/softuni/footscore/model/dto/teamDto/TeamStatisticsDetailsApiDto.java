@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class TeamStatisticsDetailsDto {
+public class TeamStatisticsDetailsApiDto {
     private LeagueApiDto league;
     private TeamApiDto team;
     private String form;
