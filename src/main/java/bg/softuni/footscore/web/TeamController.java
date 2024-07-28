@@ -1,5 +1,6 @@
 package bg.softuni.footscore.web;
 
+import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.entity.*;
 import bg.softuni.footscore.service.*;
 import bg.softuni.footscore.utils.SeasonUtils;
@@ -41,12 +42,15 @@ public class TeamController {
     }
 
     @GetMapping("/league/{leagueId}/teams")
-    public String teams(@PathVariable long leagueId,
+    public String teams(@PathVariable Long leagueId,
                         @RequestParam(required = false) Long seasonId,
                         Model model) {
-        Optional<League> leagueById = this.leagueService.getLeagueById(leagueId);
+        if (leagueId == null) {
+            return "redirect:/league-error";
+        }
+        LeaguePageDto leagueById = this.leagueService.getLeagueById(leagueId);
 
-        if (leagueById.isEmpty()) {
+        if (leagueById == null) {
             return "redirect:/league-error";
         }
 
@@ -55,7 +59,7 @@ public class TeamController {
 
         seasonId = getId(seasonId, currentSeasons.stream().toList().getLast().getId());
 
-        model.addAttribute("league", leagueById.get());
+        model.addAttribute("league", leagueById);
         model.addAttribute("seasons", currentSeasons.stream().toList().reversed());
         model.addAttribute("selectedSeasonId", seasonId);
 
@@ -67,13 +71,12 @@ public class TeamController {
 
     @Transactional
     @PostMapping("/league/{leagueId}/teams")
-    public String addTeam(@PathVariable long leagueId,
+    public String addTeam(@PathVariable Long leagueId,
                           @RequestParam(required = false) Long seasonId,
                           @RequestParam(required = false) List<Long> teamIds,
                           Model model) {
 
-        Optional<League> leagueById = this.leagueService.getLeagueById(leagueId);
-        if (leagueById.isEmpty()) {
+        if (leagueId == null) {
             return "redirect:/league-error";
         }
 

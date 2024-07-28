@@ -1,6 +1,7 @@
 package bg.softuni.footscore.service;
 
 import bg.softuni.footscore.model.dto.ResponseTeamApiDto;
+import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.entity.League;
 import bg.softuni.footscore.model.entity.Season;
 import bg.softuni.footscore.model.entity.Team;
@@ -24,4 +25,6 @@ public interface TeamService {
     Optional<Team> getTeamById(long teamId);
 
     void updateTeam(Team team);
+
+    void fetchTeams(List<LeaguePageDto> leagues, List<Season> seasons);
 }

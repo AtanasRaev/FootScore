@@ -1,34 +1,36 @@
 package bg.softuni.footscore.service;
 
 import bg.softuni.footscore.model.dto.leagueDto.LeagueAddDto;
-import bg.softuni.footscore.model.dto.leagueDto.LeaguesPageDto;
+import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
+import bg.softuni.footscore.model.dto.leagueDto.SelectedLeaguesDto;
 import bg.softuni.footscore.model.entity.League;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface LeagueService {
     List<LeagueAddDto> getAllNotSelectedLeaguesByCountry(String name, boolean selected);
 
-    List<LeaguesPageDto> getAllSelectedLeaguesByCountry(String name, boolean selected);
+    List<LeaguePageDto> getAllSelectedLeaguesByCountry(String name, boolean selected);
 
-    List<LeaguesPageDto> getAllSelectedLeaguesDto();
+    List<LeaguePageDto> getAllSelectedLeaguesDto();
 
-    List<League> getAllSelectedLeagues();
+    SelectedLeaguesDto getAllSelectedWithCountry(String countryName);
 
-    List<LeagueAddDto> getLeagueByIds(List<Long> leagueIds);
+    List<LeaguePageDto> getLeagueByIds(List<Long> leagueIds);
 
-    void updateSelectedLeagues(List<Long> leagueIds);
+    void updateSelectedLeagues(List<LeaguePageDto> leagues);
 
     void saveApiLeagues(String name);
 
     boolean isEmpty();
 
-    Optional<League> getLeagueById(long leagueId);
+    LeaguePageDto getLeagueById(Long leagueId);
 
-    Optional<League> getLeagueByApiId(long leagueApiId);
+    LeaguePageDto getLeagueByApiId(Long leagueApiId);
 
     void updateLeague(League league);
 
-    List<League> getAllLeagues();
+    List<LeaguePageDto> getAllLeagues();
+
+    void removeLeague(Long leagueId);
 }

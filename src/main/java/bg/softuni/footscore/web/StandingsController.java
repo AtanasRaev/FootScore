@@ -1,5 +1,6 @@
 package bg.softuni.footscore.web;
 
+import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.entity.League;
 import bg.softuni.footscore.model.entity.Season;
 import bg.softuni.footscore.service.LeagueService;
@@ -35,13 +36,17 @@ public class StandingsController {
     }
 
     @GetMapping("/widgets/standings")
-    public String getStandings(@RequestParam long leagueId,
+    public String getStandings(@RequestParam Long leagueId,
                                @RequestParam(required = false) Long seasonId,
                                Model model) {
 
-        Optional<League> leagueOpt = leagueService.getLeagueById(leagueId);
-        if (leagueOpt.isEmpty()) {
-            return "error/leagueNotFound";
+        if (leagueId == null) {
+            return "redirect:/leagues-error";
+        }
+        LeaguePageDto leagueById = this.leagueService.getLeagueById(leagueId);
+
+        if (leagueById == null) {
+            return "redirect:/leagues-error";
         }
 
         List<Season> seasons = this.seasonService.getAllSeasons();
@@ -51,15 +56,14 @@ public class StandingsController {
 
         Optional<Season> seasonOptional = this.seasonService.getSeasonById(seasonId);
         if (seasonOptional.isPresent()) {
-            League league = leagueOpt.get();
             model.addAttribute("selectedSeasonId", seasonOptional.get().getId());
             model.addAttribute("selectedSeason", seasonOptional.get());
             model.addAttribute("seasonYear", seasonOptional.get().getYear());
             model.addAttribute("apiKey", apiKey);
             model.addAttribute("seasons", currentSeasons.stream().toList().reversed());
-            model.addAttribute("leagueName", league.getName());
-            model.addAttribute("leagueApiId", league.getApiId());
-            model.addAttribute("league", leagueOpt.get());
+            model.addAttribute("leagueName", leagueById.getName());
+            model.addAttribute("leagueApiId", leagueById.getApiId());
+            model.addAttribute("league", leagueById);
         }
 
         return "standings";

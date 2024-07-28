@@ -1,10 +1,10 @@
 package bg.softuni.footscore.web;
 
 import bg.softuni.footscore.model.dto.leagueDto.LeagueAddDto;
-import bg.softuni.footscore.model.dto.leagueDto.LeaguesPageDto;
+import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
+import bg.softuni.footscore.model.dto.leagueDto.SelectedLeaguesDto;
 import bg.softuni.footscore.model.entity.League;
 import bg.softuni.footscore.model.entity.Season;
-import bg.softuni.footscore.model.entity.LeagueTeamSeason;
 import bg.softuni.footscore.service.CountryService;
 import bg.softuni.footscore.service.LeagueService;
 import bg.softuni.footscore.service.SeasonService;
@@ -42,13 +42,12 @@ public class LeagueController {
     @GetMapping
     public String league(@ModelAttribute("countryName") String countryName, Model model) {
         //todo: error handling
-        Result result = getResult(countryName);
-        if (result == null) {
-            return "redirect:/leagues/error";
-        }
+        SelectedLeaguesDto leagues = this.leagueService.getAllSelectedWithCountry(countryName);
 
-        model.addAttribute("countriesList", result.countries());
-        model.addAttribute("leaguesList", result.allSelectedLeagues());
+        if (leagues == null) return "redirect:/leagues/error";
+
+        model.addAttribute("countriesList", leagues.getCountries());
+        model.addAttribute("leaguesList", leagues.getAllSelectedLeagues());
 
         return "leagues";
     }
@@ -76,64 +75,53 @@ public class LeagueController {
         if (leagueIds == null || leagueIds.isEmpty()) {
             return "redirect:/leagues/add";
         }
-        List<LeagueAddDto> selectedLeagues = this.leagueService.getLeagueByIds(leagueIds);
+        List<LeaguePageDto> selectedLeagues = this.leagueService.getLeagueByIds(leagueIds);
+
         model.addAttribute("selectedLeagues", selectedLeagues);
         return "preview-leagues";
     }
 
     @PostMapping("/saveSelected")
     public String saveSelectedLeagues(@RequestParam List<Long> leagueIds) {
-        //todo: error handling
-        leagueIds.forEach(id -> {
-            Optional<League> leagueOptional = this.leagueService.getLeagueById(id);
-            for (Season season : this.seasonService.getAllSeasons()) {
-                leagueOptional.ifPresent(league -> {
-                    List<LeagueTeamSeason> optional = this.seasonLeagueTeamService.getByLeagueIdAndSeasonId(league.getId(), season.getId());
 
-                    if (optional.isEmpty()) {
-                        this.teamService.saveApiTeamsForLeagueAndSeason(league, season);
-                    }
-                });
-            }
-        });
-        this.leagueService.updateSelectedLeagues(leagueIds);
+        List<Season> seasons = this.seasonService.getAllSeasons();
+
+        if (leagueIds == null || leagueIds.isEmpty() || seasons == null || seasons.isEmpty()) {
+            return "redirect:/leagues/error";
+        }
+
+        List<LeaguePageDto> leagues = this.leagueService.getLeagueByIds(leagueIds);
+
+        if (leagues == null || leagues.isEmpty()) {
+            return "redirect:/leagues/error";
+        }
+
+        this.leagueService.updateSelectedLeagues(leagues);
+        this.teamService.fetchTeams(leagues, seasons);
         return "redirect:/leagues";
     }
 
     @GetMapping("/remove")
     public String removeSelectedLeagues(@ModelAttribute("countryName") String countryName, Model model) {
-        Result result = getResult(countryName);
-        if (result == null) return "redirect:/leagues/error";
+        SelectedLeaguesDto leagues = this.leagueService.getAllSelectedWithCountry(countryName);
 
-        model.addAttribute("countriesRemove", result.countries());
-        model.addAttribute("leaguesRemove", result.allSelectedLeagues());
+        if (leagues == null) {
+            return "redirect:/leagues/error";
+        }
+
+        model.addAttribute("countriesRemove", leagues.getCountries());
+        model.addAttribute("leaguesRemove", leagues.getAllSelectedLeagues());
 
         return "remove-leagues";
     }
 
     @PostMapping("/remove")
     public String doRemoveSelectedLeagues(@RequestParam Long leagueId) {
-        Optional<League> leagueById = this.leagueService.getLeagueById(leagueId);
-        if (leagueById.isPresent()) {
-            leagueById.get().setSelected(false);
-            this.leagueService.updateLeague(leagueById.get());
+        if (leagueId == null) {
+            return "redirect:/leagues/error";
         }
+
+        this.leagueService.removeLeague(leagueId);
         return "redirect:/leagues/remove";
-    }
-
-    private Result getResult(String countryName) {
-        List<String> countries = this.countryService.getAllCountriesNames();
-
-        if (this.leagueService.isEmpty()) {
-            return null;
-        }
-
-        List<LeaguesPageDto> allSelectedLeagues = countryName.equals("All countries") || countryName.isEmpty() ?
-                this.leagueService.getAllSelectedLeaguesDto() :
-                this.leagueService.getAllSelectedLeaguesByCountry(countryName, false);
-        return new Result(countries, allSelectedLeagues);
-    }
-
-    private record Result(List<String> countries, List<LeaguesPageDto> allSelectedLeagues) {
     }
 }

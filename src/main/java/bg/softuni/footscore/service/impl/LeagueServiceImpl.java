@@ -1,9 +1,9 @@
 package bg.softuni.footscore.service.impl;
 
-import bg.softuni.footscore.model.dto.leagueDto.LeagueAddDto;
-import bg.softuni.footscore.model.dto.LeagueCountrySeasonsApiDto;
-import bg.softuni.footscore.model.dto.leagueDto.LeaguesPageDto;
 import bg.softuni.footscore.model.dto.ResponseCountryLeagueSeasonsApiDto;
+import bg.softuni.footscore.model.dto.leagueDto.LeagueAddDto;
+import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
+import bg.softuni.footscore.model.dto.leagueDto.SelectedLeaguesDto;
 import bg.softuni.footscore.model.entity.Country;
 import bg.softuni.footscore.model.entity.League;
 import bg.softuni.footscore.repository.LeagueRepository;
@@ -43,24 +43,22 @@ public class LeagueServiceImpl implements LeagueService {
     }
 
     @Override
-    public List<LeaguesPageDto> getAllSelectedLeaguesByCountry(String name, boolean selected) {
-        List<LeaguesPageDto> list = new ArrayList<>();
+    public List<LeaguePageDto> getAllSelectedLeaguesByCountry(String name, boolean selected) {
+        List<LeaguePageDto> list = new ArrayList<>();
         this.leagueRepository.findByCountryNameAndSelectedNot(name, selected)
                 .forEach(l -> {
-                    LeaguesPageDto map = this.modelMapper.map(l, LeaguesPageDto.class);
-                    map.setCountryName(name);
+                    LeaguePageDto map = this.modelMapper.map(l, LeaguePageDto.class);
                     list.add(map);
                 });
         return list;
     }
 
     @Override
-    public List<LeaguesPageDto> getAllSelectedLeaguesDto() {
-        List<LeaguesPageDto> list = new ArrayList<>();
+    public List<LeaguePageDto> getAllSelectedLeaguesDto() {
+        List<LeaguePageDto> list = new ArrayList<>();
         this.leagueRepository.findBySelectedTrue()
                 .forEach(l -> {
-                    LeaguesPageDto map = this.modelMapper.map(l, LeaguesPageDto.class);
-                    map.setCountryName(l.getCountry().getName());
+                    LeaguePageDto map = this.modelMapper.map(l, LeaguePageDto.class);
                     list.add(map);
                 });
 
@@ -68,31 +66,55 @@ public class LeagueServiceImpl implements LeagueService {
     }
 
     @Override
-    public List<League> getAllSelectedLeagues() {
-        return this.leagueRepository.findBySelectedTrue();
+    public SelectedLeaguesDto getAllSelectedWithCountry(String countryName) {
+        List<String> countries = this.countryService.getAllCountriesNames();
+
+        if (isEmpty()) {
+            return null;
+        }
+
+        List<LeaguePageDto> allSelectedLeagues = countryName.equals("All countries") || countryName.isEmpty() ?
+                getAllSelectedLeaguesDto() :
+                getAllSelectedLeaguesByCountry(countryName, false);
+        SelectedLeaguesDto selectedLeaguesDto = new SelectedLeaguesDto();
+
+        selectedLeaguesDto.setAllSelectedLeagues(allSelectedLeagues);
+        selectedLeaguesDto.setCountries(countries);
+
+        return selectedLeaguesDto;
     }
 
     @Override
-    public List<LeagueAddDto> getLeagueByIds(List<Long> leagueIds) {
-        List<LeagueAddDto> selectedLeagues = new ArrayList<>();
-        leagueIds.forEach(id -> {
-            Optional<League> league = this.leagueRepository.findById(id);
-            selectedLeagues.add(this.modelMapper.map(league.get(), LeagueAddDto.class));
-        });
-        return selectedLeagues;
+    public List<LeaguePageDto> getLeagueByIds(List<Long> leagueIds) {
+        if (leagueIds == null || leagueIds.isEmpty()) {
+            throw new EntityNotFoundException("League Ids cannot be empty");
+        }
+        return this.leagueRepository.findAllById(leagueIds)
+                .stream()
+                .map(league -> this.modelMapper.map(league, LeaguePageDto.class))
+                .toList();
     }
 
     @Override
-    public void updateSelectedLeagues(List<Long> leagueIds) {
-        List<League> leaguesToSave = new ArrayList<>();
-        leagueIds.forEach(id -> {
-            Optional<League> league = this.leagueRepository.findById(id);
-            if (league.isPresent()) {
-                league.get().setSelected(true);
-                leaguesToSave.add(league.get());
+    @Transactional
+    public void updateSelectedLeagues(List<LeaguePageDto> leagues) {
+        if (leagues == null || leagues.isEmpty()) {
+            throw new EntityNotFoundException("Leagues not found");
+        }
+
+
+        List<League> list = leagues.stream().map(league ->  {
+            League map = this.modelMapper.map(league, League.class);
+            Optional<Country> country = this.countryService.getCountry(league.getCountry().getName());
+            if (country.isPresent()) {
+                map.setCountry(country.get());
+            } else {
+                throw new EntityNotFoundException("Country not found");
             }
-        });
-        this.leagueRepository.saveAll(leaguesToSave);
+            map.setSelected(true);
+            return map;
+        }).toList();
+        this.leagueRepository.saveAll(list);
     }
 
 
@@ -138,14 +160,6 @@ public class LeagueServiceImpl implements LeagueService {
         }
     }
 
-    private League mapToLeague(LeagueCountrySeasonsApiDto dto, Country country) {
-        League league = this.modelMapper.map(dto.getLeague(), League.class);
-        league.setCountry(country);
-        league.setSelected(false);
-        league.setApiId(dto.getLeague().getId());
-        return league;
-    }
-
 
     @Override
     public boolean isEmpty() {
@@ -153,13 +167,20 @@ public class LeagueServiceImpl implements LeagueService {
     }
 
     @Override
-    public Optional<League> getLeagueById(long leagueId) {
-        return this.leagueRepository.findById(leagueId);
+    public LeaguePageDto getLeagueById(Long leagueId) {
+        return this.leagueRepository
+                .findById(leagueId)
+                .map(league -> this.modelMapper.map(league, LeaguePageDto.class))
+                .orElse(null);
     }
 
+
     @Override
-    public Optional<League> getLeagueByApiId(long leagueApiId) {
-        return this.leagueRepository.findByApiId(leagueApiId);
+    public LeaguePageDto getLeagueByApiId(Long leagueApiId) {
+        return this.leagueRepository
+                .findByApiId(leagueApiId)
+                .map(league -> this.modelMapper.map(league, LeaguePageDto.class))
+                .orElse(null);
     }
 
     @Override
@@ -168,8 +189,18 @@ public class LeagueServiceImpl implements LeagueService {
     }
 
     @Override
-    public List<League> getAllLeagues() {
-        return this.leagueRepository.findAll();
+    public List<LeaguePageDto> getAllLeagues() {
+        return this.leagueRepository.findAll().stream().map(l -> this.modelMapper.map(l, LeaguePageDto.class)).toList();
+    }
+
+    @Override
+    public void removeLeague(Long leagueId) {
+        Optional<League> league = this.leagueRepository.findById(leagueId);
+        if (league.isEmpty()) {
+            throw new EntityNotFoundException("League not found with id: " + leagueId);
+        }
+        league.get().setSelected(false);
+        updateLeague(league.get());
     }
 
     private List<LeagueAddDto> mapToAddLeagueDtoList(List<League> leagues) {

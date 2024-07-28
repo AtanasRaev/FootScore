@@ -1,4 +1,4 @@
-package bg.softuni.footscore.model.dto;
+package bg.softuni.footscore.model.dto.countryDto;
 
 public class CountryApiDto {
     private String name;

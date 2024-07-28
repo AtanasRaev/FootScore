@@ -1,8 +1,10 @@
 package bg.softuni.footscore.web;
 
+import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.entity.*;
 import bg.softuni.footscore.service.*;
 import bg.softuni.footscore.utils.SeasonUtils;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,16 +55,18 @@ public class PlayerController {
 
         List<LeagueTeamSeason> byTeamIdAndSeasonId = this.leagueTeamSeasonService.getByTeamIdAndSeasonId(teamId, seasonId);
 
+        if (byTeamIdAndSeasonId.isEmpty()) {
+            throw new EntityNotFoundException("Not found team or season");
+        }
+
         String[] positions = {"Attacker", "Midfielder", "Defender", "Goalkeeper"};
 
-        List<League> leagues = new ArrayList<>();
+        List<LeaguePageDto> leagues = new ArrayList<>();
         byTeamIdAndSeasonId.forEach(s -> {
-            Optional<League> leagueOptional = this.leagueService.getLeagueById(s.getLeague().getId());
-            leagueOptional.ifPresent(league -> {
-                if (league.isSelected()) {
-                    leagues.add(league);
-                }
-            });
+            LeaguePageDto leagueById = this.leagueService.getLeagueById(s.getLeague().getId());
+            if (leagueById.isSelected()) {
+                leagues.add(leagueById);
+            }
         });
 
         model.addAttribute("team", teamOptional.get());

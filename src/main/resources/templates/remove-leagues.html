@@ -26,7 +26,7 @@
             <div class="league-box" th:each="league : ${leaguesRemove}">
                 <h2 class="league-title"><span th:text="${league.name}"></span></h2>
                 <img th:src="${league.logo}" alt="League Logo" class="league-logo">
-                <p class="league-country"><span th:text="${league.countryName}"></span></p>
+                <p class="league-country"><span th:text="${league.country.name}"></span></p>
                 <form th:action="@{/leagues/remove}" class="remove-league" method="post">
                     <input type="hidden" th:id="${league.id}" th:name="leagueId" th:value="${league.id}">
                     <button type="submit" class="remove-league-button">Remove</button>

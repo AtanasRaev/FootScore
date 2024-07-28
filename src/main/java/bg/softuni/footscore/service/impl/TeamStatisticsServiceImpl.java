@@ -2,6 +2,7 @@ package bg.softuni.footscore.service.impl;
 
 import bg.softuni.footscore.config.ApiConfig;
 import bg.softuni.footscore.model.dto.ResponseTeamStatisticsSeason;
+import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.dto.teamDto.*;
 import bg.softuni.footscore.model.entity.League;
 import bg.softuni.footscore.model.entity.Season;
@@ -60,13 +61,13 @@ public class TeamStatisticsServiceImpl implements TeamStatisticsService {
                 TeamStatistics teamStatistic = this.modelMapper.map(dto, TeamStatistics.class);
 
                 Optional<Team> optionalTeam = this.teamService.getTeamByApiId(dto.getTeam().getId());
-                Optional<League> optionalLeague = this.leagueService.getLeagueByApiId(dto.getLeague().getId());
+                LeaguePageDto leagueByApiId = this.leagueService.getLeagueByApiId(dto.getLeague().getId());
                 Optional<Season> optionalSeason = this.seasonService.getSeasonByYear(seasonYear);
 
-                if (optionalTeam.isPresent() && optionalSeason.isPresent() && optionalLeague.isPresent()) {
+                if (optionalTeam.isPresent() && optionalSeason.isPresent() && leagueByApiId != null) {
                     teamStatistic.setSeason(optionalSeason.get());
                     teamStatistic.setTeam(optionalTeam.get());
-                    teamStatistic.setLeague(optionalLeague.get());
+                    teamStatistic.setLeague(this.modelMapper.map(leagueByApiId, League.class));
                     this.setGoalsStatistics(teamStatistic, dto);
 
                     for (LineupDto lineup : dto.getLineups()) {

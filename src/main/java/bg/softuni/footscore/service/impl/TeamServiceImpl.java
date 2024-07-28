@@ -2,11 +2,13 @@ package bg.softuni.footscore.service.impl;
 
 import bg.softuni.footscore.config.ApiConfig;
 import bg.softuni.footscore.model.dto.ResponseTeamApiDto;
+import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.entity.*;
 import bg.softuni.footscore.repository.TeamRepository;
 import bg.softuni.footscore.repository.VenueRepository;
 import bg.softuni.footscore.service.LeagueTeamSeasonService;
 import bg.softuni.footscore.service.TeamService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -136,5 +138,23 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public void updateTeam(Team team) {
         this.teamRepository.save(team);
+    }
+
+    @Override
+    @Transactional
+    public void fetchTeams(List<LeaguePageDto> leagues, List<Season> seasons) {
+        if (leagues == null || leagues.isEmpty() || seasons == null || seasons.isEmpty()) {
+            throw new EntityNotFoundException("Not found leagues or seasons");
+        }
+
+        List<League> leaguesList = leagues.stream().map(league -> this.modelMapper.map(league, League.class)).toList();
+        seasons.forEach(season -> {
+            leaguesList.forEach(league -> {
+                List<LeagueTeamSeason> list = this.leagueTeamSeasonService.getByLeagueIdAndSeasonId(league.getId(), season.getId());
+                if (list.isEmpty()) {
+                    saveApiTeamsForLeagueAndSeason(league, season);
+                }
+            });
+        });
     }
 }

@@ -1,6 +1,6 @@
 package bg.softuni.footscore.service.impl;
 
-import bg.softuni.footscore.model.dto.CountryApiDto;
+import bg.softuni.footscore.model.dto.countryDto.CountryApiDto;
 import bg.softuni.footscore.model.dto.LeagueCountrySeasonsApiDto;
 import bg.softuni.footscore.model.dto.ResponseCountryLeagueSeasonsApiDto;
 import bg.softuni.footscore.model.entity.Country;
