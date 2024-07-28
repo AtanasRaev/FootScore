@@ -1,9 +1,11 @@
 package bg.softuni.footscore.service.impl;
 
 import bg.softuni.footscore.config.ApiConfig;
+import bg.softuni.footscore.model.dto.PlayerTeamSeasonPageDto;
 import bg.softuni.footscore.model.dto.ResponsePlayerApiDto;
 import bg.softuni.footscore.model.dto.ResponsePlayerDetailsApiDto;
 import bg.softuni.footscore.model.dto.SeasonPageDto;
+import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
 import bg.softuni.footscore.model.dto.playerDto.PlayerStatisticsApiDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 import bg.softuni.footscore.model.entity.Player;
@@ -71,7 +73,7 @@ public class PlayerServiceImpl implements PlayerService {
 
                 List<Player> playersToSave = new ArrayList<>();
                 responseList.getResponse().forEach(dto -> {
-                    if (this.getPlayerByApiId(dto.getPlayer().getId()).isEmpty()) {
+                    if (this.getPlayerByApiId(dto.getPlayer().getId()) == null) {
                         Player player = createPlayer(dto);
 
                         Optional<Player> optional = this.playerRepository.findByApiId(player.getApiId());
@@ -95,8 +97,16 @@ public class PlayerServiceImpl implements PlayerService {
                 responseList.getResponse().forEach(dto -> {
                     Optional<Player> player = this.playerRepository.findByApiId(dto.getPlayer().getId());
                     if (player.isPresent()) {
-                        Optional<Player> optionalPlayer = this.playerTeamSeasonService.getPlayerByTeamIdAndSeasonId(team.getId(), season.getId(), player.get().getId());
-                        if (optionalPlayer.isEmpty()) {
+                        List<PlayerTeamSeasonPageDto> list = this.playerTeamSeasonService.getByTeamIdAndSeasonId(team.getId(), season.getId());
+                        List<PlayerPageDto> map = list.stream().map(s -> {
+                            if (s.getPlayer().getId() == player.get().getId()) {
+                                return s.getPlayer();
+                            } else {
+                                return null;
+                            }
+                        }).toList();
+
+                        if (map.isEmpty() || map.getFirst() == null) {
                             PlayerTeamSeason seasonTeamPlayer = new PlayerTeamSeason();
                             seasonTeamPlayer.setSeason(this.modelMapper.map(season, Season.class));
                             seasonTeamPlayer.setTeam(this.modelMapper.map(team, Team.class));
@@ -112,7 +122,10 @@ public class PlayerServiceImpl implements PlayerService {
 
 
     @Override
-    public ResponsePlayerApiDto getResponsePlayerApiDto(String query, long id, int seasonYear, int page) {
+    public ResponsePlayerApiDto getResponsePlayerApiDto(String query, Long id, Integer seasonYear, Integer page) {
+        if (query == null || query.isEmpty() || id == null || seasonYear == null || page == null) {
+            throw new IllegalArgumentException("Invalid query/id/season year or page parameters");
+        }
         String url = String.format(query, this.apiConfig.getUrl(), id, seasonYear, page);
 
         return this.restClient
@@ -125,7 +138,10 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public ResponsePlayerDetailsApiDto getResponsePlayerDetailsApiDto(String query, long playerId) {
+    public ResponsePlayerDetailsApiDto getResponsePlayerDetailsApiDto(String query, Long playerId) {
+        if (query == null || query.isEmpty() || playerId == null) {
+            throw new IllegalArgumentException("Invalid query or id parameters");
+        }
         String url = String.format(query, this.apiConfig.getUrl(), playerId);
 
         return this.restClient
@@ -138,12 +154,17 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Optional<Player> getPlayerByApiId(long apiId) {
-        return this.playerRepository.findByApiId(apiId);
+    public PlayerPageDto getPlayerByApiId(Long apiId) {
+        return this.playerRepository.findByApiId(apiId)
+                .map(p -> this.modelMapper.map(p, PlayerPageDto.class))
+                .orElse(null);
     }
 
     @Override
-    public void fillMissingPlayerDetails(long playerApiId) {
+    public void fillMissingPlayerDetails(Long playerApiId) {
+        if (playerApiId == null) {
+            throw new IllegalArgumentException("Invalid player api id");
+        }
         Optional<Player> optionalPlayer = this.playerRepository.findById(playerApiId);
         if (optionalPlayer.isPresent()) {
             ResponsePlayerDetailsApiDto response = getResponsePlayerDetailsApiDto(PLAYERS_BY_ID, optionalPlayer.get().getApiId());
@@ -171,8 +192,10 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Optional<Player> getPlayerById(long playerId) {
-        return this.playerRepository.findById(playerId);
+    public PlayerPageDto getPlayerById(Long playerId) {
+        return this.playerRepository.findById(playerId)
+                .map(p -> this.modelMapper.map(p, PlayerPageDto.class))
+                .orElse(null);
     }
 
     private static Player createPlayer(PlayerStatisticsApiDto dto) {

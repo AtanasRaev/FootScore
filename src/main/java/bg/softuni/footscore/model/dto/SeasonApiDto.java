@@ -1,16 +1,16 @@
 package bg.softuni.footscore.model.dto;
 
 public class SeasonApiDto {
-    private int year;
+    private Integer year;
 
     public SeasonApiDto() {
     }
 
-    public int getYear() {
+    public Integer getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(Integer year) {
         this.year = year;
     }
 }

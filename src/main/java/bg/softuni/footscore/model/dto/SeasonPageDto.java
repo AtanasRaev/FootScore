@@ -2,7 +2,7 @@ package bg.softuni.footscore.model.dto;
 
 public class SeasonPageDto {
     private long id;
-    private int year;
+    private Integer year;
 
     public SeasonPageDto() {
     }
@@ -15,11 +15,11 @@ public class SeasonPageDto {
         this.id = id;
     }
 
-    public int getYear() {
+    public Integer getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(Integer year) {
         this.year = year;
     }
 

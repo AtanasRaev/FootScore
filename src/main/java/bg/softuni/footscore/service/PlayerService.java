@@ -3,23 +3,21 @@ package bg.softuni.footscore.service;
 import bg.softuni.footscore.model.dto.ResponsePlayerApiDto;
 import bg.softuni.footscore.model.dto.ResponsePlayerDetailsApiDto;
 import bg.softuni.footscore.model.dto.SeasonPageDto;
+import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
-import bg.softuni.footscore.model.entity.Player;
-
-import java.util.Optional;
 
 public interface PlayerService {
     void saveApiPlayersForTeamAndSeason(TeamPageDto team, SeasonPageDto season);
 
-    ResponsePlayerApiDto getResponsePlayerApiDto(String query, long id, int seasonYear, int page);
+    ResponsePlayerApiDto getResponsePlayerApiDto(String query, Long id, Integer seasonYear, Integer page);
 
-    ResponsePlayerDetailsApiDto getResponsePlayerDetailsApiDto(String query, long playerApiId);
+    ResponsePlayerDetailsApiDto getResponsePlayerDetailsApiDto(String query, Long playerApiId);
 
-    Optional<Player> getPlayerByApiId(long apiId);
+    PlayerPageDto getPlayerByApiId(Long apiId);
 
-    void fillMissingPlayerDetails(long playerId);
+    void fillMissingPlayerDetails(Long playerId);
 
     boolean isEmpty();
 
-    Optional<Player> getPlayerById(long playerId);
+    PlayerPageDto getPlayerById(Long playerId);
 }

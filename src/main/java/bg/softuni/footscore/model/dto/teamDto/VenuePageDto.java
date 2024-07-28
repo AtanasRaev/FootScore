@@ -4,7 +4,7 @@ public class VenuePageDto {
     private long id;
     private String name;
     private String city;
-    private int capacity;
+    private Integer capacity;
 
     public VenuePageDto(String name, String city, Integer capacity) {
             this.name = name;
@@ -39,11 +39,11 @@ public class VenuePageDto {
         this.city = city;
     }
 
-    public int getCapacity() {
+    public Integer getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(int capacity) {
+    public void setCapacity(Integer capacity) {
         this.capacity = capacity;
     }
 }

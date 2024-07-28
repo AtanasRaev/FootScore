@@ -1,10 +1,11 @@
 package bg.softuni.footscore.web;
 
 import bg.softuni.footscore.model.dto.LeagueTeamSeasonPageDto;
+import bg.softuni.footscore.model.dto.PlayerTeamSeasonPageDto;
 import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
+import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
-import bg.softuni.footscore.model.entity.*;
 import bg.softuni.footscore.service.*;
 import bg.softuni.footscore.utils.SeasonUtils;
 import jakarta.persistence.EntityNotFoundException;
@@ -77,14 +78,14 @@ public class PlayerController {
         model.addAttribute("positions", positions);
         model.addAttribute("leagues", leagues);
 
-        List<Player> allPlayers = this.playerTeamSeasonService.getAllPlayersBySeasonIdAndTeamId(teamId, seasonId);
+        List<PlayerTeamSeasonPageDto> allPlayers = this.playerTeamSeasonService.getByTeamIdAndSeasonId(teamId, seasonId);
 
         if (allPlayers.isEmpty()) {
             SeasonPageDto seasonOptional = this.seasonService.getSeasonById(seasonId);
             if (seasonOptional != null) {
                 this.playerService.saveApiPlayersForTeamAndSeason(teamOptional, seasonOptional);
             }
-            allPlayers = this.playerTeamSeasonService.getAllPlayersBySeasonIdAndTeamId(teamId, seasonId);
+            allPlayers  = this.playerTeamSeasonService.getByTeamIdAndSeasonId(teamId, seasonId);
         }
 
         if (allPlayers.isEmpty()) {
@@ -92,7 +93,7 @@ public class PlayerController {
         }
 
         if (position != null && !position.equals("All positions")) {
-            allPlayers.removeIf(player -> !player.getPosition().equals(position));
+            allPlayers.removeIf(s -> !s.getPlayer().getPosition().equals(position));
             model.addAttribute("selectedPosition", position);
         }
 
@@ -105,17 +106,17 @@ public class PlayerController {
     public String details(@PathVariable long playerId,
                           Model model) {
 
-        Optional<Player> playerOptional = this.playerService.getPlayerById(playerId);
+        PlayerPageDto dto = this.playerService.getPlayerById(playerId);
 
-        if (playerOptional.isEmpty()) {
+        if (dto == null) {
             return "redirect:/player-details-error";
         }
 
-        if (playerOptional.get().getRetired() == null) {
+        if (dto.getRetired() == null) {
             this.playerService.fillMissingPlayerDetails(playerId);
         }
 
-        Player player = this.playerService.getPlayerById(playerId).get();
+        PlayerPageDto player = this.playerService.getPlayerById(playerId);
 
         model.addAttribute("player", player);
         model.addAttribute("birthdate", player);
