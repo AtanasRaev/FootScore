@@ -85,19 +85,27 @@ public class PlayerController {
             if (seasonOptional != null) {
                 this.playerService.saveApiPlayersForTeamAndSeason(teamOptional, seasonOptional);
             }
-            allPlayers  = this.playerTeamSeasonService.getByTeamIdAndSeasonId(teamId, seasonId);
+            allPlayers = this.playerTeamSeasonService.getByTeamIdAndSeasonId(teamId, seasonId);
         }
 
         if (allPlayers.isEmpty()) {
             return "redirect:/players/error";
         }
 
+        List<PlayerPageDto> validPlayers = new ArrayList<>(allPlayers.stream().map(PlayerTeamSeasonPageDto::getPlayer).toList());
+
         if (position != null && !position.equals("All positions")) {
-            allPlayers.removeIf(s -> !s.getPlayer().getPosition().equals(position));
-            model.addAttribute("selectedPosition", position);
+            validPlayers = new ArrayList<>();
+            for (PlayerTeamSeasonPageDto allPlayer : allPlayers) {
+                if (allPlayer.getPlayer().getPosition().equals(position)) {
+                    validPlayers.add(allPlayer.getPlayer());
+                }
+                model.addAttribute("selectedPosition", position);
+            }
         }
 
-        model.addAttribute("players", allPlayers);
+
+        model.addAttribute("players", validPlayers);
 
         return "players";
     }
