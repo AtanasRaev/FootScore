@@ -43,6 +43,14 @@
                 <input type="hidden" name="seasonId" th:value="${selectedSeasonId}">
             </div>
         </form>
+        <div>
+            <form th:method="get"
+                  th:action="@{/team/{teamId}/players/add-favorites(teamId=${team.id})}">
+                <input type="hidden" name="seasonId" th:value="${selectedSeasonId}">
+                <input type="hidden" name="teamId" th:value="${team.id}">
+                <button class="add-leagues-button">Add to favorites</button>
+            </form>
+        </div>
         <div class="team-list">
             <div th:each="player : ${players}" class="player-box">
                 <div>

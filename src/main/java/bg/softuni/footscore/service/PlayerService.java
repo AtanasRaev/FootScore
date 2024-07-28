@@ -6,6 +6,8 @@ import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 
+import java.util.List;
+
 public interface PlayerService {
     void saveApiPlayersForTeamAndSeason(TeamPageDto team, SeasonPageDto season);
 
@@ -20,4 +22,6 @@ public interface PlayerService {
     boolean isEmpty();
 
     PlayerPageDto getPlayerById(Long playerId);
+
+    List<PlayerPageDto> getAllByIds(List<Long> playerIds);
 }

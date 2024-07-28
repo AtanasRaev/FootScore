@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Teams</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="teams-body">
+<header th:replace="fragments/commons::nav"></header>
+<section class="teams-section">
+    <div class="teams-container">
+        <h1 class="teams-title">Players in <span th:text="${team.name}"></span></h1>
+        <h2 class="teams-title">Season: <span th:text="${season.toString()}"></span></h2>
+        <form id="season-form" th:method="get"
+              th:action="@{/team/{teamId}/players/add-favorites(teamId=${team.id})}">
+            <input type="hidden" name="teamId" th:value="${team.id}">
+            <div class="players-filters">
+                <label for="position">Sort by position:</label>
+                <select id="position" name="position" onchange="this.form.submit()">
+                    <option th:text="'All positions'" th:selected="${selectedPosition == 'All positions'}">All
+                        positions
+                    </option>
+                    <option th:each="position : ${positions}"
+                            th:value="${position}"
+                            th:text="${position}"
+                            th:selected="${position == selectedPosition}">Position
+                    </option>
+                </select>
+                <input type="hidden" name="teamId" th:value="${team.id}">
+                <input type="hidden" name="seasonId" th:value="${selectedSeasonId}">
+            </div>
+        </form>
+        <form th:method="post"
+              th:action="@{/team/{teamId}/players(teamId=${team.id})}">
+            <div class="leagues-button-admin">
+                <input type="hidden" name="teamId" th:value="${team.id}">
+                <button class="add-leagues-button">Done</button>
+            </div>
+            <div class="team-list">
+                <div th:each="player : ${players}" class="team-box-add">
+                    <h2 class="team-name"><span th:text="${player.shortName}"></span></h2>
+                    <img th:src="${player.photo}" alt="Team Logo" class="team-logo-add">
+                    <div class="checkbox-wrapper">
+                        <label>
+                            <input type="checkbox" th:id="'favorite-team-' + ${player.id}"
+                                   class="favorite-checkbox"
+                                   th:name="playerIds" th:value="${player.id}"
+                                   th:checked="${favoritePlayers.contains(player)}">
+                            <label th:for="'favorite-team-' + ${player.id}" class="favorite-button">
+                                <span class="star-icon">&#9733;</span>
+                            </label>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+<footer class="teams-footer">
+    <p>&copy; 2024 Foot Score. All rights reserved.</p>
+</footer>
+</body>
+</html>

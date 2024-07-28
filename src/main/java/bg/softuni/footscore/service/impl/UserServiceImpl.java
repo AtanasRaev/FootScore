@@ -2,7 +2,9 @@ package bg.softuni.footscore.service.impl;
 
 import bg.softuni.footscore.model.dto.RegisterUserDto;
 import bg.softuni.footscore.model.dto.UserEntityPageDto;
+import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
+import bg.softuni.footscore.model.entity.Player;
 import bg.softuni.footscore.model.entity.Role;
 import bg.softuni.footscore.model.entity.Team;
 import bg.softuni.footscore.model.entity.UserEntity;
@@ -59,7 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(UserEntityPageDto userEntityPageDto) {
+    public void updateFavoriteTeams(UserEntityPageDto userEntityPageDto) {
         Optional<UserEntity> byUsername = this.userRepository.findByUsername(userEntityPageDto.getUsername());
         Set<TeamPageDto> favoriteTeams = userEntityPageDto.getFavoriteTeams();
         Set<Team> collect = favoriteTeams.stream().map(t -> this.modelMapper.map(t, Team.class)).collect(Collectors.toSet());
@@ -71,13 +73,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateFavoritePlayers(UserEntityPageDto userEntityPageDto) {
+        Optional<UserEntity> byUsername = this.userRepository.findByUsername(userEntityPageDto.getUsername());
+        Set<PlayerPageDto> favoritePlayers = userEntityPageDto.getFavoritePlayers();
+        Set<Player> collect = favoritePlayers.stream().map(p -> this.modelMapper.map(p, Player.class)).collect(Collectors.toSet());
+        byUsername.ifPresent(user -> {
+            user.getFavoritePlayers().addAll(collect);
+            this.userRepository.save(user);
+        });
+    }
+
+    @Override
     public void addFavoriteTeams(UserEntityPageDto dto, List<TeamPageDto> allByIds) {
         dto.getFavoriteTeams().addAll(new HashSet<>(allByIds));
-        this.updateUser(dto);
+        this.updateFavoriteTeams(dto);
     }
 
     @Override
     public UserEntityPageDto getUser() {
         return getUserByUsername(UserUtils.findUsername());
+    }
+
+    @Override
+    public void addFavoritePlayers(UserEntityPageDto dto, List<PlayerPageDto> allByIds) {
+        dto.getFavoritePlayers().addAll(new HashSet<>(allByIds));
+        this.updateFavoritePlayers(dto);
     }
 }
