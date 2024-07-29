@@ -26,4 +26,9 @@ public interface PlayerService {
     List<PlayerPageDto> getAllByIds(List<Long> playerIds);
 
     List<PlayerPageDto> getAllPlayers();
+
+    List<PlayerPageDto> getAllSelectedPlayers(boolean bool);
+
+    void setSelected(Long playerId, boolean b);
+
 }

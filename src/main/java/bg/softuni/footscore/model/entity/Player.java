@@ -56,6 +56,9 @@ public class Player {
     @Column
     private Boolean isRetired;
 
+    @Column
+    private Boolean isSelected;
+
     public Player(String firstName,
                   String lastName,
                   String name,
@@ -78,6 +81,7 @@ public class Player {
         this.weight = weight;
         this.photo = photo;
         this.apiId = apiId;
+        this.isSelected = false;
     }
 
     public Player() {
@@ -138,6 +142,14 @@ public class Player {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public Boolean getSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(Boolean selected) {
+        isSelected = selected;
     }
 
     public LocalDate getBirthday() {

@@ -211,6 +211,24 @@ public class PlayerServiceImpl implements PlayerService {
         return this.playerRepository.findAll().stream().map(p -> this.modelMapper.map(p, PlayerPageDto.class)).toList();
     }
 
+    @Override
+    public List<PlayerPageDto> getAllSelectedPlayers(boolean bool) {
+        return this.playerRepository.findByIsSelected(bool).stream().map(p -> this.modelMapper.map(p, PlayerPageDto.class)).toList();
+    }
+
+    @Override
+    public void setSelected(Long playerId, boolean b) {
+        Optional<Player> optionalPlayer = this.playerRepository.findById(playerId);
+        if (optionalPlayer.isPresent()) {
+            optionalPlayer.get().setSelected(b);
+            updatePlayer(optionalPlayer.get());
+        }
+    }
+
+    private void updatePlayer(Player player) {
+        this.playerRepository.save(player);
+    }
+
     private static Player createPlayer(PlayerStatisticsApiDto dto) {
         String heightStr = dto.getPlayer().getHeight();
         String weightStr = dto.getPlayer().getWeight();

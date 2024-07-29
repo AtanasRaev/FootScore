@@ -19,6 +19,7 @@ public class PlayerPageDto {
     private String team;
     private Integer number;
     private Boolean isRetired;
+    private Boolean isSelected;
 
     public PlayerPageDto() {
     }
@@ -141,6 +142,14 @@ public class PlayerPageDto {
 
     public void setNumber(Integer number) {
         this.number = number;
+    }
+
+    public Boolean getSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(Boolean selected) {
+        isSelected = selected;
     }
 
     public Boolean getRetired() {

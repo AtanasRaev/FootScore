@@ -17,50 +17,42 @@
                 <label for="position">Sort by position:</label>
                 <select id="position" name="position" onchange="this.form.submit()">
                     <option th:text="'All positions'"
-                            th:selected="${selectedPosition == null || selectedPosition == 'All positions'}">All
-                        positions
+                            th:selected="${selectedPosition == null || selectedPosition == 'All positions'}">All positions
                     </option>
                     <option th:each="position : ${positions}" th:value="${position}" th:text="${position}"
                             th:selected="${position == selectedPosition}"></option>
-                </select>
-                <label for="formation">Choose a Formation:</label>
-                <select id="formation" name="formation" onchange="this.form.submit()">
-                    <option th:each="formation : ${formations}" th:value="${formation}" th:text="${formation}"
-                            th:selected="${formation == selectedFormation}"></option>
                 </select>
                 <label for="search">Search:</label>
                 <input type="text" id="search" name="search" th:value="${searchTerm}" placeholder="Search players">
             </div>
         </form>
-
-        <form id="players-form" th:method="get" th:action="@{/create/dream-team/preview}">
-            <div class="input-container">
-                <label for="team-name">Dream Team Name:</label>
-                <input type="text" id="team-name" name="teamName" placeholder="Enter your team name"
-                       th:value="${teamName}" required>
-            </div>
-            <span>You can choose only 11 players</span>
-            <div id="player-list" class="team-list">
-                <div th:each="player : ${players}" class="team-box-add">
-                    <h2 class="team-name"><span th:text="${player.shortName}"></span></h2>
-                    <img th:src="${player.photo}" alt="Team Logo" class="team-logo-add">
-                    <p class="player-position"><span th:text="${player.position}"></span></p>
-                    <div class="checkbox-wrapper">
-                        <label class="custom-checkbox">
-                            <input type="checkbox" th:id="'favorite-team-' + ${player.id}" class="favorite-checkbox"
-                                   th:name="playerIds" th:value="${player.id}" onclick="limitSelection(event)">
-                            <span class="checkmark"></span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="submit-buttons">
-                <input type="hidden" name="formation" th:value="${selectedFormation}">
-                <input type="hidden" name="teamName" th:value="${teamName}">
-                <input type="hidden" id="selectedPlayers" name="playerIds">
-                <button type="submit">Review Team</button>
-            </div>
+        <form th:method="get" th:action="@{/create/dream-team/preview}">
+            <button type="submit" class="remove-league-button">Continue</button>
         </form>
+        <form th:method="post" th:action="@{/cancel}">
+            <button type="submit" class="remove-league-button">Cancel</button>
+        </form>
+        <span>You can choose only 11 players</span>
+        <div>
+            <span>Selected</span>
+            <div>
+                <span>Goalkeeper: <span th:text="${goalkeepers}"></span></span>
+                <span>Defenders: <span th:text="${defenders}"></span></span>
+                <span>Midfielders: <span th:text="${midfielders}"></span></span>
+                <span>Attackers: <span th:text="${attackers}"></span></span>
+            </div>
+        </div>
+        <div id="player-list" class="team-list">
+            <div th:each="player : ${players}" class="team-box-add">
+                <h2 class="team-name"><span th:text="${player.shortName}"></span></h2>
+                <img th:src="${player.photo}" alt="Team Logo" class="team-logo-add">
+                <p class="player-position"><span th:text="${player.position}"></span></p>
+                <form class="checkbox-wrapper" th:method="post" th:action="@{/create/dream-team}">
+                    <input type="hidden" th:id="${player.id}" th:name="playerId" th:value="${player.id}">
+                    <button type="submit" class="remove-league-button">Add</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 </body>

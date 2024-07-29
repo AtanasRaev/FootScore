@@ -11,8 +11,16 @@
 <div class="preview-dream-team-container">
     <h1>Preview Your Dream Team</h1>
     <div class="team-details">
-        <h2>Team Name: <span th:text="${teamName}"></span></h2>
-        <h3>Formation: <span th:text="${formation}"></span></h3>
+        <div class="submit-buttons">
+            <form th:action="@{/create/dream-team/save}" method="post">
+                <div class="input-container">
+                    <label for="team-name">Dream Team Name:</label>
+                    <input type="text" id="team-name" name="teamName" placeholder="Enter your team name" th:value="${teamName}" required>
+                </div>
+                <button type="submit">Confirm Team</button>
+            </form>
+            <a th:href="@{/create/dream-team}" class="edit-button">Edit Team</a>
+        </div>
     </div>
     <div>
         <div class="team-list">
@@ -43,15 +51,6 @@
                 <p class="player-position"><span th:text="${attacker.position}"></span></p>
             </div>
         </div>
-    </div>
-    <div class="submit-buttons">
-        <form th:action="@{/create/dream-team/save}" method="post">
-            <input type="hidden" name="teamName" th:value="${teamName}">
-            <input type="hidden" name="formation" th:value="${formation}">
-            <input type="hidden" name="playerIds" th:value="${playerIds}">
-            <button type="submit">Confirm Team</button>
-        </form>
-        <a th:href="@{/create/dream-team}" class="edit-button">Edit Team</a>
     </div>
 </div>
 </body>

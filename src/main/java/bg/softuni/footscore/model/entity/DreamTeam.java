@@ -2,6 +2,7 @@ package bg.softuni.footscore.model.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -19,8 +20,8 @@ public class DreamTeam {
     @Column(nullable = false)
     private String formation;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<Player> players;
+    @OneToMany
+    private List<Player> players;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -30,7 +31,7 @@ public class DreamTeam {
 
     public DreamTeam(String name,
                      String formation,
-                     Set<Player> players,
+                     List<Player> players,
                      UserEntity user) {
         this.name = name;
         this.formation = formation;
@@ -62,11 +63,11 @@ public class DreamTeam {
         this.formation = formation;
     }
 
-    public Set<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 
-    public void setPlayers(Set<Player> players) {
+    public void setPlayers(List<Player> players) {
         this.players = players;
     }
 
