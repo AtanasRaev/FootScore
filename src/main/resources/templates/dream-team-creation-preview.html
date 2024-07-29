@@ -23,31 +23,16 @@
     </div>
     <div>
         <div class="team-list">
-            <div th:each="attacker : ${attackers}" class="team-box-add">
-                <h2 class="team-name"><span th:text="${attacker.shortName}"></span></h2>
-                <img th:src="${attacker.photo}" alt="Team Logo" class="team-logo-add">
-                <p class="player-position"><span th:text="${attacker.position}"></span></p>
-            </div>
-        </div>
-        <div class="team-list">
-            <div th:each="midfielder : ${midfielders}" class="team-box-add">
-                <h2 class="team-name"><span th:text="${midfielder.shortName}"></span></h2>
-                <img th:src="${midfielder.photo}" alt="Team Logo" class="team-logo-add">
-                <p class="player-position"><span th:text="${midfielder.position}"></span></p>
-            </div>
-        </div>
-        <div class="team-list">
-            <div th:each="defender : ${defenders}" class="team-box-add">
-                <h2 class="team-name"><span th:text="${defender.shortName}"></span></h2>
-                <img th:src="${defender.photo}" alt="Team Logo" class="team-logo-add">
-                <p class="player-position"><span th:text="${defender.position}"></span></p>
-            </div>
-        </div>
-        <div class="team-list">
-            <div class="team-box-add">
-                <h2 class="team-name"><span th:text="${goalkeeper.shortName}"></span></h2>
-                <img th:src="${goalkeeper.photo}" alt="Team Logo" class="team-logo-add">
-                <p class="player-position"><span th:text="${goalkeeper.position}"></span></p>
+            <div th:each="position : ${positions}">
+                <div th:if="${player.position.equals(position)}" th:each="player : ${players}" class="player-box">
+                    <div>
+                        <a th:href="@{/player/{playerId}/details(playerId=${player.id})}" class="team-link">
+                            <h2 class="player-name"><span th:text="${player.shortName}"></span></h2>
+                            <img th:src="${player.photo}" alt="Player Photo" class="player-logo">
+                            <p class="player-position"><span th:text="${player.position}"></span></p>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

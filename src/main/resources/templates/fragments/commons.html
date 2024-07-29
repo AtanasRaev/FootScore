@@ -22,6 +22,10 @@
                 <a th:href="@{/leagues}">Leagues</a>
             </li>
 
+            <li>
+                <a th:href="@{/all/dream-teams}">Dream Teams</a>
+            </li>
+
             <li sec:authorize="!isAuthenticated()">
                 <a href="/login"
                    th:classappend="${activeLink == 'login'}? 'active'">Login</a>

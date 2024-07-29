@@ -9,16 +9,16 @@ public class DreamTeamPageDto {
     private String name;
     private String formation;
     private List<PlayerPageDto> players;
-    private UserEntityPageDto userEntityPageDto;
+    private UserEntityPageDto user;
 
     public DreamTeamPageDto() {
     }
 
-    public DreamTeamPageDto(String name, String formation, List<PlayerPageDto> players, UserEntityPageDto userEntityPageDto) {
+    public DreamTeamPageDto(String name, String formation, List<PlayerPageDto> players, UserEntityPageDto user) {
         this.name = name;
         this.formation = formation;
         this.players = players;
-        this.userEntityPageDto = userEntityPageDto;
+        this.user = user;
     }
 
     public Long getId() {
@@ -53,11 +53,11 @@ public class DreamTeamPageDto {
         this.players = players;
     }
 
-    public UserEntityPageDto getUserEntityPageDto() {
-        return userEntityPageDto;
+    public UserEntityPageDto getUser() {
+        return user;
     }
 
-    public void setUserEntityPageDto(UserEntityPageDto userEntityPageDto) {
-        this.userEntityPageDto = userEntityPageDto;
+    public void setUser(UserEntityPageDto user) {
+        this.user = user;
     }
 }

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Teams</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<header th:replace="fragments/commons::nav"></header>
+<body>
+<div class="teams-players-container">
+    <span th:if="${dreamTeams.size() == 0}">No teams created yet</span>
+    <div th:each="team : ${dreamTeams}" class="team-box">
+        <a class="team-link" th:href="@{/dream-team/{dreamTeamId}/details(dreamTeamId=${team.id})}">
+            <h2 class="team-name">Team name: <span th:text="${team.name}"></span></h2>
+            <p class="team-name">Formation: <span th:text="${team.formation}"></span></p>
+        </a>
+    </div>
+</div>
+<footer class="teams-footer">
+    <p>&copy; 2024 Foot Score. All rights reserved.</p>
+</footer>
+</body>
+</html>

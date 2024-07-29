@@ -8,12 +8,12 @@ import bg.softuni.footscore.service.DreamTeamService;
 import bg.softuni.footscore.service.PlayerService;
 import bg.softuni.footscore.service.TeamStatisticsService;
 import bg.softuni.footscore.service.UserService;
+import bg.softuni.footscore.utils.UserUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -140,20 +140,27 @@ public class DreamTeamController {
         model.addAttribute("defenders", defenders);
         model.addAttribute("midfielders", midfielders);
         model.addAttribute("attackers", attackers);
-        model.addAttribute("positions", POSITIONS);
+        model.addAttribute("positions", Arrays.asList(POSITIONS).reversed());
+        model.addAttribute("players", players);
         model.addAttribute("formations", this.teamStatisticsService.getAllFormations());
 
         return "dream-team-creation-preview";
     }
 
     @GetMapping("/profile/dream-teams")
-    public String showDreamTeams(Model model) {
+    public String showUserDreamTeams(Model model) {
         UserEntityPageDto user = this.userService.getUser();
 
         List<DreamTeamPageDto> dreamTeams = this.dreamTeamService.getAllDreamTeamsByUserId(user.getId());
 
         model.addAttribute("dreamTeams", dreamTeams);
         return "user-dream-teams";
+    }
+
+    @GetMapping("/all/dream-teams")
+    public String showAllDreamTeams(Model model) {
+        model.addAttribute("dreamTeams", this.dreamTeamService.getAll());
+        return "view-all-dream-teams";
     }
 
 
@@ -186,6 +193,28 @@ public class DreamTeamController {
         return "redirect:/profile";
     }
 
+    @GetMapping("/dream-team/{dreamTeamId}/details")
+    public String showDreamTeamDetails(@PathVariable Long dreamTeamId, Model model) {
+        DreamTeamPageDto byId = this.dreamTeamService.getById(dreamTeamId);
+        UserEntityPageDto user = this.userService.getUser();
+
+        if (byId == null) {
+            return "redirect:/dream-team-detail-error";
+        }
+
+        model.addAttribute("user", user);
+        model.addAttribute("team", byId);
+        model.addAttribute("players", byId.getPlayers());
+        model.addAttribute("positions", Arrays.asList(POSITIONS).reversed());
+        return "dream-team-details";
+    }
+
+
+    @DeleteMapping("/dream-team/{teamId}/delete")
+    public String deleteDreamTeam(@PathVariable Long teamId) {
+        this.dreamTeamService.deleteTeam(teamId);
+        return "redirect:/profile/dream-teams";
+    }
 
     private static List<PlayerPageDto> getPlayersByPosition(String position, List<PlayerPageDto> validPlayers) {
         if (position != null && !position.equals("All positions") && !position.isEmpty()) {

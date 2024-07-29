@@ -18,6 +18,7 @@ public class UserEntityPageDto {
     public UserEntityPageDto() {
     }
 
+
     public String getUsername() {
         return username;
     }

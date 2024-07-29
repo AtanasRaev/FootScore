@@ -14,4 +14,10 @@ public interface DreamTeamService {
     List<DreamTeamPageDto> getAllDreamTeamsByUserId(Long id);
 
     boolean checkTeamName(String teamName);
+
+    DreamTeamPageDto getById(Long dreamTeamId);
+
+    List<DreamTeamPageDto> getAll();
+
+    void deleteTeam(Long teamId);
 }
