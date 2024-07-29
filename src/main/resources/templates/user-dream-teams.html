@@ -9,6 +9,10 @@
 <header th:replace="fragments/commons::nav"></header>
 <body>
 <div class="teams-players-container">
+    <span th:if="${dreamTeams.size() == 0}">You haven't created your dream teams yet</span>
+    <div id="favorite-teams" class="favorites-list">
+        <a th:href="@{/create/dream-team}" class="show-more">Create a team</a>
+    </div>
     <div th:each="team : ${dreamTeams}" class="team-box">
         <a class="team-link" th:href="@{/dream-team/{dreamTeamId}/details(dreamTeamId=${team.id})}">
             <h2 class="team-name">Team name: <span th:text="${team.name}"></span></h2>
