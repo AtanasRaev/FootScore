@@ -165,7 +165,7 @@ public class PlayerController {
             }
         }
 
-        return "redirect:/team/" + teamId + "/players";
+        return "redirect:/team/" + teamId + "/players" + "?seasonId=" + seasonId;
     }
 
 

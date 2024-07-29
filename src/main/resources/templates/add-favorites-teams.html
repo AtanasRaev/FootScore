@@ -16,7 +16,7 @@
             <input type="hidden" name="leagueId" th:value="${league.id}">
         </form>
         <form th:method="post"
-              th:action="@{/league/{leagueId}/teams(leagueId=${league.id})}">
+              th:action="@{/league/{leagueId}/teams(leagueId=${league.id}, seasonId=${season.id})}">
             <div class="leagues-button-admin">
                 <input type="hidden" name="leagueId" th:value="${league.id}">
                 <button class="add-leagues-button">Done</button>

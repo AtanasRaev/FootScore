@@ -107,7 +107,7 @@ public class TeamController {
             }
         }
 
-        return "redirect:/league/" + leagueId + "/teams";
+        return "redirect:/league/" + leagueId + "/teams" + "?seasonId=" + seasonId;
     }
 
     @Transactional

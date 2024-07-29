@@ -82,4 +82,9 @@ public class UserEntityPageDto {
     public void setFavoritePlayers(Set<PlayerPageDto> favoritePlayers) {
         this.favoritePlayers = favoritePlayers;
     }
+
+    @Override
+    public String toString() {
+        return getFirstName() + " " + getLastName();
+    }
 }

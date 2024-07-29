@@ -11,7 +11,7 @@
 <section class="teams-section">
     <div class="teams-container">
         <h1 class="teams-title">Team: <span th:text="${team.name}"></span></h1>
-        <p>Created by: <span th:text="${team.user.username}"></span></p>
+        <p>Created by: <span th:text="${team.user.toString()}"></span></p>
         <h1 class="teams-title">Formation: <span th:text="${team.formation}"></span></h1>
         <form th:if="${user.role.getRole().toString().equals('ADMIN') || team.user.id == user.id}"
               th:action="@{/dream-team/{teamId}/delete(teamId=${team.id})}"
