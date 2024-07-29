@@ -11,7 +11,7 @@
     <h1>Create Your Dream Team</h1>
     <div class="teams-container">
         <form id="players-form" th:method="post" th:action="@{/create/dream-team}">
-            <div class="players-filters">
+            <div class="dream-team-filters">
                 <label for="position">Choose Formation:</label>
                 <select id="position" name="formations">
                     <option th:each="formation : ${formations}" th:value="${formation}" th:text="${formation}"></option>
@@ -40,5 +40,8 @@
         </form>
     </div>
 </div>
+<footer class="teams-footer">
+    <p>&copy; 2024 Foot Score. All rights reserved.</p>
+</footer>
 </body>
 </html>

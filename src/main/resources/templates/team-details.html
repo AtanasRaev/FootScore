@@ -72,7 +72,7 @@
     <form class="team-details-players-page"
           th:method="get"
           th:action="@{/team/{teamId}/players(teamId=${team.id}, seasonId=${selectedSeasonId})}">
-        <button>View Players</button>
+        <button class="add-leagues-button">View Players</button>
         <input type="hidden" name="seasonId" th:value="${selectedSeasonId}">
     </form>
 </div>
