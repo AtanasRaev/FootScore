@@ -1,8 +1,10 @@
 package bg.softuni.footscore.web;
 
+import bg.softuni.footscore.model.dto.DreamTeamPageDto;
 import bg.softuni.footscore.model.dto.UserEntityPageDto;
 import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
+import bg.softuni.footscore.service.DreamTeamService;
 import bg.softuni.footscore.service.PlayerService;
 import bg.softuni.footscore.service.TeamService;
 import bg.softuni.footscore.service.UserService;
@@ -23,14 +25,17 @@ public class ProfileController {
     private final UserService userService;
     private final TeamService teamService;
     private final PlayerService playerService;
+    private final DreamTeamService dreamTeamService;
     private static final String[] FAVORITES = {"Teams", "Players"};
 
     public ProfileController(UserService userService,
                              TeamService teamService,
-                             PlayerService playerService) {
+                             PlayerService playerService,
+                             DreamTeamService dreamTeamService) {
         this.userService = userService;
         this.teamService = teamService;
         this.playerService = playerService;
+        this.dreamTeamService = dreamTeamService;
     }
 
     @GetMapping("/profile")
@@ -41,8 +46,10 @@ public class ProfileController {
         }
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
         UserEntityPageDto user = userService.getUserByUsername(username);
+        List<DreamTeamPageDto> allDreamTeamsByUserId = this.dreamTeamService.getAllDreamTeamsByUserId(user.getId());
         if (user != null) {
             model.addAttribute("user", user);
+            model.addAttribute("dreamTeams", allDreamTeamsByUserId);
         }
         return "profile";
     }

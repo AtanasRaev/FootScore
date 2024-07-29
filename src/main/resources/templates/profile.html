@@ -30,6 +30,10 @@
                 <strong>Favorite Players:</strong>
                 <span th:text="${user.favoritePlayers.size()}"></span>
             </p>
+            <p>
+                <strong>Dream Teams:</strong>
+                <span th:text="${dreamTeams.size()}"></span>
+            </p>
         </div>
     </header>
     <div class="favorites-container">
@@ -38,7 +42,7 @@
                 <a th:href="@{/show-all}" class="show-more">Favorites</a>
             </div>
             <div id="dream-teams" class="dream-teams-list">
-                <a th:href="@{/show-dream-teams}" class="show-more">Dream Teams</a>
+                <a th:href="@{/profile/dream-teams}" class="show-more">Dream Teams</a>
             </div>
         </section>
     </div>

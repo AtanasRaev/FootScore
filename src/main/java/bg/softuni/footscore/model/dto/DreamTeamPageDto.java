@@ -3,9 +3,9 @@ package bg.softuni.footscore.model.dto;
 import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
 
 import java.util.List;
-import java.util.Set;
 
 public class DreamTeamPageDto {
+    private Long id;
     private String name;
     private String formation;
     private List<PlayerPageDto> players;
@@ -19,6 +19,14 @@ public class DreamTeamPageDto {
         this.formation = formation;
         this.players = players;
         this.userEntityPageDto = userEntityPageDto;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

@@ -6,7 +6,7 @@ import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 import java.util.Set;
 
 public class UserEntityPageDto {
-    private int id;
+    private Long id;
     private String username;
     private String firstName;
     private String lastName;
@@ -26,11 +26,11 @@ public class UserEntityPageDto {
         this.username = username;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

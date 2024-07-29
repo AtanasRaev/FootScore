@@ -16,11 +16,14 @@
             <div class="players-filters">
                 <label for="position">Sort by position:</label>
                 <select id="position" name="position" onchange="this.form.submit()">
-                    <option th:text="'All positions'"
-                            th:selected="${selectedPosition == null || selectedPosition == 'All positions'}">All positions
+                    <option th:text="'All positions'" th:selected="${selectedPosition == 'All positions'}">All
+                        positions
                     </option>
-                    <option th:each="position : ${positions}" th:value="${position}" th:text="${position}"
-                            th:selected="${position == selectedPosition}"></option>
+                    <option th:each="position : ${positions}"
+                            th:value="${position}"
+                            th:text="${position}"
+                            th:selected="${position == selectedPosition}">Position
+                    </option>
                 </select>
                 <label for="search">Search:</label>
                 <input type="text" id="search" name="search" th:value="${searchTerm}" placeholder="Search players">
@@ -28,6 +31,7 @@
         </form>
         <form th:method="get" th:action="@{/create/dream-team/preview}">
             <button type="submit" class="remove-league-button">Continue</button>
+
         </form>
         <form th:method="post" th:action="@{/cancel}">
             <button type="submit" class="remove-league-button">Cancel</button>
@@ -49,6 +53,7 @@
                 <p class="player-position"><span th:text="${player.position}"></span></p>
                 <form class="checkbox-wrapper" th:method="post" th:action="@{/create/dream-team}">
                     <input type="hidden" th:id="${player.id}" th:name="playerId" th:value="${player.id}">
+                    <input type="hidden" name="position" th:value="${selectedPosition}">
                     <button type="submit" class="remove-league-button">Add</button>
                 </form>
             </div>

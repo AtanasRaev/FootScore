@@ -10,8 +10,8 @@ import bg.softuni.footscore.service.PlayerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DreamTeamServiceImpl implements DreamTeamService {
@@ -32,6 +32,16 @@ public class DreamTeamServiceImpl implements DreamTeamService {
         DreamTeamPageDto dto = new DreamTeamPageDto(teamName, formation, allSelectedPlayers, user);
         dto.getPlayers().forEach(p -> this.playerService.setSelected(p.getId(), false));
         update(dto);
+    }
+
+    @Override
+    public List<DreamTeamPageDto> getAllDreamTeamsByUserId(Long userId) {
+        return this.dreamTeamRepository.findAllByUserId(userId).stream().map(dt -> this.modelMapper.map(dt, DreamTeamPageDto.class)).toList();
+    }
+
+    @Override
+    public boolean checkTeamName(String teamName) {
+        return this.dreamTeamRepository.findByName(teamName).isPresent();
     }
 
     private void update(DreamTeamPageDto dto) {

@@ -841,13 +841,13 @@ footer.teams-footer {
     margin-bottom: 20px;
 }
 
-#position-form #formation label {
+#position-form {
     font-size: 1.2em;
     margin-right: 10px;
     color: #555;
 }
 
-#position #formation {
+#position {
     padding: 5px;
     font-size: 0.9em;
     border: 1px solid #ccc;
@@ -856,7 +856,7 @@ footer.teams-footer {
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-#position:focus #formation:focus {
+#position:focus  {
     border-color: #007bff;
 }
 

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "dream_teams")
@@ -20,7 +19,7 @@ public class DreamTeam {
     @Column(nullable = false)
     private String formation;
 
-    @OneToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Player> players;
 
     @ManyToOne

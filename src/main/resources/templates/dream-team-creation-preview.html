@@ -19,22 +19,14 @@
                 </div>
                 <button type="submit">Confirm Team</button>
             </form>
-            <a th:href="@{/create/dream-team}" class="edit-button">Edit Team</a>
         </div>
     </div>
     <div>
         <div class="team-list">
-            <div class="team-box-add">
-                <h2 class="team-name"><span th:text="${goalkeeper.shortName}"></span></h2>
-                <img th:src="${goalkeeper.photo}" alt="Team Logo" class="team-logo-add">
-                <p class="player-position"><span th:text="${goalkeeper.position}"></span></p>
-            </div>
-        </div>
-        <div class="team-list">
-            <div th:each="defender : ${defenders}" class="team-box-add">
-                <h2 class="team-name"><span th:text="${defender.shortName}"></span></h2>
-                <img th:src="${defender.photo}" alt="Team Logo" class="team-logo-add">
-                <p class="player-position"><span th:text="${defender.position}"></span></p>
+            <div th:each="attacker : ${attackers}" class="team-box-add">
+                <h2 class="team-name"><span th:text="${attacker.shortName}"></span></h2>
+                <img th:src="${attacker.photo}" alt="Team Logo" class="team-logo-add">
+                <p class="player-position"><span th:text="${attacker.position}"></span></p>
             </div>
         </div>
         <div class="team-list">
@@ -45,10 +37,17 @@
             </div>
         </div>
         <div class="team-list">
-            <div th:each="attacker : ${attackers}" class="team-box-add">
-                <h2 class="team-name"><span th:text="${attacker.shortName}"></span></h2>
-                <img th:src="${attacker.photo}" alt="Team Logo" class="team-logo-add">
-                <p class="player-position"><span th:text="${attacker.position}"></span></p>
+            <div th:each="defender : ${defenders}" class="team-box-add">
+                <h2 class="team-name"><span th:text="${defender.shortName}"></span></h2>
+                <img th:src="${defender.photo}" alt="Team Logo" class="team-logo-add">
+                <p class="player-position"><span th:text="${defender.position}"></span></p>
+            </div>
+        </div>
+        <div class="team-list">
+            <div class="team-box-add">
+                <h2 class="team-name"><span th:text="${goalkeeper.shortName}"></span></h2>
+                <img th:src="${goalkeeper.photo}" alt="Team Logo" class="team-logo-add">
+                <p class="player-position"><span th:text="${goalkeeper.position}"></span></p>
             </div>
         </div>
     </div>

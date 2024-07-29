@@ -1,5 +1,6 @@
 package bg.softuni.footscore.web;
 
+import bg.softuni.footscore.model.dto.DreamTeamPageDto;
 import bg.softuni.footscore.model.dto.FormationDto;
 import bg.softuni.footscore.model.dto.UserEntityPageDto;
 import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
@@ -35,7 +36,7 @@ public class DreamTeamController {
     }
 
     @GetMapping("/create/dream-team")
-    public String showDreamTeams(@RequestParam(required = false) String position,
+    public String createDreamTeams(@RequestParam(required = false) String position,
                                  @RequestParam(required = false) String formation,
                                  @RequestParam(required = false) String search,
                                  @RequestParam(required = false) String teamName,
@@ -97,10 +98,17 @@ public class DreamTeamController {
 
     @PostMapping("/create/dream-team")
     public String addDreamTeam(@RequestParam(required = false) Long playerId,
+                               @RequestParam(required = false) String position,
                                Model model) {
 
+        if (this.playerService.getAllSelectedPlayers(true).size() >= 11) {
+            return "redirect:/create/dream-team/preview";
+        }
+
         this.playerService.setSelected(playerId, true);
-        return "redirect:/create/dream-team";
+        model.addAttribute("selectedPosition", position);
+
+        return "redirect:/create/dream-team?position=" + position;
     }
 
 
@@ -138,9 +146,26 @@ public class DreamTeamController {
         return "dream-team-creation-preview";
     }
 
+    @GetMapping("/profile/dream-teams")
+    public String showDreamTeams(Model model) {
+        UserEntityPageDto user = this.userService.getUser();
+
+        List<DreamTeamPageDto> dreamTeams = this.dreamTeamService.getAllDreamTeamsByUserId(user.getId());
+
+        model.addAttribute("dreamTeams", dreamTeams);
+        return "user-dream-teams";
+    }
+
+
 
     @PostMapping("/create/dream-team/save")
     public String saveDreamTeam(@RequestParam String teamName) {
+
+        //TODO: unique names, errorHandling
+        if (this.dreamTeamService.checkTeamName(teamName)) {
+            return "redirect:/profile/dream-teams";
+        }
+
         List<PlayerPageDto> allSelectedPlayers = this.playerService.getAllSelectedPlayers(true);
         long defenderCount = allSelectedPlayers.stream().filter(p -> p.getPosition().equals("Defender")).count();
         long midfielderCount = allSelectedPlayers.stream().filter(p -> p.getPosition().equals("Midfielder")).count();
@@ -151,11 +176,11 @@ public class DreamTeamController {
         UserEntityPageDto user = this.userService.getUser();
 
         this.dreamTeamService.create(teamName, formation, allSelectedPlayers, user);
-        return "redirect:/";
+        return "redirect:/profile/dream-teams";
     }
 
     @PostMapping("/cancel")
-    public String showDreamTeams(Model model) {
+    public String cancelDreamTeams(Model model) {
         List<PlayerPageDto> allSelectedPlayers = this.playerService.getAllSelectedPlayers(true);
         allSelectedPlayers.forEach(p -> this.playerService.setSelected(p.getId(), false));
         return "redirect:/profile";
@@ -163,7 +188,7 @@ public class DreamTeamController {
 
 
     private static List<PlayerPageDto> getPlayersByPosition(String position, List<PlayerPageDto> validPlayers) {
-        if (position != null && !position.equals("All positions")) {
+        if (position != null && !position.equals("All positions") && !position.isEmpty()) {
             validPlayers.removeIf(p -> !p.getPosition().equals(position));
         }
         return validPlayers;
