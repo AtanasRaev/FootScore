@@ -5,43 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Dream Team</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <script defer src="/js/checkbox-limit.js"></script>
 </head>
+<header th:replace="fragments/commons::nav"></header>
 <body>
 <div class="dream-team-container">
     <h1>Create Your Dream Team</h1>
     <div class="teams-container">
-        <form id="players-form" th:method="post" th:action="@{/create/dream-team}">
-            <div class="dream-team-filters">
-                <label for="position">Choose Formation:</label>
-                <select id="position" name="formations">
-                    <option th:each="formation : ${formations}" th:value="${formation}" th:text="${formation}"></option>
+        <form id="filter-form" th:method="get" th:action="@{/create/dream-team}">
+            <div class="players-filters">
+                <label for="position">Sort by position:</label>
+                <select id="position" name="position" onchange="this.form.submit()">
+                    <option th:text="'All positions'"
+                            th:selected="${selectedPosition == null || selectedPosition == 'All positions'}">All
+                        positions
+                    </option>
+                    <option th:each="position : ${positions}" th:value="${position}" th:text="${position}"
+                            th:selected="${position == selectedPosition}"></option>
                 </select>
+                <label for="formation">Choose a Formation:</label>
+                <select id="formation" name="formation" onchange="this.form.submit()">
+                    <option th:each="formation : ${formations}" th:value="${formation}" th:text="${formation}"
+                            th:selected="${formation == selectedFormation}"></option>
+                </select>
+                <label for="search">Search:</label>
+                <input type="text" id="search" name="search" th:value="${searchTerm}" placeholder="Search players">
             </div>
-            <div class="team-list">
+        </form>
+
+        <form id="players-form" th:method="get" th:action="@{/create/dream-team/preview}">
+            <div class="input-container">
+                <label for="team-name">Dream Team Name:</label>
+                <input type="text" id="team-name" name="teamName" placeholder="Enter your team name"
+                       th:value="${teamName}" required>
+            </div>
+            <span>You can choose only 11 players</span>
+            <div id="player-list" class="team-list">
                 <div th:each="player : ${players}" class="team-box-add">
                     <h2 class="team-name"><span th:text="${player.shortName}"></span></h2>
                     <img th:src="${player.photo}" alt="Team Logo" class="team-logo-add">
                     <p class="player-position"><span th:text="${player.position}"></span></p>
                     <div class="checkbox-wrapper">
-                        <label>
-                            <input type="checkbox" th:id="'favorite-team-' + ${player.id}"
-                                   class="favorite-checkbox"
-                                   th:name="playerIds" th:value="${player.id}">
-                            <label th:for="'favorite-team-' + ${player.id}" class="favorite-button">
-                                <span class="star-icon">&#9733;</span>
-                            </label>
+                        <label class="custom-checkbox">
+                            <input type="checkbox" th:id="'favorite-team-' + ${player.id}" class="favorite-checkbox"
+                                   th:name="playerIds" th:value="${player.id}" onclick="limitSelection(event)">
+                            <span class="checkmark"></span>
                         </label>
                     </div>
                 </div>
             </div>
             <div class="submit-buttons">
-                <button type="submit">Create Dream Team</button>
+                <input type="hidden" name="formation" th:value="${selectedFormation}">
+                <input type="hidden" name="teamName" th:value="${teamName}">
+                <input type="hidden" id="selectedPlayers" name="playerIds">
+                <button type="submit">Review Team</button>
             </div>
         </form>
     </div>
 </div>
-<footer class="teams-footer">
-    <p>&copy; 2024 Foot Score. All rights reserved.</p>
-</footer>
 </body>
 </html>

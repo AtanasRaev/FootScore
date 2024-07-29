@@ -841,13 +841,13 @@ footer.teams-footer {
     margin-bottom: 20px;
 }
 
-#position-form label {
+#position-form #formation label {
     font-size: 1.2em;
     margin-right: 10px;
     color: #555;
 }
 
-#position #formation{
+#position #formation {
     padding: 5px;
     font-size: 0.9em;
     border: 1px solid #ccc;
@@ -856,7 +856,7 @@ footer.teams-footer {
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-#position:focus {
+#position:focus #formation:focus {
     border-color: #007bff;
 }
 
@@ -1101,7 +1101,7 @@ footer.teams-footer {
     padding: 1.3em;
 }
 
-.profile-header{
+.profile-header {
     border-bottom: 2px solid #e0e0e0;
     padding-bottom: 20px;
     margin-bottom: 20px;
@@ -1322,4 +1322,55 @@ footer.teams-footer {
 .dream-team-filters {
     align-content: center;
     margin-bottom: 37px;
+}
+
+ .custom-checkbox {
+     display: inline-block;
+     position: relative;
+     padding-left: 35px;
+     cursor: pointer;
+     font-size: 18px;
+     user-select: none;
+ }
+
+.custom-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+    border-radius: 5px;
+    border: 2px solid #ddd;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.custom-checkbox input:checked + .checkmark {
+    background-color: #4caf50;
+    border-color: #4CAF50;
+}
+
+.checkmark::after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.custom-checkbox input:checked + .checkmark::after {
+    display: block;
+    left: 9px;
+    top: 5px;
+    width: 7px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
 }

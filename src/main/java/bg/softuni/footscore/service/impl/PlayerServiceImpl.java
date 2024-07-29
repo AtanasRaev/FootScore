@@ -207,7 +207,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public List<PlayerPageDto> getAllPLayers() {
+    public List<PlayerPageDto> getAllPlayers() {
         return this.playerRepository.findAll().stream().map(p -> this.modelMapper.map(p, PlayerPageDto.class)).toList();
     }
 

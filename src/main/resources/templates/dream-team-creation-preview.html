@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview Dream Team</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<header th:replace="fragments/commons::nav"></header>
+<body>
+<div class="preview-dream-team-container">
+    <h1>Preview Your Dream Team</h1>
+    <div class="team-details">
+        <h2>Team Name: <span th:text="${teamName}"></span></h2>
+        <h3>Formation: <span th:text="${formation}"></span></h3>
+    </div>
+    <div>
+        <div class="team-list">
+            <div class="team-box-add">
+                <h2 class="team-name"><span th:text="${goalkeeper.shortName}"></span></h2>
+                <img th:src="${goalkeeper.photo}" alt="Team Logo" class="team-logo-add">
+                <p class="player-position"><span th:text="${goalkeeper.position}"></span></p>
+            </div>
+        </div>
+        <div class="team-list">
+            <div th:each="defender : ${defenders}" class="team-box-add">
+                <h2 class="team-name"><span th:text="${defender.shortName}"></span></h2>
+                <img th:src="${defender.photo}" alt="Team Logo" class="team-logo-add">
+                <p class="player-position"><span th:text="${defender.position}"></span></p>
+            </div>
+        </div>
+        <div class="team-list">
+            <div th:each="midfielder : ${midfielders}" class="team-box-add">
+                <h2 class="team-name"><span th:text="${midfielder.shortName}"></span></h2>
+                <img th:src="${midfielder.photo}" alt="Team Logo" class="team-logo-add">
+                <p class="player-position"><span th:text="${midfielder.position}"></span></p>
+            </div>
+        </div>
+        <div class="team-list">
+            <div th:each="attacker : ${attackers}" class="team-box-add">
+                <h2 class="team-name"><span th:text="${attacker.shortName}"></span></h2>
+                <img th:src="${attacker.photo}" alt="Team Logo" class="team-logo-add">
+                <p class="player-position"><span th:text="${attacker.position}"></span></p>
+            </div>
+        </div>
+    </div>
+    <div class="submit-buttons">
+        <form th:action="@{/create/dream-team/save}" method="post">
+            <input type="hidden" name="teamName" th:value="${teamName}">
+            <input type="hidden" name="formation" th:value="${formation}">
+            <input type="hidden" name="playerIds" th:value="${playerIds}">
+            <button type="submit">Confirm Team</button>
+        </form>
+        <a th:href="@{/create/dream-team}" class="edit-button">Edit Team</a>
+    </div>
+</div>
+</body>
+</html>

@@ -186,7 +186,6 @@ public class PlayerController {
 
         players = getPlayersByPosition(position, players, byTeamIdAndSeasonId);
         model.addAttribute("selectedPosition", position);
-
         model.addAttribute("positions", POSITIONS);
 
         if (user != null) {
