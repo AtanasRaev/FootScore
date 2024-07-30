@@ -18,7 +18,6 @@ public class Country {
     @Column
     private String flag;
 
-    //TODO:
     @OneToMany(mappedBy = "country")
     private List<League> leagues;
 

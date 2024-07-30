@@ -8,14 +8,11 @@ import bg.softuni.footscore.service.DreamTeamService;
 import bg.softuni.footscore.service.PlayerService;
 import bg.softuni.footscore.service.TeamStatisticsService;
 import bg.softuni.footscore.service.UserService;
-import bg.softuni.footscore.utils.UserUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 public class DreamTeamController {
