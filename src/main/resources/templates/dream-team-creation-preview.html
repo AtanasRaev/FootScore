@@ -14,8 +14,8 @@
         <div class="submit-buttons">
             <form class="form-preview" th:action="@{/create/dream-team/save}" method="post">
                 <div class="input-container">
-                    <label for="team-name">Dream Team Name:</label>
-                    <input type="text" id="team-name" name="teamName" placeholder="Enter your team name"
+                    <label for="search">Dream Team Name:</label>
+                    <input type="text" id="search" name="teamName" placeholder="Enter your team name"
                            th:value="${teamName}" required>
                 </div>
                 <button class="remove-league-button blue" type="submit">Confirm Team</button>
@@ -29,10 +29,8 @@
                     <div th:if="${player.position.equals(position)}" th:each="player : ${players}"
                          class="dream-team-player-box">
                         <div>
-                            <a th:href="@{/player/{playerId}/details(playerId=${player.id})}" class="team-link">
-                                <h2 class="dream-team-player-name"><span th:text="${player.shortName}"></span></h2>
-                                <img th:src="${player.photo}" alt="Player Photo" class="dream-team-player-logo">
-                            </a>
+                            <h2 class="dream-team-player-name"><span th:text="${player.shortName}"></span></h2>
+                            <img th:src="${player.photo}" alt="Player Photo" class="dream-team-player-logo">
                         </div>
                     </div>
                 </div>

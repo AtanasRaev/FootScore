@@ -519,7 +519,7 @@ body.add-league-body {
     display: inline-block;
     margin-top: 20px;
     padding: 12px 30px;
-    background-color: #6c757d;
+    background-color: red;
     color: #ffffff;
     border: none;
     border-radius: 4px;
@@ -529,7 +529,7 @@ body.add-league-body {
 }
 
 .cancel-button:hover {
-    background-color: #5a6268;
+    background-color: rgb(154, 2, 2);
 }
 
 .add-league-footer {
@@ -1508,17 +1508,31 @@ footer.teams-footer {
 }
 
 button.blue {
-    background-color: #007bff
+    background-color: #007bff;
+    font-size: 20px;
 }
 
 button.blue:hover {
-    background-color: #007bff
+    background-color: #0056b3;
 }
 
 button.green {
     background-color: #4CAF50;
     border-radius: 50%;
     margin-top: 15px;
+}
+
+button.green:hover {
+    background-color: #1f8e3f;
+}
+
+button.red {
+    background: red;
+    font-size: 20px;
+}
+
+button.red:hover {
+    background-color: rgb(154, 2, 2);
 }
 
 .preview-dream-team-container {
@@ -1540,6 +1554,7 @@ button.green {
     display: flex;
     gap: 10px;
     flex-direction: column;
+    align-items: center;
 }
 
 .league-name-link {
