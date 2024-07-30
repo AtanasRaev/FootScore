@@ -97,6 +97,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean isUniqueUsername(String username) {
+        return this.userRepository.findByUsername(username).isEmpty();
+    }
+
+    @Override
+    public boolean isUniqueEmail(String email) {
+        return this.userRepository.findByEmail(email).isEmpty();
+    }
+
+    @Override
     public void addFavoritePlayers(UserEntityPageDto dto, List<PlayerPageDto> allByIds) {
         dto.getFavoritePlayers().addAll(new HashSet<>(allByIds));
         this.updateAddFavoritePlayers(dto);
@@ -110,6 +120,14 @@ public class UserServiceImpl implements UserService {
         this.removeTeamsAndSaveUser(user);
     }
 
+    @Override
+    public void removeFavoritePlayers(UserEntityPageDto user, List<PlayerPageDto> allByIds) {
+        for (PlayerPageDto allById : allByIds) {
+            user.getFavoritePlayers().removeIf(favoritePlayer -> allById.getId() == favoritePlayer.getId());
+        }
+        this.removePlayersAndSaveUser(user);
+    }
+
     private void removeTeamsAndSaveUser(UserEntityPageDto user) {
         Optional<UserEntity> byUsername = this.userRepository.findByUsername(user.getUsername());
 
@@ -120,14 +138,6 @@ public class UserServiceImpl implements UserService {
             userEntity.setFavoriteTeams(collect);
             this.userRepository.save(userEntity);
         });
-    }
-
-    @Override
-    public void removeFavoritePlayers(UserEntityPageDto user, List<PlayerPageDto> allByIds) {
-        for (PlayerPageDto allById : allByIds) {
-            user.getFavoritePlayers().removeIf(favoritePlayer -> allById.getId() == favoritePlayer.getId());
-        }
-        this.removePlayersAndSaveUser(user);
     }
 
     private void removePlayersAndSaveUser(UserEntityPageDto user) {

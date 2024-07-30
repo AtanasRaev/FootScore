@@ -1,28 +1,34 @@
 package bg.softuni.footscore.model.dto;
 
+import bg.softuni.footscore.validation.annotations.PasswordMatch;
+import bg.softuni.footscore.validation.annotations.UniqueEmail;
+import bg.softuni.footscore.validation.annotations.UniqueUsername;
 import jakarta.validation.constraints.*;
 
+@PasswordMatch
 public class RegisterUserDto {
-    @Size(min = 3, max = 20)
+    @NotNull
+    @Size(min = 3, message = "{user.full-name.length}")
     private String firstName;
 
-    @Size(min = 3, max = 20)
+    @NotNull
+    @Size(min = 3, message = "{user.full-name.length}")
     private String lastName;
 
-    @Email
-    @NotEmpty
+    @NotNull
+    @UniqueEmail
+    @Email(regexp = ".+[@].+", message = "{user.email}")
     private String email;
 
-    @NotEmpty
-    @Size(min = 3, max = 20)
+    @NotNull
+    @UniqueUsername
+    @Size(min = 3, message = "{user.username.length}")
     private String username;
 
-    @NotEmpty
-    @Size(min = 3, max = 20)
+    @Size(min = 3, message = "{user.password.length}")
     private String password;
 
-    @NotEmpty
-    @Size(min = 3, max = 20)
+    @Size(min = 3, message = "{user.confirm-password.length}")
     private String confirmPassword;
 
     public RegisterUserDto() {

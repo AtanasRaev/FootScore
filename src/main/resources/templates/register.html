@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/commons::head"></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Dream Team</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
 
 <body>
 <header th:replace="fragments/commons::nav"></header>
@@ -13,24 +18,30 @@
                     th:action="@{/register}"
                     th:object="${registerData}"
                     class="login-form">
-                <input th:field="*{firstName}"
-                        type="text"
-                       placeholder="first name"/>
-                <input th:field="*{lastName}"
-                        type="text"
-                        placeholder="last name"/>
-                <input th:field="*{email}"
-                        type="email"
-                        placeholder="email"/>
-                <input th:field="*{username}"
-                        type="text"
-                        placeholder="username"/>
-                <input th:field="*{password}"
-                        type="password"
-                        placeholder="password"/>
-                <input th:field="*{confirmPassword}"
-                        type="password"
-                        placeholder="confirm password"/>
+                <div>
+                    <input th:field="*{firstName}" th:errorclass="is-invalid" type="text" placeholder="first name"/>
+                    <small th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="text-danger error-message"></small>
+                </div>
+                <div>
+                    <input th:field="*{lastName}" th:errorclass="is-invalid" type="text" placeholder="last name"/>
+                    <small th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger error-message"></small>
+                </div>
+                <div>
+                    <input th:field="*{email}" th:errorclass="is-invalid" type="email" placeholder="email"/>
+                    <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger error-message"></small>
+                </div>
+                <div>
+                    <input th:field="*{username}" th:errorclass="is-invalid" type="text" placeholder="username"/>
+                    <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger error-message"></small>
+                </div>
+                <div>
+                    <input th:field="*{password}" th:errorclass="is-invalid" type="password" placeholder="password"/>
+                    <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger error-message"></small>
+                </div>
+                <div>
+                    <input th:field="*{confirmPassword}" th:errorclass="is-invalid" type="password" placeholder="confirm password"/>
+                    <small th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="text-danger error-message"></small>
+                </div>
                 <button>Register</button>
             </form>
         </div>

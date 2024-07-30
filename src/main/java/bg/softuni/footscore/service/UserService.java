@@ -21,4 +21,8 @@ public interface UserService {
     void removeFavoritePlayers(UserEntityPageDto user, List<PlayerPageDto> allByIds);
 
     UserEntityPageDto getUser();
+
+    boolean isUniqueEmail(String value);
+
+    boolean isUniqueUsername(String value);
 }
