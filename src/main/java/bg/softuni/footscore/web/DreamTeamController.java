@@ -61,6 +61,7 @@ public class DreamTeamController {
             formations.add(allFormation.getFormation());
         }
 
+
         for (PlayerPageDto player : allSelected) {
             switch (player.getPosition()) {
                 case "Goalkeeper":
