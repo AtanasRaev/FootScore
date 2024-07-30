@@ -9,10 +9,10 @@
 <header th:replace="fragments/commons::nav"></header>
 
 <section class="teams-section">
-    <div class="teams-container">
+    <div class="dream-teams-container">
         <h1 class="teams-title">Team: <span th:text="${team.name}"></span></h1>
         <p>Created by: <span th:text="${team.user.toString()}"></span></p>
-        <h1 class="teams-title">Formation: <span th:text="${team.formation}"></span></h1>
+        <h2>Formation: <span th:text="${team.formation}"></span></h2>
         <form th:if="${user.role.getRole().toString().equals('ADMIN') || team.user.id == user.id}"
               th:action="@{/dream-team/{teamId}/delete(teamId=${team.id})}"
               method="post">
@@ -20,15 +20,17 @@
             <input type="hidden" name="teamId" th:value="${team.id}">
             <button type="submit" class="remove-league-button">Delete</button>
         </form>
-        <div class="team-list">
-            <div th:each="position : ${positions}">
-                <div th:if="${player.position.equals(position)}" th:each="player : ${players}" class="player-box">
-                    <div>
-                        <a th:href="@{/player/{playerId}/details(playerId=${player.id})}" class="team-link">
-                            <h2 class="player-name"><span th:text="${player.shortName}"></span></h2>
-                            <img th:src="${player.photo}" alt="Player Photo" class="player-logo">
-                            <p class="player-position"><span th:text="${player.position}"></span></p>
-                        </a>
+        <div class="dream-team-background">
+            <div class="dream-team-list">
+                <div th:each="position : ${positions}" class="position">
+                    <div th:if="${player.position.equals(position)}" th:each="player : ${players}"
+                         class="dream-team-player-box">
+                        <div>
+                            <a th:href="@{/player/{playerId}/details(playerId=${player.id})}" class="team-link">
+                                <h2 class="dream-team-player-name"><span th:text="${player.shortName}"></span></h2>
+                                <img th:src="${player.photo}" alt="Player Photo" class="dream-team-player-logo">
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

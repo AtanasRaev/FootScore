@@ -116,30 +116,7 @@ public class DreamTeamController {
     public String reviewDreamTeam(Model model) {
 
         List<PlayerPageDto> players = playerService.getAllSelectedPlayers(true);
-        List<PlayerPageDto> defenders = new ArrayList<>();
-        List<PlayerPageDto> midfielders = new ArrayList<>();
-        List<PlayerPageDto> attackers = new ArrayList<>();
 
-        for (PlayerPageDto player : players) {
-            switch (player.getPosition()) {
-                case "Goalkeeper":
-                    model.addAttribute("goalkeeper", player);
-                    break;
-                case "Defender":
-                    defenders.add(player);
-                    break;
-                case "Midfielder":
-                    midfielders.add(player);
-                    break;
-                case "Attacker":
-                    attackers.add(player);
-                    break;
-            }
-        }
-
-        model.addAttribute("defenders", defenders);
-        model.addAttribute("midfielders", midfielders);
-        model.addAttribute("attackers", attackers);
         model.addAttribute("positions", Arrays.asList(POSITIONS).reversed());
         model.addAttribute("players", players);
         model.addAttribute("formations", this.teamStatisticsService.getAllFormations());

@@ -13,9 +13,9 @@
     <h1>Create Your Dream Team</h1>
     <div class="teams-container">
         <form id="filter-form" th:method="get" th:action="@{/create/dream-team}">
-            <div class="players-filters">
-                <label for="position">Sort by position:</label>
-                <select id="position" name="position" onchange="this.form.submit()">
+            <div class="create-players-filters">
+                <label for="position1">Sort by position:</label>
+                <select id="position1" name="position" onchange="this.form.submit()">
                     <option th:text="'All positions'" th:selected="${selectedPosition == 'All positions'}">All
                         positions
                     </option>
@@ -25,21 +25,21 @@
                             th:selected="${position == selectedPosition}">Position
                     </option>
                 </select>
-                <label for="search">Search:</label>
                 <input type="text" id="search" name="search" th:value="${searchTerm}" placeholder="Search players">
             </div>
         </form>
-        <form th:method="get" th:action="@{/create/dream-team/preview}">
-            <button type="submit" class="remove-league-button">Continue</button>
+        <div class="create-buttons">
+            <form th:method="get" th:action="@{/create/dream-team/preview}">
+                <button type="submit" class="blue remove-league-button">Continue</button>
 
-        </form>
-        <form th:method="post" th:action="@{/cancel}">
-            <button type="submit" class="remove-league-button">Cancel</button>
-        </form>
+            </form>
+            <form th:method="post" th:action="@{/cancel}">
+                <button type="submit" class="remove-league-button">Cancel</button>
+            </form>
+        </div>
         <span>You can choose only 11 players</span>
         <div>
-            <span>Selected</span>
-            <div>
+            <div class="margin-position">
                 <span>Goalkeeper: <span th:text="${goalkeepers}"></span></span>
                 <span>Defenders: <span th:text="${defenders}"></span></span>
                 <span>Midfielders: <span th:text="${midfielders}"></span></span>
@@ -54,11 +54,14 @@
                 <form class="checkbox-wrapper" th:method="post" th:action="@{/create/dream-team}">
                     <input type="hidden" th:id="${player.id}" th:name="playerId" th:value="${player.id}">
                     <input type="hidden" name="position" th:value="${selectedPosition}">
-                    <button type="submit" class="remove-league-button">Add</button>
+                    <button type="submit" class="green remove-league-button">+</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+<footer class="teams-footer">
+    <p>&copy; 2024 Foot Score. All rights reserved.</p>
+</footer>
 </body>
 </html>

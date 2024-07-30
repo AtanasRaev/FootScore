@@ -13,11 +13,13 @@
     <div id="favorite-teams" class="favorites-list">
         <a th:href="@{/create/dream-team}" class="show-more">Create a team</a>
     </div>
-    <div th:each="team : ${dreamTeams}" class="team-box">
-        <a class="team-link" th:href="@{/dream-team/{dreamTeamId}/details(dreamTeamId=${team.id})}">
-            <h2 class="team-name">Team name: <span th:text="${team.name}"></span></h2>
-            <p class="team-name">Formation: <span th:text="${team.formation}"></span></p>
-        </a>
+    <div class="user-dream-teams">
+        <div th:each="team : ${dreamTeams}" class="team-box">
+            <a class="team-link" th:href="@{/dream-team/{dreamTeamId}/details(dreamTeamId=${team.id})}">
+                <h2 class="team-name">Team name: <span th:text="${team.name}"></span></h2>
+                <p class="team-name">Formation: <span th:text="${team.formation}"></span></p>
+            </a>
+        </div>
     </div>
 </div>
 <footer class="teams-footer">

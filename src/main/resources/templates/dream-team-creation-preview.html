@@ -9,33 +9,39 @@
 <header th:replace="fragments/commons::nav"></header>
 <body>
 <div class="preview-dream-team-container">
-    <h1>Preview Your Dream Team</h1>
+    <h2>Preview Your Dream Team</h2>
     <div class="team-details">
         <div class="submit-buttons">
-            <form th:action="@{/create/dream-team/save}" method="post">
+            <form class="form-preview" th:action="@{/create/dream-team/save}" method="post">
                 <div class="input-container">
                     <label for="team-name">Dream Team Name:</label>
-                    <input type="text" id="team-name" name="teamName" placeholder="Enter your team name" th:value="${teamName}" required>
+                    <input type="text" id="team-name" name="teamName" placeholder="Enter your team name"
+                           th:value="${teamName}" required>
                 </div>
-                <button type="submit">Confirm Team</button>
+                <button class="remove-league-button blue" type="submit">Confirm Team</button>
             </form>
         </div>
     </div>
     <div>
-        <div class="team-list">
-            <div th:each="position : ${positions}">
-                <div th:if="${player.position.equals(position)}" th:each="player : ${players}" class="player-box">
-                    <div>
-                        <a th:href="@{/player/{playerId}/details(playerId=${player.id})}" class="team-link">
-                            <h2 class="player-name"><span th:text="${player.shortName}"></span></h2>
-                            <img th:src="${player.photo}" alt="Player Photo" class="player-logo">
-                            <p class="player-position"><span th:text="${player.position}"></span></p>
-                        </a>
+        <div class="dream-team-background">
+            <div class="dream-team-list">
+                <div th:each="position : ${positions}" class="position">
+                    <div th:if="${player.position.equals(position)}" th:each="player : ${players}"
+                         class="dream-team-player-box">
+                        <div>
+                            <a th:href="@{/player/{playerId}/details(playerId=${player.id})}" class="team-link">
+                                <h2 class="dream-team-player-name"><span th:text="${player.shortName}"></span></h2>
+                                <img th:src="${player.photo}" alt="Player Photo" class="dream-team-player-logo">
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<footer class="teams-footer">
+    <p>&copy; 2024 Foot Score. All rights reserved.</p>
+</footer>
 </body>
 </html>

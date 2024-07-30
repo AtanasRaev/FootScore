@@ -2,8 +2,6 @@ package bg.softuni.footscore.web;
 
 import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
-import bg.softuni.footscore.model.entity.League;
-import bg.softuni.footscore.model.entity.Season;
 import bg.softuni.footscore.service.LeagueService;
 import bg.softuni.footscore.service.LeagueTeamSeasonService;
 import bg.softuni.footscore.service.SeasonService;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Controller

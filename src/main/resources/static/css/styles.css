@@ -856,7 +856,7 @@ footer.teams-footer {
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-#position:focus  {
+#position:focus {
     border-color: #007bff;
 }
 
@@ -1312,6 +1312,7 @@ footer.teams-footer {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 50px 0 20px 0;
 }
 
 .dream-team-container h1 {
@@ -1324,14 +1325,14 @@ footer.teams-footer {
     margin-bottom: 37px;
 }
 
- .custom-checkbox {
-     display: inline-block;
-     position: relative;
-     padding-left: 35px;
-     cursor: pointer;
-     font-size: 18px;
-     user-select: none;
- }
+.custom-checkbox {
+    display: inline-block;
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    font-size: 18px;
+    user-select: none;
+}
 
 .custom-checkbox input {
     position: absolute;
@@ -1374,3 +1375,175 @@ footer.teams-footer {
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
 }
+
+.dream-team-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 1em 0;
+    gap: 20px;
+    padding: 50px;
+}
+
+
+.dream-team-background {
+    background: url('/images/background3.png') no-repeat center;
+    width: 1000px;
+    height: 900px;
+    background-size: 1000px 900px;
+    margin-top: 20px;
+    border-radius: 45px;
+}
+
+
+.dream-team-player-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 150px;
+    padding: 0.4em;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+.dream-teams-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1200px;
+    min-height: 717px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.position {
+    display: flex;
+    gap: 20px;
+}
+
+.dream-team-player-name {
+    font-size: 18px;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.dream-team-player-logo {
+    max-width: 70%;
+    height: auto;
+}
+
+.dream-team-player-position {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.user-dream-teams, .dt {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+}
+
+.create-teams-container {
+    max-width: 1200px;
+    min-height: 717px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.create-players-filters {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#position1 {
+    padding: 5px;
+    font-size: 0.9em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #fff;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 200px;
+}
+
+#position1:focus {
+    border-color: #007bff;
+}
+
+#search {
+    text-align: center;
+    width: 300px;
+    height: 35px;
+    font-size: 25px;
+}
+
+
+.create-players-filters {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.create-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.margin-position {
+    margin: 10px 0;
+}
+
+button.blue {
+    background-color: #007bff
+}
+
+button.blue:hover {
+    background-color: #007bff
+}
+
+button.green {
+    background-color: #4CAF50;
+    border-radius: 50%;
+    margin-top: 15px;
+}
+
+.preview-dream-team-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 50px 0 20px 0;
+}
+
+.form-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.input-container {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.league-name-link {
+    text-decoration: none;
+    color: black;
+}
+
