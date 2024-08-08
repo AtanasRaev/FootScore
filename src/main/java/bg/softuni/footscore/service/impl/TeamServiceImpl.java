@@ -15,6 +15,7 @@ import bg.softuni.footscore.service.VenueService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -36,7 +37,7 @@ public class TeamServiceImpl implements TeamService {
                            VenueService venueService,
                            ModelMapper modelMapper,
                            ApiConfig apiConfig,
-                           RestClient restClient,
+                           @Qualifier("genericRestClient") RestClient restClient,
                            LeagueTeamSeasonService seasonLeagueTeamService) {
         this.teamRepository = teamRepository;
         this.venueService = venueService;

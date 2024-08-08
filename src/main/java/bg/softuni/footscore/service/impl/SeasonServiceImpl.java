@@ -8,6 +8,7 @@ import bg.softuni.footscore.model.entity.Season;
 import bg.softuni.footscore.repository.SeasonRepository;
 import bg.softuni.footscore.service.SeasonService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -22,7 +23,10 @@ public class SeasonServiceImpl implements SeasonService {
     private final RestClient restClient;
     private final ModelMapper modelMapper;
 
-    public SeasonServiceImpl(SeasonRepository seasonRepository, ApiConfig apiConfig, RestClient restClient, ModelMapper modelMapper) {
+    public SeasonServiceImpl(SeasonRepository seasonRepository,
+                             ApiConfig apiConfig,
+                             @Qualifier("genericRestClient") RestClient restClient,
+                             ModelMapper modelMapper) {
         this.seasonRepository = seasonRepository;
         this.apiConfig = apiConfig;
         this.restClient = restClient;

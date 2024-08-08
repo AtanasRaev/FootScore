@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<header th:replace="fragments/commons::nav"></header>
+<body>
+<div class="profile-container">
+    <header class="profile-header">
+        <div class="user-info">
+            <strong id="name" th:text="${user.firstName} + ' ' + ${user.lastName}"></strong>
+
+            <form th:method="post"
+                  th:action="@{/profile/edit}"
+                  th:object="${editData}">
+                <p id="username1">
+                    <label for="username"><strong>Username:</strong></label>
+                    <input th:field="*{username}" th:errorclass="is-invalid" type="text" id="username" name="name">
+                    <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
+                           class="text-danger error-message"></small>
+                </p>
+                <p id="email">
+                    <strong>Email:</strong>
+                    <span th:text="${user.email}"></span>
+                </p>
+                <button type="submit">Edit username</button>
+            </form>
+        </div>
+    </header>
+</div>
+<footer class="player-footer">
+    <p>&copy; 2024 Foot Score. All rights reserved.</p>
+</footer>
+</body>
+</html>

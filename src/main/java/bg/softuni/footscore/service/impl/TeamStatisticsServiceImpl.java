@@ -17,6 +17,7 @@ import bg.softuni.footscore.service.TeamService;
 import bg.softuni.footscore.service.TeamStatisticsService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -41,7 +42,7 @@ public class TeamStatisticsServiceImpl implements TeamStatisticsService {
                                      SeasonService seasonService,
                                      ModelMapper modelMapper,
                                      ApiConfig apiConfig,
-                                     RestClient restClient,
+                                     @Qualifier("genericRestClient")RestClient restClient,
                                      LeagueService leagueService) {
         this.teamStatisticsRepository = teamStatisticsRepository;
         this.teamService = teamService;

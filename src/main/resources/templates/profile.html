@@ -35,6 +35,9 @@
                 <span th:text="${dreamTeams.size()}"></span>
             </p>
         </div>
+        <div id="edit" class="dream-teams-list">
+            <a th:href="@{/profile/edit}" class="show-more">Edit</a>
+        </div>
     </header>
     <div class="favorites-container">
         <section class="favorites-section">
@@ -43,6 +46,9 @@
             </div>
             <div id="dream-teams" class="dream-teams-list">
                 <a th:href="@{/profile/dream-teams}" class="show-more">Dream Teams</a>
+            </div>
+            <div id="user-player" class="dream-teams-list">
+                <a th:href="@{/profile/my-player}" class="show-more">My player</a>
             </div>
         </section>
     </div>

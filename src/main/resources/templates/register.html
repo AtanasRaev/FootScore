@@ -14,33 +14,40 @@
     <div class="login-page">
         <div class="form">
             <span class="login-span">Register</span>
-            <form   th:method="post"
-                    th:action="@{/register}"
-                    th:object="${registerData}"
-                    class="login-form">
+            <form th:method="post"
+                  th:action="@{/register}"
+                  th:object="${registerData}"
+                  class="login-form">
                 <div>
                     <input th:field="*{firstName}" th:errorclass="is-invalid" type="text" placeholder="first name"/>
-                    <small th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="text-danger error-message"></small>
+                    <small th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
+                           class="text-danger error-message"></small>
                 </div>
                 <div>
                     <input th:field="*{lastName}" th:errorclass="is-invalid" type="text" placeholder="last name"/>
-                    <small th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger error-message"></small>
+                    <small th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
+                           class="text-danger error-message"></small>
                 </div>
                 <div>
                     <input th:field="*{email}" th:errorclass="is-invalid" type="email" placeholder="email"/>
-                    <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger error-message"></small>
+                    <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+                           class="text-danger error-message"></small>
                 </div>
                 <div>
                     <input th:field="*{username}" th:errorclass="is-invalid" type="text" placeholder="username"/>
-                    <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger error-message"></small>
+                    <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
+                           class="text-danger error-message"></small>
                 </div>
                 <div>
                     <input th:field="*{password}" th:errorclass="is-invalid" type="password" placeholder="password"/>
-                    <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger error-message"></small>
+                    <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                           class="text-danger error-message"></small>
                 </div>
                 <div>
-                    <input th:field="*{confirmPassword}" th:errorclass="is-invalid" type="password" placeholder="confirm password"/>
-                    <small th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="text-danger error-message"></small>
+                    <input th:field="*{confirmPassword}" th:errorclass="is-invalid" type="password"
+                           placeholder="confirm password"/>
+                    <small th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"
+                           class="text-danger error-message"></small>
                 </div>
                 <button>Register</button>
             </form>

@@ -1,6 +1,5 @@
 package bg.softuni.footscore.config;
 
-
 import bg.softuni.footscore.repository.UserEntityRepository;
 import bg.softuni.footscore.service.impl.FootScoreUserDetailsService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -21,7 +20,17 @@ public class SecurityConfig {
                         authorizeRequests ->
                                 authorizeRequests
                                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                                        .requestMatchers("/", "/login", "/register", "/about", "/leagues").permitAll()
+                                        .requestMatchers(
+                                                "/",
+                                                "/login",
+                                                "/register",
+                                                "/about",
+                                                "/leagues",
+                                                "/my-player",
+                                                "my-player/create",
+                                                "/all/dream-teams",
+                                                "/dream-team/{dreamTeamId}/details")
+                                        .permitAll()
                                         .anyRequest()
                                         .authenticated()
                 )

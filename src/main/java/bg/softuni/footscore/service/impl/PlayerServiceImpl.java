@@ -19,6 +19,7 @@ import bg.softuni.footscore.service.SeasonService;
 import bg.softuni.footscore.service.TeamService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -48,7 +49,7 @@ public class PlayerServiceImpl implements PlayerService {
                              PlayerTeamSeasonService seasonTeamPlayerService,
                              ModelMapper modelMapper,
                              ApiConfig apiConfig,
-                             RestClient restClient) {
+                             @Qualifier("genericRestClient") RestClient restClient) {
         this.playerRepository = playerRepository;
         this.teamService = teamService;
         this.seasonService = seasonService;
