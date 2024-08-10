@@ -11,40 +11,53 @@
     <nav>
         <ul id="navbar">
             <li>
-                <a th:href="@{/}">Home</a>
+                <a th:href="@{/}" th:text="#{nav_bar_home}">Home</a>
             </li>
 
             <li>
-                <a th:href="@{/about}">About</a>
+                <a th:href="@{/about}" th:text="#{nav_bar_about}">About</a>
             </li>
 
             <li>
-                <a th:href="@{/leagues}">Leagues</a>
+                <a th:href="@{/leagues}" th:text="#{nav_bar_leagues}">Leagues</a>
             </li>
 
             <li>
-                <a th:href="@{/all/dream-teams}">Dream Teams</a>
+                <a th:href="@{/all/dream-teams}" th:text="#{nav_bar_dream_teams}">Dream Teams</a>
             </li>
 
             <li sec:authorize="!isAuthenticated()">
                 <a href="/login"
-                   th:classappend="${activeLink == 'login'}? 'active'">Login</a>
+                   th:classappend="${activeLink == 'login'}? 'active'"
+                   th:text="#{nav_bar_login}">Login</a>
             </li>
 
             <li sec:authorize="!isAuthenticated()">
                 <a th:href="@{/register}"
-                   th:classappend="${activeLink == 'register'}? 'active'">Register</a>
+                   th:classappend="${activeLink == 'register'}? 'active'"
+                   th:text="#{nav_bar_register}">Register</a>
             </li>
 
             <li sec:authorize="isAuthenticated()">
-                <a th:href="@{/profile}">Profile</a>
+                <a th:href="@{/profile}" th:text="#{nav_bar_profile}">Profile</a>
             </li>
 
             <li sec:authorize="isAuthenticated()">
                 <form th:action="@{/logout}" method="post" class="logout-form">
-                    <button type="submit" class="logout-button">Logout</button>
+                    <button type="submit" class="logout-button" th:text="#{nav_bar_logout}">Logout</button>
                 </form>
             </li>
+
+            <li>
+                <form th:method="get">
+                    <label for="lang" th:text="#{nav_bar_language}">Language</label>
+                    <select onchange="this.form.submit()" id="lang" name="lang">
+                        <option value="en_US" th:selected="${#locale.toString()} == 'en_US'">English</option>
+                        <option value="bg_BG" th:selected="${#locale.toString()} == 'bg_BG'">Български</option>
+                    </select>
+                </form>
+            </li>
+
         </ul>
     </nav>
 </header>

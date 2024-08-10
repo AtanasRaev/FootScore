@@ -28,7 +28,7 @@ body {
     margin: 0 0.5em;
 }
 
-#navbar a {
+#navbar a, form {
     text-decoration: none;
     color: white;
     font-weight: bold;
