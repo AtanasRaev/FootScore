@@ -1,17 +1,23 @@
 package bg.softuni.footscore.model.dto;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
+
 public class UserPlayerDto {
     private long id;
 
+    @NotEmpty
     private String name;
 
-
+    @Positive
+    @Max(100)
     private int rating;
 
-
+    @Positive
     private int age;
 
-
+    @NotEmpty
     private String position;
 
     public long getId() {
