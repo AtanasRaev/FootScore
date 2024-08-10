@@ -1,8 +1,8 @@
 package bg.softuni.footscore.service.impl;
 
-import bg.softuni.footscore.model.dto.RegisterUserDto;
-import bg.softuni.footscore.model.dto.UserEditDto;
-import bg.softuni.footscore.model.dto.UserEntityPageDto;
+import bg.softuni.footscore.model.dto.userDto.RegisterUserDto;
+import bg.softuni.footscore.model.dto.userDto.UserEditDto;
+import bg.softuni.footscore.model.dto.userDto.UserEntityPageDto;
 import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 import bg.softuni.footscore.model.entity.Player;

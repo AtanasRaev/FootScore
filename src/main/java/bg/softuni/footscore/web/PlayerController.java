@@ -3,7 +3,7 @@ package bg.softuni.footscore.web;
 import bg.softuni.footscore.model.dto.LeagueTeamSeasonPageDto;
 import bg.softuni.footscore.model.dto.PlayerTeamSeasonPageDto;
 import bg.softuni.footscore.model.dto.SeasonPageDto;
-import bg.softuni.footscore.model.dto.UserEntityPageDto;
+import bg.softuni.footscore.model.dto.userDto.UserEntityPageDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;

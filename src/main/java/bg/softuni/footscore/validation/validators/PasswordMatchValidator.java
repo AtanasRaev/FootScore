@@ -1,6 +1,6 @@
 package bg.softuni.footscore.validation.validators;
 
-import bg.softuni.footscore.model.dto.RegisterUserDto;
+import bg.softuni.footscore.model.dto.userDto.RegisterUserDto;
 import bg.softuni.footscore.validation.annotations.PasswordMatch;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

@@ -1,8 +1,7 @@
 package bg.softuni.footscore.service;
 
-import bg.softuni.footscore.model.dto.FormationDto;
+import bg.softuni.footscore.model.dto.teamDto.FormationDto;
 import bg.softuni.footscore.model.dto.ResponseTeamStatisticsSeason;
-import bg.softuni.footscore.model.dto.teamDto.TeamStatisticsPageDto;
 import bg.softuni.footscore.model.entity.TeamStatistics;
 
 import java.util.List;

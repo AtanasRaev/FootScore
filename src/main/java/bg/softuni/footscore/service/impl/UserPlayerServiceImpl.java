@@ -1,6 +1,6 @@
 package bg.softuni.footscore.service.impl;
 
-import bg.softuni.footscore.model.dto.UserPlayerDto;
+import bg.softuni.footscore.model.dto.userDto.UserPlayerDto;
 import bg.softuni.footscore.service.UserPlayerService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

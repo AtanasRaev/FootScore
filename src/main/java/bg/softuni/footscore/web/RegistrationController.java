@@ -1,6 +1,6 @@
 package bg.softuni.footscore.web;
 
-import bg.softuni.footscore.model.dto.RegisterUserDto;
+import bg.softuni.footscore.model.dto.userDto.RegisterUserDto;
 import bg.softuni.footscore.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;

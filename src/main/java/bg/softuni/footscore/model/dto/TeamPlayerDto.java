@@ -1,5 +1,6 @@
 package bg.softuni.footscore.model.dto;
 
+import bg.softuni.footscore.model.dto.playerDto.PlayerDetailsApiDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamApiDto;
 
 import java.util.List;

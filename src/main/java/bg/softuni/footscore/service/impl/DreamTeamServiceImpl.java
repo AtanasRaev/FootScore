@@ -1,7 +1,7 @@
 package bg.softuni.footscore.service.impl;
 
-import bg.softuni.footscore.model.dto.DreamTeamPageDto;
-import bg.softuni.footscore.model.dto.UserEntityPageDto;
+import bg.softuni.footscore.model.dto.teamDto.DreamTeamPageDto;
+import bg.softuni.footscore.model.dto.userDto.UserEntityPageDto;
 import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
 import bg.softuni.footscore.model.entity.DreamTeam;
 import bg.softuni.footscore.repository.DreamTeamRepository;

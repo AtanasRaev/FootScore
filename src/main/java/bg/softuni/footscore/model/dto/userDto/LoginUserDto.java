@@ -1,4 +1,4 @@
-package bg.softuni.footscore.model.dto;
+package bg.softuni.footscore.model.dto.userDto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;

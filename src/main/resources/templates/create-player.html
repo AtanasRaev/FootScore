@@ -1,35 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Football Player</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
+<header th:replace="fragments/commons::nav"></header>
 <body>
 <h1>Create Football Player</h1>
-<form action="/my-player" method="post" class="create-player-form">
+<form th:action="@{/my-player}"
+      th:method="post"
+      th:object="${userPlayerData}"
+      class="create-player-form">
     <div class="create-player-form-group">
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
+        <input th:field="*{name}" th:errorclass="is-invalid" id="name" type="text" name="name" required/>
+        <small th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+               class="text-danger error-message"></small>
     </div>
 
     <div class="create-player-form-group">
         <label for="rating">Rating:</label>
-        <input type="number" id="rating" name="rating" min="0" step="1" required>
+        <input th:field="*{rating}" th:errorclass="is-invalid" id="rating" type="text" name="rating" min="1" max="100"
+               step="1" required/>
+        <small th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}"
+               class="text-danger error-message"></small>
     </div>
 
     <div class="create-player-form-group">
         <label for="age">Age:</label>
-        <input type="number" id="age" name="age" min="1" step="1" required>
+        <input th:field="*{age}" th:errorclass="is-invalid" id="age" name="age" min="1" step="1" required/>
+        <small th:if="${#fields.hasErrors('age')}" th:errors="*{age}"
+               class="text-danger error-message"></small>
     </div>
 
     <div class="create-player-form-group">
         <label for="position">Position:</label>
-        <input type="text" id="position" name="position" required>
+        <input th:field="*{position}" th:errorclass="is-invalid" type="text" id="position" name="position" required/>
+        <small th:if="${#fields.hasErrors('position')}" th:errors="*{position}"
+               class="text-danger error-message"></small>
     </div>
 
     <button type="submit">Create Player</button>
 </form>
+<footer class="teams-footer">
+    <p>&copy; 2024 Foot Score. All rights reserved.</p>
+</footer>
 </body>
 </html>

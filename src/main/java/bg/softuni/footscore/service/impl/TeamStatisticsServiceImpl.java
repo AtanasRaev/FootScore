@@ -1,7 +1,7 @@
 package bg.softuni.footscore.service.impl;
 
 import bg.softuni.footscore.config.ApiConfig;
-import bg.softuni.footscore.model.dto.FormationDto;
+import bg.softuni.footscore.model.dto.teamDto.FormationDto;
 import bg.softuni.footscore.model.dto.ResponseTeamStatisticsSeason;
 import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
@@ -22,10 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class TeamStatisticsServiceImpl implements TeamStatisticsService {

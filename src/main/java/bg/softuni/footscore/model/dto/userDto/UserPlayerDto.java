@@ -1,13 +1,15 @@
-package bg.softuni.footscore.model.dto;
+package bg.softuni.footscore.model.dto.userDto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 public class UserPlayerDto {
     private long id;
 
     @NotEmpty
+    @Size(min = 2, max = 20)
     private String name;
 
     @Positive
@@ -18,6 +20,7 @@ public class UserPlayerDto {
     private int age;
 
     @NotEmpty
+    @Size(min = 2, max = 20)
     private String position;
 
     public long getId() {

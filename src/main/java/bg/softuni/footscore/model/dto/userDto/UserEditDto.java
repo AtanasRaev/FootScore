@@ -1,4 +1,4 @@
-package bg.softuni.footscore.model.dto;
+package bg.softuni.footscore.model.dto.userDto;
 
 import bg.softuni.footscore.validation.annotations.UniqueUsername;
 import jakarta.validation.constraints.NotNull;

@@ -1,4 +1,4 @@
-package bg.softuni.footscore.model.dto;
+package bg.softuni.footscore.model.dto.playerDto;
 
 public class PlayerDetailsApiDto {
     private long id;

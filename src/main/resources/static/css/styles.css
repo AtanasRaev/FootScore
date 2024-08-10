@@ -1572,49 +1572,49 @@ button.red:hover {
     }
 }
 
-.create-player-form {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
+/*.create-player-form {*/
+/*    max-width: 400px;*/
+/*    margin: 0 auto;*/
+/*    padding: 20px;*/
+/*    border: 1px solid #ccc;*/
+/*    border-radius: 5px;*/
+/*}*/
 
-.create-player-form-group {
-    margin-bottom: 15px;
-}
+/*.create-player-form-group {*/
+/*    margin-bottom: 15px;*/
+/*}*/
 
-.create-player label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
+/*.create-player label {*/
+/*    display: block;*/
+/*    margin-bottom: 5px;*/
+/*    font-weight: bold;*/
+/*}*/
 
-.create-player input[type="text"], input[type="number"], select {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-}
+/*.create-player input[type="text"], input[type="number"], select {*/
+/*    width: 100%;*/
+/*    padding: 8px;*/
+/*    box-sizing: border-box;*/
+/*}*/
 
-.create-player input[type="number"] {
-    -moz-appearance: textfield;
-}
+/*.create-player input[type="number"] {*/
+/*    -moz-appearance: textfield;*/
+/*}*/
 
-.create-player input[type="number"]::-webkit-inner-spin-button,
-.create-player input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
+/*.create-player input[type="number"]::-webkit-inner-spin-button,*/
+/*.create-player input[type="number"]::-webkit-outer-spin-button {*/
+/*    -webkit-appearance: none;*/
+/*    margin: 0;*/
+/*}*/
 
-.create-player button {
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-}
+/*.create-player button {*/
+/*    background-color: #007BFF;*/
+/*    color: white;*/
+/*    border: none;*/
+/*    padding: 10px 15px;*/
+/*    border-radius: 5px;*/
+/*    cursor: pointer;*/
+/*}*/
 
-.create-player button:hover {
-    background-color: #0056b3;
-}
+/*.create-player button:hover {*/
+/*    background-color: #0056b3;*/
+/*}*/

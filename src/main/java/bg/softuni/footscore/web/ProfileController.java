@@ -1,9 +1,8 @@
 package bg.softuni.footscore.web;
 
-import bg.softuni.footscore.model.dto.DreamTeamPageDto;
-import bg.softuni.footscore.model.dto.RegisterUserDto;
-import bg.softuni.footscore.model.dto.UserEditDto;
-import bg.softuni.footscore.model.dto.UserEntityPageDto;
+import bg.softuni.footscore.model.dto.teamDto.DreamTeamPageDto;
+import bg.softuni.footscore.model.dto.userDto.UserEditDto;
+import bg.softuni.footscore.model.dto.userDto.UserEntityPageDto;
 import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 import bg.softuni.footscore.service.DreamTeamService;
