@@ -7,8 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -52,6 +51,7 @@ public class UserPlayersController {
     @GetMapping("/all-created-players")
     public String showAllPlayers(Model model) {
         model.addAttribute("myPlayers", this.userPlayerService.getAllPlayers());
+        model.addAttribute("user", this.userService.getUser());
         return "all-created-players";
     }
 
@@ -59,5 +59,42 @@ public class UserPlayersController {
     public String showMyPlayers(Model model) {
         model.addAttribute("myPlayers", this.userPlayerService.getUserPlayers(this.userService.getUser().getId()));
         return "user-created-players";
+    }
+
+    //TODO:add logic for validating IDs
+    @DeleteMapping("/my-player/{playerId}/delete")
+    public String deleteMyPlayer(@PathVariable Long playerId) {
+        this.userPlayerService.deleteMyPlayer(playerId);
+        return "redirect:/profile/my-players";
+    }
+
+    //TODO:add logic for validating IDs
+    @GetMapping("/edit/my-player/{id}")
+    public String showEditPlayer(@PathVariable("id") Long id, Model model) {
+        UserPlayerDto userPlayer = userPlayerService.getUserPlayerById(id);
+        if (userPlayer != null) {
+            model.addAttribute("userPlayerData", userPlayer);
+            model.addAttribute("positions", POSITIONS);
+            return "my-player-edit";
+        }
+        return "redirect:/error";
+    }
+
+    //TODO:add logic for validating IDs
+    @PutMapping("/edit/my-player/{id}")
+    public String updatePlayer(
+            @PathVariable("id") Long id,
+            @Valid @ModelAttribute("userPlayerData") UserPlayerDto userPlayerDto,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userPlayerData", bindingResult);
+            redirectAttributes.addFlashAttribute("userPlayerData", userPlayerDto);
+            return "redirect:/edit/" + id;
+        }
+
+        this.userPlayerService.updateUserPlayerById(id, userPlayerDto);
+        return "redirect:/profile/my-players";
     }
 }

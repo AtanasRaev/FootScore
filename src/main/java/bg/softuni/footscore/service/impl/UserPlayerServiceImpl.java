@@ -47,4 +47,34 @@ public class UserPlayerServiceImpl implements UserPlayerService {
                 .retrieve()
                 .body(new ParameterizedTypeReference<>(){});
     }
+
+    @Override
+    public void deleteMyPlayer(Long playerId) {
+        this.userPlayerRestClient
+                .delete()
+                .uri("/my-player/delete/{id}", playerId)
+                .retrieve()
+                .toBodilessEntity();
+    }
+
+    @Override
+    public UserPlayerDto getUserPlayerById(Long id) {
+        return this.userPlayerRestClient
+                .get()
+                .uri("/my-player/{id}", id)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(UserPlayerDto.class);
+    }
+
+    @Override
+    public void updateUserPlayerById(Long id, UserPlayerDto userPlayerDto) {
+        this.userPlayerRestClient
+                .put()
+                .uri("/my-player/update/{id}", id)
+                .body(userPlayerDto)
+                .retrieve()
+                .toBodilessEntity();
+    }
+
 }

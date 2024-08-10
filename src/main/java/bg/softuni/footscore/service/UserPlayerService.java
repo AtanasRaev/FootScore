@@ -10,4 +10,10 @@ public interface UserPlayerService {
     List<UserPlayerDto> getAllPlayers();
 
     List<UserPlayerDto> getUserPlayers(Long id);
+
+    void deleteMyPlayer(Long id);
+
+    UserPlayerDto getUserPlayerById(Long id);
+
+    void updateUserPlayerById(Long id, UserPlayerDto userPlayerDto);
 }
