@@ -27,8 +27,6 @@ public class SecurityConfig {
                                                 "/register",
                                                 "/about",
                                                 "/leagues",
-                                                "/my-player",
-                                                "my-player/create",
                                                 "/all/dream-teams",
                                                 "/dream-team/{dreamTeamId}/details")
                                         .permitAll()

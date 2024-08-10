@@ -10,7 +10,7 @@
 <header th:replace="fragments/commons::nav"></header>
 <body>
 <h1>Create Football Player</h1>
-<form th:action="@{/my-player}"
+<form th:action="@{/create/my-player}"
       th:method="post"
       th:object="${userPlayerData}"
       class="create-player-form">
@@ -38,9 +38,11 @@
 
     <div class="create-player-form-group">
         <label for="position">Position:</label>
-        <input th:field="*{position}" th:errorclass="is-invalid" type="text" id="position" name="position" required/>
-        <small th:if="${#fields.hasErrors('position')}" th:errors="*{position}"
-               class="text-danger error-message"></small>
+        <select th:field="*{position}" th:errorclass="is-invalid" id="position" name="position" required>
+            <option value="" disabled selected>Select a position</option>
+            <option th:each="position : ${positions}" th:value="${position}" th:text="${position}"></option>
+        </select>
+        <small th:if="${#fields.hasErrors('position')}" th:errors="*{position}" class="text-danger error-message"></small>
     </div>
 
     <button type="submit">Create Player</button>

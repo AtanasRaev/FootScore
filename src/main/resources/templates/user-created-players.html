@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Teams</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<header th:replace="fragments/commons::nav"></header>
+<body>
+<div class="teams-players-container">
+    <span th:if="${myPlayers.size() == 0}">You haven't created your player yet</span>
+    <div id="favorite-teams" class="favorites-list">
+        <a th:href="@{/create/my-player}" class="show-more">Create a player</a>
+    </div>
+    <div class="favorites-list">
+        <a th:href="@{/all-created-players}" class="show-more">Show all players</a>
+    </div>
+    <div class="user-dream-teams">
+        <div th:each="player : ${myPlayers}" class="team-box">
+            <h2 class="team-name">Player name: <span th:text="${player.name}"></span></h2>
+            <p class="team-name">Age: <span th:text="${player.age}"></span></p>
+            <p class="team-name">Position: <span th:text="${player.position}"></span></p>
+            <p class="team-name">Rating: <span th:text="${player.rating}"></span></p>
+        </div>
+    </div>
+</div>
+<footer class="teams-footer">
+    <p>&copy; 2024 Foot Score. All rights reserved.</p>
+</footer>
+</body>
+</html>

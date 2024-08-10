@@ -23,6 +23,8 @@ public class UserPlayerDto {
     @Size(min = 2, max = 20)
     private String position;
 
+    private long userId;
+
     public long getId() {
         return id;
     }
@@ -61,5 +63,13 @@ public class UserPlayerDto {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 }
