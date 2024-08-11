@@ -30,7 +30,7 @@ public class SecurityConfig {
                                                 "/all/dream-teams",
                                                 "/dream-team/{dreamTeamId}/details",
                                                 "/league/{id}/teams",
-                                                "/my-api/leagues",
+                                                "/api/leagues",
                                                 "/team/{id}/details",
                                                 "/team/{id}/players",
                                                 "/player/{id}/details",

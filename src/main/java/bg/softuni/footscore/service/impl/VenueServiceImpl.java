@@ -20,11 +20,6 @@ public class VenueServiceImpl implements VenueService {
     }
 
     @Override
-    public void saveVenue(VenuePageDto venue) {
-        this.venueRepository.save(this.modelMapper.map(venue, Venue.class));
-    }
-
-    @Override
     public void saveAll(List<VenuePageDto> venuesToSave) {
         this.venueRepository.saveAll(venuesToSave.stream().map(v -> this.modelMapper.map(v, Venue.class)).toList());
     }

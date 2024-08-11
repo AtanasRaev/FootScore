@@ -1,12 +1,11 @@
 package bg.softuni.footscore.service;
 
+import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
+import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 import bg.softuni.footscore.model.dto.userDto.RegisterUserDto;
 import bg.softuni.footscore.model.dto.userDto.UserEditDto;
 import bg.softuni.footscore.model.dto.userDto.UserEntityPageDto;
-import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
-import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface UserService {

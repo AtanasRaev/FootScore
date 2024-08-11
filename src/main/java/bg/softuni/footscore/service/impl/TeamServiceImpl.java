@@ -7,7 +7,6 @@ import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 import bg.softuni.footscore.model.dto.teamDto.VenuePageDto;
-import bg.softuni.footscore.model.dto.userDto.UserEntityPageDto;
 import bg.softuni.footscore.model.entity.*;
 import bg.softuni.footscore.repository.TeamRepository;
 import bg.softuni.footscore.service.LeagueTeamSeasonService;

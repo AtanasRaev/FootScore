@@ -20,7 +20,7 @@ public class LeagueRestController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping("/my-api/leagues")
+    @GetMapping("/api/leagues")
     public ResponseEntity<List<LeagueDto>> getAllPlayers () {
         return ResponseEntity.ok(
                 this.leagueService.getAllLeagues().stream().map(l -> this.modelMapper.map(l, LeagueDto.class)).toList()

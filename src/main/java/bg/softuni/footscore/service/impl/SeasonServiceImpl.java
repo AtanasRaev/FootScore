@@ -3,7 +3,6 @@ package bg.softuni.footscore.service.impl;
 import bg.softuni.footscore.config.ApiConfig;
 import bg.softuni.footscore.model.dto.ResponseCountryLeagueSeasonsApiDto;
 import bg.softuni.footscore.model.dto.SeasonPageDto;
-import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.entity.Season;
 import bg.softuni.footscore.repository.SeasonRepository;
 import bg.softuni.footscore.service.SeasonService;
@@ -14,7 +13,6 @@ import org.springframework.web.client.RestClient;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SeasonServiceImpl implements SeasonService {

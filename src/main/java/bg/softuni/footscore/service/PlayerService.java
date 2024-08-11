@@ -7,7 +7,6 @@ import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface PlayerService {
@@ -26,8 +25,6 @@ public interface PlayerService {
     PlayerPageDto getPlayerById(Long playerId);
 
     List<PlayerPageDto> getAllByIds(List<Long> playerIds);
-
-    List<PlayerPageDto> getAllPlayers();
 
     List<PlayerPageDto> getAllSelectedPlayers(boolean bool);
 

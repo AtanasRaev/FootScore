@@ -6,7 +6,6 @@ import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.dto.leagueDto.SelectedLeaguesDto;
 import bg.softuni.footscore.model.entity.League;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface LeagueService {

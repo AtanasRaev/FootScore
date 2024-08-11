@@ -20,6 +20,7 @@ import bg.softuni.footscore.service.TeamService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -209,11 +210,6 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public List<PlayerPageDto> getAllPlayers() {
-        return this.playerRepository.findAll().stream().map(p -> this.modelMapper.map(p, PlayerPageDto.class)).toList();
-    }
-
-    @Override
     public List<PlayerPageDto> getAllSelectedPlayers(boolean bool) {
         return this.playerRepository.findByIsSelected(bool).stream().map(p -> this.modelMapper.map(p, PlayerPageDto.class)).toList();
     }
@@ -293,6 +289,15 @@ public class PlayerServiceImpl implements PlayerService {
             }
         }
         return validPlayers;
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    @Transactional
+    public void resetIsSelected() {
+        playerRepository.findAll().forEach(player -> {
+            player.setSelected(false);
+            playerRepository.save(player);
+        });
     }
 
     private void updatePlayer(Player player) {

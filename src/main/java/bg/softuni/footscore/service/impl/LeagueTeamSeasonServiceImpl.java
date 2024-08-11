@@ -38,14 +38,6 @@ public class LeagueTeamSeasonServiceImpl implements LeagueTeamSeasonService {
     }
 
     @Override
-    public List<LeagueTeamSeasonPageDto> getByTeamIdAndLeagueId(Long teamId, Long leagueId) {
-        return this.seasonLeagueTeamRepository.findByTeamIdAndLeagueId(teamId, leagueId)
-                .stream()
-                .map(s -> this.modelMapper.map(s, LeagueTeamSeasonPageDto.class))
-                .toList();
-    }
-
-    @Override
     public List<LeagueTeamSeasonPageDto> getByTeamIdAndSeasonId(Long teamId, Long seasonId) {
         return this.seasonLeagueTeamRepository.findByTeamIdAndSeasonId(teamId, seasonId)
                 .stream()
