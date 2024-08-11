@@ -27,6 +27,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -218,12 +219,54 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void setSelected(Long playerId, boolean b) {
+    public void setSelected(Long playerId, boolean selected) {
         Optional<Player> optionalPlayer = this.playerRepository.findById(playerId);
         if (optionalPlayer.isPresent()) {
-            optionalPlayer.get().setSelected(b);
+            optionalPlayer.get().setSelected(selected);
             updatePlayer(optionalPlayer.get());
         }
+    }
+
+    @Override
+    public void setAllSelected(boolean selected) {
+        List<PlayerPageDto> allSelectedPlayers = this.getAllSelectedPlayers(true);
+        allSelectedPlayers.forEach(p -> this.setSelected(p.getId(), selected));
+    }
+
+    @Override
+    public List<PlayerPageDto> getPlayersByPosition(String position, List<PlayerPageDto> validPlayers) {
+        if (position != null && !position.equals("All positions") && !position.isEmpty()) {
+            validPlayers.removeIf(p -> !p.getPosition().equals(position));
+        }
+        return validPlayers;
+    }
+
+    @Override
+    public List<PlayerPageDto> getAllSortedPlayers(String position, String search) {
+        List<PlayerPageDto> allNotSelected = this.getAllSelectedPlayers(false);
+        List<PlayerPageDto> sortedPlayers = new ArrayList<>(allNotSelected);
+
+        if (search != null && !search.trim().isEmpty()) {
+            sortedPlayers.removeIf(player -> !player.getFullName().toLowerCase().contains(search.toLowerCase()));
+        }
+
+        sortedPlayers = this.getPlayersByPosition(position, sortedPlayers);
+        sortedPlayers.sort(Comparator.comparing(PlayerPageDto::getShortName));
+        return sortedPlayers;
+    }
+
+    @Override
+    public List<PlayerPageDto> getAllPlayersByPosition(String position) {
+        List<PlayerPageDto> result = new ArrayList<>();
+
+        List<PlayerPageDto> allSelected = getAllSelectedPlayers(true);
+        for (PlayerPageDto player : allSelected) {
+            if (player.getPosition().equals(position)) {
+                result.add(player);
+            }
+        }
+
+        return result;
     }
 
     private void updatePlayer(Player player) {

@@ -1,7 +1,6 @@
 package bg.softuni.footscore.web;
 
 import bg.softuni.footscore.model.dto.teamDto.DreamTeamPageDto;
-import bg.softuni.footscore.model.dto.teamDto.FormationDto;
 import bg.softuni.footscore.model.dto.userDto.UserEntityPageDto;
 import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
 import bg.softuni.footscore.service.DreamTeamService;
@@ -39,54 +38,16 @@ public class DreamTeamController {
                                  @RequestParam(required = false) String teamName,
                                  Model model) {
 
-        List<PlayerPageDto> allNotSelected = this.playerService.getAllSelectedPlayers(false);
-        List<PlayerPageDto> allSelected = this.playerService.getAllSelectedPlayers(true);
-        List<PlayerPageDto> sortedPlayers = new ArrayList<>(allNotSelected);
-
-        if (search != null && !search.trim().isEmpty()) {
-            sortedPlayers.removeIf(player -> !player.getFullName().toLowerCase().contains(search.toLowerCase()));
-        }
-
-        sortedPlayers = getPlayersByPosition(position, sortedPlayers);
-        sortedPlayers.sort(Comparator.comparing(PlayerPageDto::getShortName));
-
-        List<PlayerPageDto> goalkeepers = new ArrayList<>();
-        List<PlayerPageDto> defenders = new ArrayList<>();
-        List<PlayerPageDto> midfielders = new ArrayList<>();
-        List<PlayerPageDto> attackers = new ArrayList<>();
-
-        List<FormationDto> allFormations = this.teamStatisticsService.getAllFormations();
-        Set<String> formations = new TreeSet<>();
-        for (FormationDto allFormation : allFormations) {
-            formations.add(allFormation.getFormation());
-        }
+        List<PlayerPageDto> sortedPlayers = this.playerService.getAllSortedPlayers(position, search);
 
 
-        for (PlayerPageDto player : allSelected) {
-            switch (player.getPosition()) {
-                case "Goalkeeper":
-                    goalkeepers.add(player);
-                    break;
-                case "Defender":
-                    defenders.add(player);
-                    break;
-                case "Midfielder":
-                    midfielders.add(player);
-                    break;
-                case "Attacker":
-                    attackers.add(player);
-                    break;
-            }
-        }
-
-        model.addAttribute("goalkeepers", goalkeepers.size());
-        model.addAttribute("defenders", defenders.size());
-        model.addAttribute("midfielders", midfielders.size());
-        model.addAttribute("attackers", attackers.size());
+        model.addAttribute("goalkeepers", this.playerService.getAllPlayersByPosition("Goalkeeper").size());
+        model.addAttribute("defenders", this.playerService.getAllPlayersByPosition("Defender").size());
+        model.addAttribute("midfielders", this.playerService.getAllPlayersByPosition("Midfielder").size());
+        model.addAttribute("attackers", this.playerService.getAllPlayersByPosition("Attacker").size());
         model.addAttribute("selectedPosition", position);
         model.addAttribute("positions", POSITIONS);
         model.addAttribute("teamName", teamName);
-        model.addAttribute("formations", formations);
         model.addAttribute("selectedFormation", formation);
         model.addAttribute("searchTerm", search);
         model.addAttribute("players", sortedPlayers);
@@ -146,23 +107,14 @@ public class DreamTeamController {
             return "redirect:/profile/dream-teams";
         }
 
-        List<PlayerPageDto> allSelectedPlayers = this.playerService.getAllSelectedPlayers(true);
-        long defenderCount = allSelectedPlayers.stream().filter(p -> p.getPosition().equals("Defender")).count();
-        long midfielderCount = allSelectedPlayers.stream().filter(p -> p.getPosition().equals("Midfielder")).count();
-        long attackerCount = allSelectedPlayers.stream().filter(p -> p.getPosition().equals("Attacker")).count();
+        this.dreamTeamService.createDreamTeam(teamName);
 
-        String formation = defenderCount + "-" + midfielderCount + "-" + attackerCount;
-
-        UserEntityPageDto user = this.userService.getUser();
-
-        this.dreamTeamService.create(teamName, formation, allSelectedPlayers, user);
         return "redirect:/profile/dream-teams";
     }
 
     @PostMapping("/cancel")
     public String cancelDreamTeams(Model model) {
-        List<PlayerPageDto> allSelectedPlayers = this.playerService.getAllSelectedPlayers(true);
-        allSelectedPlayers.forEach(p -> this.playerService.setSelected(p.getId(), false));
+        this.playerService.setAllSelected(false);
         return "redirect:/profile";
     }
 
@@ -187,12 +139,5 @@ public class DreamTeamController {
     public String deleteDreamTeam(@PathVariable Long teamId) {
         this.dreamTeamService.deleteTeam(teamId);
         return "redirect:/profile/dream-teams";
-    }
-
-    private static List<PlayerPageDto> getPlayersByPosition(String position, List<PlayerPageDto> validPlayers) {
-        if (position != null && !position.equals("All positions") && !position.isEmpty()) {
-            validPlayers.removeIf(p -> !p.getPosition().equals(position));
-        }
-        return validPlayers;
     }
 }

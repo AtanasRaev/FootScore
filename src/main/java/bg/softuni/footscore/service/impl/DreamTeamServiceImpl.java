@@ -7,6 +7,7 @@ import bg.softuni.footscore.model.entity.DreamTeam;
 import bg.softuni.footscore.repository.DreamTeamRepository;
 import bg.softuni.footscore.service.DreamTeamService;
 import bg.softuni.footscore.service.PlayerService;
+import bg.softuni.footscore.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -16,18 +17,24 @@ import java.util.List;
 public class DreamTeamServiceImpl implements DreamTeamService {
     private final DreamTeamRepository dreamTeamRepository;
     private final PlayerService playerService;
+    private final UserService userService;
     private final ModelMapper modelMapper;
 
     public DreamTeamServiceImpl(DreamTeamRepository dreamTeamRepository,
                                 PlayerService playerService,
+                                UserService userService,
                                 ModelMapper modelMapper) {
         this.dreamTeamRepository = dreamTeamRepository;
         this.playerService = playerService;
+        this.userService = userService;
         this.modelMapper = modelMapper;
     }
 
     @Override
-    public void create(String teamName, String formation, List<PlayerPageDto> allSelectedPlayers, UserEntityPageDto user) {
+    public void createDreamTeam(String teamName) {
+        List<PlayerPageDto> allSelectedPlayers = this.playerService.getAllSelectedPlayers(true);
+        String formation = createPosition(allSelectedPlayers);
+        UserEntityPageDto user = this.userService.getUser();
         DreamTeamPageDto dto = new DreamTeamPageDto(teamName, formation, allSelectedPlayers, user);
         dto.getPlayers().forEach(p -> this.playerService.setSelected(p.getId(), false));
         update(dto);
@@ -60,6 +67,16 @@ public class DreamTeamServiceImpl implements DreamTeamService {
         DreamTeamPageDto byId = getById(teamId);
         this.dreamTeamRepository.delete(this.modelMapper.map(byId, DreamTeam.class));
     }
+
+    @Override
+    public String createPosition(List<PlayerPageDto> allSelectedPlayers){
+        long defenderCount = allSelectedPlayers.stream().filter(p -> p.getPosition().equals("Defender")).count();
+        long midfielderCount = allSelectedPlayers.stream().filter(p -> p.getPosition().equals("Midfielder")).count();
+        long attackerCount = allSelectedPlayers.stream().filter(p -> p.getPosition().equals("Attacker")).count();
+
+        return defenderCount + "-" + midfielderCount + "-" + attackerCount;
+    }
+
 
     private void update(DreamTeamPageDto dto) {
         this.dreamTeamRepository.save(this.modelMapper.map(dto, DreamTeam.class));

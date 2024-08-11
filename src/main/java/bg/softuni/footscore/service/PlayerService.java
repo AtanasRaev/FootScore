@@ -29,6 +29,14 @@ public interface PlayerService {
 
     List<PlayerPageDto> getAllSelectedPlayers(boolean bool);
 
-    void setSelected(Long playerId, boolean b);
+    void setSelected(Long playerId, boolean selected);
+
+    void setAllSelected(boolean selected);
+
+    List<PlayerPageDto> getPlayersByPosition(String position, List<PlayerPageDto> validPlayers);
+
+    List<PlayerPageDto> getAllSortedPlayers(String position, String search);
+
+    List<PlayerPageDto> getAllPlayersByPosition(String position);
 
 }
