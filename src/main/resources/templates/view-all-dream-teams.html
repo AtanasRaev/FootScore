@@ -10,7 +10,7 @@
 <body>
 <div class="dt teams-players-container">
     <span th:if="${dreamTeams.size() == 0}">No teams created yet</span>
-    <div th:each="team : ${dreamTeams}" class="team-box">
+    <div th:each="team : ${dreamTeams}" class="dream-team-box">
         <a class="team-link" th:href="@{/dream-team/{dreamTeamId}/details(dreamTeamId=${team.id})}">
             <h2 class="team-name">Team name: <span th:text="${team.name}"></span></h2>
             <p class="team-name">Formation: <span th:text="${team.formation}"></span></p>

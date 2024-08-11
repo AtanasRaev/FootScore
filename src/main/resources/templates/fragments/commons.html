@@ -49,7 +49,7 @@
             </li>
 
             <li>
-                <form th:method="get">
+                <form th:method="get" class="navbar-form">
                     <label for="lang" th:text="#{nav_bar_language}">Language</label>
                     <select onchange="this.form.submit()" id="lang" name="lang">
                         <option value="en_US" th:selected="${#locale.toString()} == 'en_US'">English</option>

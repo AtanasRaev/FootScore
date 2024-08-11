@@ -37,8 +37,8 @@
     </div>
 
     <div class="create-player-form-group">
-        <label for="position">Position:</label>
-        <select th:field="*{position}" th:errorclass="is-invalid" id="position" name="position" required>
+        <label for="position-create">Position:</label>
+        <select th:field="*{position}" th:errorclass="is-invalid" id="position-create" name="position" required>
             <option value="" disabled selected>Select a position</option>
             <option th:each="position : ${positions}" th:value="${position}" th:text="${position}"></option>
         </select>

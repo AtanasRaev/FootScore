@@ -13,17 +13,17 @@
 <form th:action="@{/edit/my-player/{id}(id=${userPlayerData.id})}"
       th:method="put"
       th:object="${userPlayerData}"
-      class="edit-player-form">
+      class="create-player-form">
     <input type="hidden" th:field="*{id}" />
 
-    <div class="edit-player-form-group">
+    <div class="create-player-form-group">
         <label for="name">Name:</label>
         <input th:field="*{name}" th:errorclass="is-invalid" id="name" type="text" name="name" required/>
         <small th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
                class="text-danger error-message"></small>
     </div>
 
-    <div class="edit-player-form-group">
+    <div class="create-player-form-group">
         <label for="rating">Rating:</label>
         <input th:field="*{rating}" th:errorclass="is-invalid" id="rating" type="text" name="rating" min="1" max="100"
                step="1" required/>
@@ -31,16 +31,16 @@
                class="text-danger error-message"></small>
     </div>
 
-    <div class="edit-player-form-group">
+    <div class="create-player-form-group">
         <label for="age">Age:</label>
         <input th:field="*{age}" th:errorclass="is-invalid" id="age" name="age" min="1" step="1" required/>
         <small th:if="${#fields.hasErrors('age')}" th:errors="*{age}"
                class="text-danger error-message"></small>
     </div>
 
-    <div class="edit-player-form-group">
-        <label for="position">Position:</label>
-        <select th:field="*{position}" th:errorclass="is-invalid" id="position" name="position" required>
+    <div class="create-player-form-group">
+        <label for="position-create">Position:</label>
+        <select th:field="*{position}" th:errorclass="is-invalid" id="position-create" name="position" required>
             <option value="" disabled>Select a position</option>
             <option th:each="position : ${positions}" th:value="${position}" th:text="${position}"></option>
         </select>

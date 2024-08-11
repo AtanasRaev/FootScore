@@ -2,11 +2,13 @@ package bg.softuni.footscore.model.dto.teamDto;
 
 import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
 import bg.softuni.footscore.model.dto.userDto.UserEntityPageDto;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
 public class DreamTeamPageDto {
     private Long id;
+    @Size(min = 2, max = 10)
     private String name;
     private String formation;
     private List<PlayerPageDto> players;
