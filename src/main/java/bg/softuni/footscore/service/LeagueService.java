@@ -1,10 +1,12 @@
 package bg.softuni.footscore.service;
 
+import bg.softuni.footscore.model.dto.LeagueTeamSeasonPageDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeagueAddDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
 import bg.softuni.footscore.model.dto.leagueDto.SelectedLeaguesDto;
 import bg.softuni.footscore.model.entity.League;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface LeagueService {
@@ -33,4 +35,6 @@ public interface LeagueService {
     List<LeaguePageDto> getAllLeagues();
 
     void removeLeague(Long leagueId);
+
+    List<LeaguePageDto> getSelectedLeagueByTeamAndSeason(List<LeagueTeamSeasonPageDto> byTeamIdAndSeasonId);
 }

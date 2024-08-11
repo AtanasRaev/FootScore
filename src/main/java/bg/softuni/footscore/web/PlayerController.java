@@ -64,53 +64,36 @@ public class PlayerController {
 
         List<SeasonPageDto> seasons = this.seasonService.getAllSeasons();
         Set<SeasonPageDto> currentSeasons = SeasonUtils.getCurrentSeasonsForTeam(teamId, leagueTeamSeasonService, seasons);
-
         seasonId = getId(seasonId, currentSeasons.stream().toList().getLast().getId());
 
-        List<LeagueTeamSeasonPageDto> byTeamIdAndSeasonId = this.leagueTeamSeasonService.getByTeamIdAndSeasonId(teamId, seasonId);
 
+        List<LeagueTeamSeasonPageDto> byTeamIdAndSeasonId = this.leagueTeamSeasonService.getByTeamIdAndSeasonId(teamId, seasonId);
         if (byTeamIdAndSeasonId.isEmpty()) {
             throw new EntityNotFoundException("Not found team or season");
         }
+        List<LeaguePageDto> leagues = this.leagueService.getSelectedLeagueByTeamAndSeason(byTeamIdAndSeasonId);
 
-        List<LeaguePageDto> leagues = new ArrayList<>();
-        byTeamIdAndSeasonId.forEach(s -> {
-            LeaguePageDto leagueById = this.leagueService.getLeagueById(s.getLeague().getId());
-            if (leagueById.isSelected()) {
-                leagues.add(leagueById);
-            }
-        });
 
+        List<PlayerTeamSeasonPageDto> allPlayers = this.playerTeamSeasonService.getByTeamIdAndSeasonId(teamId, seasonId);
+        allPlayers = this.playerService.getAllPlayers(teamId, seasonId, allPlayers, teamOptional);
+        if (allPlayers.isEmpty()) {
+            return "redirect:/players/error";
+        }
+        List<PlayerPageDto> validPlayers = new ArrayList<>(allPlayers.stream().map(PlayerTeamSeasonPageDto::getPlayer).toList());
+        validPlayers = this.playerService.getPlayersByPosition(position, validPlayers, allPlayers);
+
+        model.addAttribute("selectedPosition", position);
         model.addAttribute("team", teamOptional);
         model.addAttribute("seasons", currentSeasons.stream().toList().reversed());
         model.addAttribute("selectedSeasonId", seasonId);
         model.addAttribute("positions", POSITIONS);
         model.addAttribute("leagues", leagues);
-
-        List<PlayerTeamSeasonPageDto> allPlayers = this.playerTeamSeasonService.getByTeamIdAndSeasonId(teamId, seasonId);
-
-        if (allPlayers.isEmpty()) {
-            SeasonPageDto seasonOptional = this.seasonService.getSeasonById(seasonId);
-            if (seasonOptional != null) {
-                this.playerService.saveApiPlayersForTeamAndSeason(teamOptional, seasonOptional);
-            }
-            allPlayers = this.playerTeamSeasonService.getByTeamIdAndSeasonId(teamId, seasonId);
-        }
-
-        if (allPlayers.isEmpty()) {
-            return "redirect:/players/error";
-        }
-
-        List<PlayerPageDto> validPlayers = new ArrayList<>(allPlayers.stream().map(PlayerTeamSeasonPageDto::getPlayer).toList());
-
-        validPlayers = getPlayersByPosition(position, validPlayers, allPlayers);
-        model.addAttribute("selectedPosition", position);
-
-
         model.addAttribute("players", validPlayers);
 
         return "players";
     }
+
+
 
     @GetMapping("/player/{playerId}/details")
     public String details(@PathVariable long playerId,
@@ -154,19 +137,12 @@ public class PlayerController {
 
         UserEntityPageDto user = this.userService.getUser();
 
-        if (user != null) {
-            List<PlayerPageDto> allByIds = new ArrayList<>();
-            if (playerIds != null && !playerIds.isEmpty()) {
-                allByIds = this.playerService.getAllByIds(playerIds);
-            }
-
-            if (!user.getFavoritePlayers().containsAll(allByIds)) {
-                this.userService.addFavoritePlayers(user, allByIds);
-            }
-        }
+        this.userService.addPlayersToFavorites(playerIds, user);
 
         return "redirect:/team/" + teamId + "/players" + "?seasonId=" + seasonId;
     }
+
+
 
 
     @Transactional
@@ -184,23 +160,15 @@ public class PlayerController {
 
         UserEntityPageDto user = this.userService.getUser();
 
-        players = getPlayersByPosition(position, players, byTeamIdAndSeasonId);
-        model.addAttribute("selectedPosition", position);
-        model.addAttribute("positions", POSITIONS);
+        players = this.playerService.getPlayersByPosition(position, players, byTeamIdAndSeasonId);
 
         if (user != null) {
-            List<PlayerPageDto> list = new ArrayList<>();
-            for (PlayerPageDto player : players) {
-                for (PlayerPageDto favorite : user.getFavoritePlayers().stream().toList()) {
-                    if (player.getId() == favorite.getId()) {
-                        list.add(player);
-                    }
-                }
-
-            }
+            List<PlayerPageDto> list = this.userService.getFavoritesPlayers(players, user);
             model.addAttribute("favoritePlayers", list);
         }
 
+        model.addAttribute("selectedPosition", position);
+        model.addAttribute("positions", POSITIONS);
         model.addAttribute("players", players);
         model.addAttribute("selectedSeasonId", seasonId);
         model.addAttribute("team", byTeamIdAndSeasonId.getFirst().getTeam());
@@ -211,17 +179,5 @@ public class PlayerController {
 
     private static Long getId(Long seasonId, long currentSeasonId) {
         return seasonId != null ? seasonId : currentSeasonId;
-    }
-
-    private static List<PlayerPageDto> getPlayersByPosition(String position, List<PlayerPageDto> validPlayers, List<PlayerTeamSeasonPageDto> allPlayers) {
-        if (position != null && !position.equals("All positions")) {
-            validPlayers = new ArrayList<>();
-            for (PlayerTeamSeasonPageDto allPlayer : allPlayers) {
-                if (allPlayer.getPlayer().getPosition().equals(position)) {
-                    validPlayers.add(allPlayer.getPlayer());
-                }
-            }
-        }
-        return validPlayers;
     }
 }

@@ -10,6 +10,7 @@ import bg.softuni.footscore.model.entity.Role;
 import bg.softuni.footscore.model.entity.Team;
 import bg.softuni.footscore.model.entity.UserEntity;
 import bg.softuni.footscore.repository.UserEntityRepository;
+import bg.softuni.footscore.service.PlayerService;
 import bg.softuni.footscore.service.RoleService;
 import bg.softuni.footscore.service.UserService;
 import bg.softuni.footscore.utils.RequestContextHolder;
@@ -18,14 +19,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
+    private final PlayerService playerService;
     private final UserEntityRepository userRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
@@ -33,11 +32,13 @@ public class UserServiceImpl implements UserService {
     private final RequestContextHolder requestContextHolder;
 
 
-    public UserServiceImpl(UserEntityRepository userRepository,
+    public UserServiceImpl(PlayerService playerService,
+                           UserEntityRepository userRepository,
                            ModelMapper modelMapper,
                            PasswordEncoder passwordEncoder,
                            RoleService roleService,
                            RequestContextHolder requestContextHolder) {
+        this.playerService = playerService;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
@@ -86,14 +87,35 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<PlayerPageDto> getFavoritesPlayers(List<PlayerPageDto> players, UserEntityPageDto user) {
+        List<PlayerPageDto> list = new ArrayList<>();
+        for (PlayerPageDto player : players) {
+            for (PlayerPageDto favorite : user.getFavoritePlayers().stream().toList()) {
+                if (player.getId() == favorite.getId()) {
+                    list.add(player);
+                }
+            }
+        }
+        return list;
+    }
+
+    @Override
     public boolean isUniqueEmail(String email) {
         return this.userRepository.findByEmail(email).isEmpty();
     }
 
     @Override
-    public void addFavoritePlayers(UserEntityPageDto dto, List<PlayerPageDto> allByIds) {
-        dto.getFavoritePlayers().addAll(new HashSet<>(allByIds));
-        this.updateAddFavoritePlayers(dto);
+    public void addPlayersToFavorites(List<Long> playerIds, UserEntityPageDto user) {
+        if (user != null) {
+            List<PlayerPageDto> allByIds = new ArrayList<>();
+            if (playerIds != null && !playerIds.isEmpty()) {
+                allByIds = this.playerService.getAllByIds(playerIds);
+            }
+
+            if (!user.getFavoritePlayers().containsAll(allByIds)) {
+                addFavoritePlayers(user, allByIds);
+            }
+        }
     }
 
     @Override
@@ -152,7 +174,7 @@ public class UserServiceImpl implements UserService {
         });
     }
 
-    public void updateAddFavoriteTeams(UserEntityPageDto userEntityPageDto) {
+    private void updateAddFavoriteTeams(UserEntityPageDto userEntityPageDto) {
         Optional<UserEntity> byUsername = this.userRepository.findByUsername(userEntityPageDto.getUsername());
 
         Set<TeamPageDto> favoriteTeams = userEntityPageDto.getFavoriteTeams();
@@ -165,7 +187,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public void updateAddFavoritePlayers(UserEntityPageDto userEntityPageDto) {
+    private void updateAddFavoritePlayers(UserEntityPageDto userEntityPageDto) {
         Optional<UserEntity> byUsername = this.userRepository.findByUsername(userEntityPageDto.getUsername());
 
         Set<PlayerPageDto> favoritePlayers = userEntityPageDto.getFavoritePlayers();
@@ -175,5 +197,10 @@ public class UserServiceImpl implements UserService {
             user.getFavoritePlayers().addAll(collect);
             this.userRepository.save(user);
         });
+    }
+
+    private void addFavoritePlayers(UserEntityPageDto dto, List<PlayerPageDto> allByIds) {
+        dto.getFavoritePlayers().addAll(new HashSet<>(allByIds));
+        this.updateAddFavoritePlayers(dto);
     }
 }

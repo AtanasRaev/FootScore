@@ -1,5 +1,6 @@
 package bg.softuni.footscore.service.impl;
 
+import bg.softuni.footscore.model.dto.LeagueTeamSeasonPageDto;
 import bg.softuni.footscore.model.dto.ResponseCountryLeagueSeasonsApiDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeagueAddDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeaguePageDto;
@@ -200,6 +201,18 @@ public class LeagueServiceImpl implements LeagueService {
         }
         league.get().setSelected(false);
         updateLeague(league.get());
+    }
+
+    @Override
+    public List<LeaguePageDto> getSelectedLeagueByTeamAndSeason(List<LeagueTeamSeasonPageDto> byTeamIdAndSeasonId) {
+        List<LeaguePageDto> leagues = new ArrayList<>();
+        byTeamIdAndSeasonId.forEach(s -> {
+            LeaguePageDto leagueById = getLeagueById(s.getLeague().getId());
+            if (leagueById.isSelected()) {
+                leagues.add(leagueById);
+            }
+        });
+        return leagues;
     }
 
     private List<LeagueAddDto> mapToAddLeagueDtoList(List<League> leagues) {

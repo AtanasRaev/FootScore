@@ -6,6 +6,7 @@ import bg.softuni.footscore.model.dto.userDto.UserEntityPageDto;
 import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface UserService {
@@ -15,7 +16,7 @@ public interface UserService {
 
     void addFavoriteTeams(UserEntityPageDto user, List<TeamPageDto> allByIds);
 
-    void addFavoritePlayers(UserEntityPageDto user, List<PlayerPageDto> allByIds);
+    void addPlayersToFavorites(List<Long> playerIds, UserEntityPageDto user);
 
     void removeFavoriteTeams(UserEntityPageDto user, List<TeamPageDto> allByIds);
 
@@ -28,4 +29,6 @@ public interface UserService {
     boolean isUniqueEmail(String value);
 
     boolean isUniqueUsername(String value);
+
+    List<PlayerPageDto> getFavoritesPlayers(List<PlayerPageDto> players, UserEntityPageDto user);
 }

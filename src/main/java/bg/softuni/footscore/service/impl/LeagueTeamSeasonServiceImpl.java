@@ -58,4 +58,5 @@ public class LeagueTeamSeasonServiceImpl implements LeagueTeamSeasonService {
     public void save(LeagueTeamSeason seasonLeagueTeam) {
         this.seasonLeagueTeamRepository.save(seasonLeagueTeam);
     }
+
 }

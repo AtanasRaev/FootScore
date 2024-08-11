@@ -269,6 +269,32 @@ public class PlayerServiceImpl implements PlayerService {
         return result;
     }
 
+    @Override
+    @Transactional
+    public List<PlayerTeamSeasonPageDto> getAllPlayers(long teamId, Long seasonId, List<PlayerTeamSeasonPageDto> allPlayers, TeamPageDto teamOptional) {
+        if (allPlayers.isEmpty()) {
+            SeasonPageDto seasonOptional = this.seasonService.getSeasonById(seasonId);
+            if (seasonOptional != null) {
+                saveApiPlayersForTeamAndSeason(teamOptional, seasonOptional);
+            }
+            allPlayers = this.playerTeamSeasonService.getByTeamIdAndSeasonId(teamId, seasonId);
+        }
+        return allPlayers;
+    }
+
+    @Override
+    public List<PlayerPageDto> getPlayersByPosition(String position, List<PlayerPageDto> validPlayers, List<PlayerTeamSeasonPageDto> allPlayers) {
+        if (position != null && !position.equals("All positions")) {
+            validPlayers = new ArrayList<>();
+            for (PlayerTeamSeasonPageDto allPlayer : allPlayers) {
+                if (allPlayer.getPlayer().getPosition().equals(position)) {
+                    validPlayers.add(allPlayer.getPlayer());
+                }
+            }
+        }
+        return validPlayers;
+    }
+
     private void updatePlayer(Player player) {
         this.playerRepository.save(player);
     }

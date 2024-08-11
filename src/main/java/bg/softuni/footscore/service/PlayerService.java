@@ -1,11 +1,13 @@
 package bg.softuni.footscore.service;
 
+import bg.softuni.footscore.model.dto.PlayerTeamSeasonPageDto;
 import bg.softuni.footscore.model.dto.ResponsePlayerApiDto;
 import bg.softuni.footscore.model.dto.ResponsePlayerDetailsApiDto;
 import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
 import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface PlayerService {
@@ -39,4 +41,7 @@ public interface PlayerService {
 
     List<PlayerPageDto> getAllPlayersByPosition(String position);
 
+    List<PlayerTeamSeasonPageDto> getAllPlayers(long teamId, Long seasonId, List<PlayerTeamSeasonPageDto> allPlayers, TeamPageDto teamOptional);
+
+    List<PlayerPageDto> getPlayersByPosition(String position, List<PlayerPageDto> validPlayers, List<PlayerTeamSeasonPageDto> allPlayers);
 }
