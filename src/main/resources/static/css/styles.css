@@ -100,18 +100,8 @@ body {
 .hero-title {
     font-size: 12vh;
     font-weight: bold;
-    line-height: 1;
     text-align: center;
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    margin-bottom: 0.1em;
-}
-
-@media only screen and (min-width: 32em) {
-    .hero-title {
-        font-size: 16vh;
-    }
+    margin: 0;
 }
 
 .hero-footer {
@@ -1637,4 +1627,26 @@ button.red:hover {
     background-color: #fff;
     transition: border-color 0.3s, box-shadow 0.3s;
     width: 170px;
+}
+
+.error-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 7em;
+    width: 40em;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 2em;
+    border-radius: 0.7em;
+}
+
+
+.error-container a {
+    text-decoration: none;
+    color: white;
+    background-color: #3b4f29;
+    padding: 0.3em;
+    border-radius: 0.2em;
+    margin-bottom: 1em;
 }

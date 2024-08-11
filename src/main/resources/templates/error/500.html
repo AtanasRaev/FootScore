@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/commons::head"></head>
+<body>
+<div th:replace="~{fragments/commons::navbar(activeLink=${'home'})}"></div>
+<section class="hero">
+    <div class="error-container">
+        <h2 class="error">500 - Internal Server Error</h2>
+        <p>Something went wrong on our end. Please try again later or contact support if the issue persists.</p>
+        <a th:href="@{/}" class="btn">Go to Homepage</a>
+    </div>
+</section>
+<footer th:replace="fragments/commons::footer"></footer>
+</body>
+</html>
