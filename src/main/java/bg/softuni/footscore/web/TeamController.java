@@ -66,12 +66,12 @@ public class TeamController {
 
         seasonId = getId(seasonId, currentSeasons.stream().toList().getLast().getId());
 
+        List<TeamPageDto> allTeams = this.leagueTeamSeasonService.getAllByLeagueIdAndSeasonId(leagueId, seasonId).stream().map(LeagueTeamSeasonPageDto::getTeam).toList();
+
         model.addAttribute("league", leagueById);
         model.addAttribute("seasons", currentSeasons.stream().toList().reversed());
         model.addAttribute("selectedSeasonId", seasonId);
-
-        List<TeamPageDto> allTeams = this.leagueTeamSeasonService.getAllByLeagueIdAndSeasonId(leagueId, seasonId).stream().map(LeagueTeamSeasonPageDto::getTeam).toList();
-
+        model.addAttribute("user", this.userService.getUser());
         model.addAttribute("teams", allTeams);
 
         return "teams";

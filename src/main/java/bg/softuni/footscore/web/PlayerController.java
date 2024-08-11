@@ -87,6 +87,7 @@ public class PlayerController {
         model.addAttribute("seasons", currentSeasons.stream().toList().reversed());
         model.addAttribute("selectedSeasonId", seasonId);
         model.addAttribute("positions", POSITIONS);
+        model.addAttribute("user", this.userService.getUser());
         model.addAttribute("leagues", leagues);
         model.addAttribute("players", validPlayers);
 

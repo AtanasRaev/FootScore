@@ -11,7 +11,8 @@
 <section class="teams-section">
     <div class="teams-container">
         <h1 class="teams-title">Players in <span th:text="${team.name}"></span></h1>
-        <form id="player-season-form" th:method="get" th:action="@{/team/{teamId}/players(teamId=${team.id}, seasonId=${selectedSeasonId})}">
+        <form id="player-season-form" th:method="get"
+              th:action="@{/team/{teamId}/players(teamId=${team.id}, seasonId=${selectedSeasonId})}">
             <div class="players-filters">
                 <label for="player-season">Select a season:</label>
                 <select id="player-season" name="seasonId" onchange="this.form.submit()">
@@ -23,7 +24,8 @@
                 </select>
             </div>
             <div class="players-filters">
-                <a th:href="@{/league/{leagueId}/teams(leagueId=${league.id}, seasonId=${selectedSeasonId})}" class="team-link" th:each="league : ${leagues}">
+                <a th:href="@{/league/{leagueId}/teams(leagueId=${league.id}, seasonId=${selectedSeasonId})}"
+                   class="team-link" th:each="league : ${leagues}">
                     <img th:src="${league.logo}" alt="Team Logo" class="player-logo">
                 </a>
             </div>
@@ -44,7 +46,8 @@
             </div>
         </form>
         <div>
-            <form th:method="get"
+            <form th:if="${user != null}"
+                  th:method="get"
                   th:action="@{/team/{teamId}/players/add-favorites(teamId=${team.id})}">
                 <input type="hidden" name="seasonId" th:value="${selectedSeasonId}">
                 <input type="hidden" name="teamId" th:value="${team.id}">

@@ -28,7 +28,8 @@
                 <input type="hidden" name="seasonId" th:value="${selectedSeasonId}">
                 <button class="add-leagues-button">View standings</button>
             </form>
-            <form th:method="get"
+            <form th:if="${user != null}"
+                  th:method="get"
                   th:action="@{/league/{leagueId}/teams/add-favorites(leagueId=${league.id})}">
                 <input type="hidden" name="seasonId" th:value="${selectedSeasonId}">
                 <input type="hidden" name="leagueId" th:value="${league.id}">

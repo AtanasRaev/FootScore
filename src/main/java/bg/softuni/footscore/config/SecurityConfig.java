@@ -28,7 +28,13 @@ public class SecurityConfig {
                                                 "/about",
                                                 "/leagues",
                                                 "/all/dream-teams",
-                                                "/dream-team/{dreamTeamId}/details")
+                                                "/dream-team/{dreamTeamId}/details",
+                                                "/league/{id}/teams",
+                                                "/my-api/leagues",
+                                                "/team/{id}/details",
+                                                "/team/{id}/players",
+                                                "/player/{id}/details",
+                                                "/widgets/standings")
                                         .permitAll()
                                         .anyRequest()
                                         .authenticated()

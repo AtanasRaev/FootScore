@@ -44,7 +44,7 @@ public class UserPlayersController {
             return "redirect:/my-player";
         }
 
-        userPlayerService.createPlayer(userPlayerDto);
+        this.userPlayerService.createPlayer(userPlayerDto);
         return "redirect:/profile";
     }
 
