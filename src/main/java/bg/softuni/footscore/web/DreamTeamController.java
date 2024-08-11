@@ -102,11 +102,6 @@ public class DreamTeamController {
     @PostMapping("/create/dream-team/save")
     public String saveDreamTeam(@RequestParam String teamName) {
 
-        //TODO: unique names, errorHandling
-        if (this.dreamTeamService.checkTeamName(teamName)) {
-            return "redirect:/profile/dream-teams";
-        }
-
         this.dreamTeamService.createDreamTeam(teamName);
 
         return "redirect:/profile/dream-teams";

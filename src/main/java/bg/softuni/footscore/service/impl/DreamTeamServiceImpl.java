@@ -46,11 +46,6 @@ public class DreamTeamServiceImpl implements DreamTeamService {
     }
 
     @Override
-    public boolean checkTeamName(String teamName) {
-        return this.dreamTeamRepository.findByName(teamName).isPresent();
-    }
-
-    @Override
     public DreamTeamPageDto getById(Long dreamTeamId) {
         return this.dreamTeamRepository.findById(dreamTeamId)
                 .map(dt -> this.modelMapper.map(dt, DreamTeamPageDto.class))

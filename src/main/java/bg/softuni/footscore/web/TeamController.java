@@ -52,14 +52,7 @@ public class TeamController {
     public String teams(@PathVariable Long leagueId,
                         @RequestParam(required = false) Long seasonId,
                         Model model) {
-        if (leagueId == null) {
-            return "redirect:/league-error";
-        }
         LeaguePageDto leagueById = this.leagueService.getLeagueById(leagueId);
-
-        if (leagueById == null) {
-            return "redirect:/league-error";
-        }
 
         List<SeasonPageDto> seasons = this.seasonService.getAllSeasons();
         Set<SeasonPageDto> currentSeasons = SeasonUtils.getCurrentSeasonsForLeague(leagueId, leagueTeamSeasonService, seasons);
@@ -84,9 +77,7 @@ public class TeamController {
                           @RequestParam(required = false) List<Long> teamIds,
                           Model model) {
 
-        if (leagueId == null) {
-            return "redirect:/league-error";
-        }
+        LeaguePageDto leagueById = this.leagueService.getLeagueById(leagueId);
 
         if (seasonId == null) {
             seasonId = this.seasonService.getAllSeasons().getLast().getId();
@@ -100,7 +91,7 @@ public class TeamController {
             this.userService.addTeamsToFavorites(teamIds, user);
         }
 
-        return "redirect:/league/" + leagueId + "/teams" + "?seasonId=" + seasonId;
+        return "redirect:/league/" + leagueById.getId() + "/teams" + "?seasonId=" + seasonId;
     }
 
 

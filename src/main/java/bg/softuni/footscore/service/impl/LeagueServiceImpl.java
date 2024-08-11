@@ -11,6 +11,7 @@ import bg.softuni.footscore.repository.LeagueRepository;
 import bg.softuni.footscore.service.CountryService;
 import bg.softuni.footscore.service.LeagueService;
 import bg.softuni.footscore.service.SeasonService;
+import bg.softuni.footscore.service.exception.LeagueNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -70,7 +71,7 @@ public class LeagueServiceImpl implements LeagueService {
         List<String> countries = this.countryService.getAllCountriesNames();
 
         if (isEmpty()) {
-            return null;
+            throw new LeagueNotFoundException("No leagues found for the specified country: " + countryName);
         }
 
         List<LeaguePageDto> allSelectedLeagues = countryName.equals("All countries") || countryName.isEmpty() ?
@@ -171,7 +172,7 @@ public class LeagueServiceImpl implements LeagueService {
         return this.leagueRepository
                 .findById(leagueId)
                 .map(league -> this.modelMapper.map(league, LeaguePageDto.class))
-                .orElse(null);
+                .orElseThrow(()-> new LeagueNotFoundException("League not found"));
     }
 
 

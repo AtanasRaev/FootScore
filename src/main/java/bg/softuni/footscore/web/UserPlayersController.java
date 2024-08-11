@@ -1,5 +1,6 @@
 package bg.softuni.footscore.web;
 
+import bg.softuni.footscore.model.dto.userDto.UserEntityPageDto;
 import bg.softuni.footscore.model.dto.userDto.UserPlayerDto;
 import bg.softuni.footscore.service.UserPlayerService;
 import bg.softuni.footscore.service.UserService;
@@ -9,6 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.nio.file.AccessDeniedException;
+import java.util.Objects;
 
 @Controller
 public class UserPlayersController {
@@ -30,7 +34,6 @@ public class UserPlayersController {
         return "create-player";
     }
 
-    //TODO: fix validation
     @PostMapping("/create/my-player")
     public String doCreatePlayer(@Valid UserPlayerDto userPlayerDto,
                                  BindingResult bindingResult,
@@ -61,26 +64,33 @@ public class UserPlayersController {
         return "user-created-players";
     }
 
-    //TODO:add logic for validating IDs
     @DeleteMapping("/my-player/{playerId}/delete")
-    public String deleteMyPlayer(@PathVariable Long playerId) {
+    public String deleteMyPlayer(@PathVariable Long playerId) throws AccessDeniedException {
+        UserEntityPageDto user = this.userService.getUser();
+        UserPlayerDto userPlayer = userPlayerService.getUserPlayerById(playerId);
+
+        if (!Objects.equals(user.getRole().getRole().toString(), "ADMIN") || user.getId() != userPlayer.getUserId()) {
+            throw new AccessDeniedException("You do not have permission to access this page.");
+        }
+
         this.userPlayerService.deleteMyPlayer(playerId);
         return "redirect:/profile/my-players";
     }
 
-    //TODO:add logic for validating IDs
     @GetMapping("/edit/my-player/{id}")
-    public String showEditPlayer(@PathVariable("id") Long id, Model model) {
+    public String showEditPlayer(@PathVariable("id") Long id, Model model) throws AccessDeniedException {
+        UserEntityPageDto user = this.userService.getUser();
         UserPlayerDto userPlayer = userPlayerService.getUserPlayerById(id);
-        if (userPlayer != null) {
-            model.addAttribute("userPlayerData", userPlayer);
-            model.addAttribute("positions", POSITIONS);
-            return "my-player-edit";
+
+        if (user.getId() != userPlayer.getUserId()) {
+            throw new AccessDeniedException("You do not have permission to access this page.");
         }
-        return "redirect:/error";
+
+        model.addAttribute("userPlayerData", userPlayer);
+        model.addAttribute("positions", POSITIONS);
+        return "my-player-edit";
     }
 
-    //TODO:add logic for validating IDs
     @PutMapping("/edit/my-player/{id}")
     public String updatePlayer(
             @PathVariable("id") Long id,

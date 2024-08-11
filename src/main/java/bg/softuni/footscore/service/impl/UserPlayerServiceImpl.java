@@ -2,6 +2,7 @@ package bg.softuni.footscore.service.impl;
 
 import bg.softuni.footscore.model.dto.userDto.UserPlayerDto;
 import bg.softuni.footscore.service.UserPlayerService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
@@ -59,12 +60,18 @@ public class UserPlayerServiceImpl implements UserPlayerService {
 
     @Override
     public UserPlayerDto getUserPlayerById(Long id) {
-        return this.userPlayerRestClient
+        UserPlayerDto body = this.userPlayerRestClient
                 .get()
                 .uri("/my-player/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(UserPlayerDto.class);
+
+        if (body == null) {
+            throw new EntityNotFoundException();
+        }
+
+        return body;
     }
 
     @Override

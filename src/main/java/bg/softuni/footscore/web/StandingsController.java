@@ -38,14 +38,7 @@ public class StandingsController {
                                @RequestParam(required = false) Long seasonId,
                                Model model) {
 
-        if (leagueId == null) {
-            return "redirect:/leagues-error";
-        }
         LeaguePageDto leagueById = this.leagueService.getLeagueById(leagueId);
-
-        if (leagueById == null) {
-            return "redirect:/leagues-error";
-        }
 
         List<SeasonPageDto> seasons = this.seasonService.getAllSeasons();
         Set<SeasonPageDto> currentSeasons = SeasonUtils.getCurrentSeasonsForLeague(leagueId, leagueTeamSeasonService, seasons);
