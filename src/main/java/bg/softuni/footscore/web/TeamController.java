@@ -97,18 +97,12 @@ public class TeamController {
         UserEntityPageDto user = this.userService.getUser();
 
         if (user != null) {
-            List<TeamPageDto> allByIds  = new ArrayList<>();
-            if (teamIds != null && !teamIds.isEmpty()) {
-                allByIds = this.teamService.findAllByIds(teamIds);
-            }
-
-            if (!user.getFavoriteTeams().containsAll(allByIds)) {
-                this.userService.addFavoriteTeams(user, allByIds);
-            }
+            this.userService.addTeamsToFavorites(teamIds, user);
         }
 
         return "redirect:/league/" + leagueId + "/teams" + "?seasonId=" + seasonId;
     }
+
 
     @Transactional
     @GetMapping("/league/{leagueId}/teams/add-favorites")
@@ -123,16 +117,9 @@ public class TeamController {
         List<TeamPageDto> teams = byLeagueIdAndSeasonId.stream().map(s -> this.modelMapper.map(s.getTeam(), TeamPageDto.class)).toList();
 
         UserEntityPageDto user = this.userService.getUser();
-        if (user != null) {
-            List<TeamPageDto> list = new ArrayList<>();
-            for (TeamPageDto team : teams) {
-                for (TeamPageDto favorite : user.getFavoriteTeams().stream().toList()) {
-                    if (team.getId() == favorite.getId()) {
-                        list.add(team);
-                    }
-                }
 
-            }
+        if (user != null) {
+            List<TeamPageDto> list = this.userService.getFavoriteTeams(teams, user);
             model.addAttribute("favoriteTeams", list);
         }
 
@@ -142,7 +129,6 @@ public class TeamController {
 
         return "add-favorites-teams";
     }
-
 
     @GetMapping("/team/{teamId}/details")
     public String teamDetails(@PathVariable long teamId,

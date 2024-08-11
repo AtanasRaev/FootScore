@@ -163,7 +163,7 @@ public class PlayerController {
         players = this.playerService.getPlayersByPosition(position, players, byTeamIdAndSeasonId);
 
         if (user != null) {
-            List<PlayerPageDto> list = this.userService.getFavoritesPlayers(players, user);
+            List<PlayerPageDto> list = this.userService.getFavoritePlayers(players, user);
             model.addAttribute("favoritePlayers", list);
         }
 

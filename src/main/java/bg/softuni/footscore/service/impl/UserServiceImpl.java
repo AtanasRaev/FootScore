@@ -12,6 +12,7 @@ import bg.softuni.footscore.model.entity.UserEntity;
 import bg.softuni.footscore.repository.UserEntityRepository;
 import bg.softuni.footscore.service.PlayerService;
 import bg.softuni.footscore.service.RoleService;
+import bg.softuni.footscore.service.TeamService;
 import bg.softuni.footscore.service.UserService;
 import bg.softuni.footscore.utils.RequestContextHolder;
 import bg.softuni.footscore.utils.UserUtils;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
     private final PlayerService playerService;
+    private final TeamService teamService;
     private final UserEntityRepository userRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
@@ -33,12 +35,14 @@ public class UserServiceImpl implements UserService {
 
 
     public UserServiceImpl(PlayerService playerService,
+                           TeamService teamService,
                            UserEntityRepository userRepository,
                            ModelMapper modelMapper,
                            PasswordEncoder passwordEncoder,
                            RoleService roleService,
                            RequestContextHolder requestContextHolder) {
         this.playerService = playerService;
+        this.teamService = teamService;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
@@ -71,9 +75,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addFavoriteTeams(UserEntityPageDto dto, List<TeamPageDto> allByIds) {
-        dto.getFavoriteTeams().addAll(new HashSet<>(allByIds));
-        this.updateAddFavoriteTeams(dto);
+    public void addTeamsToFavorites(List<Long> teamIds, UserEntityPageDto user) {
+        List<TeamPageDto> allByIds  = new ArrayList<>();
+        if (teamIds != null && !teamIds.isEmpty()) {
+            allByIds = this.teamService.findAllByIds(teamIds);
+        }
+
+        if (!user.getFavoriteTeams().containsAll(allByIds)) {
+            addFavoriteTeams(user, allByIds);
+        }
     }
 
     @Override
@@ -87,7 +97,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<PlayerPageDto> getFavoritesPlayers(List<PlayerPageDto> players, UserEntityPageDto user) {
+    public List<PlayerPageDto> getFavoritePlayers(List<PlayerPageDto> players, UserEntityPageDto user) {
         List<PlayerPageDto> list = new ArrayList<>();
         for (PlayerPageDto player : players) {
             for (PlayerPageDto favorite : user.getFavoritePlayers().stream().toList()) {
@@ -132,6 +142,20 @@ public class UserServiceImpl implements UserService {
             user.getFavoritePlayers().removeIf(favoritePlayer -> allById.getId() == favoritePlayer.getId());
         }
         this.removePlayersAndSaveUser(user);
+    }
+
+    @Override
+    public List<TeamPageDto> getFavoriteTeams(List<TeamPageDto> teams, UserEntityPageDto user) {
+        List<TeamPageDto> list = new ArrayList<>();
+        for (TeamPageDto team : teams) {
+            for (TeamPageDto favorite : user.getFavoriteTeams().stream().toList()) {
+                if (team.getId() == favorite.getId()) {
+                    list.add(team);
+                }
+            }
+
+        }
+        return list;
     }
 
     @Override
@@ -185,6 +209,11 @@ public class UserServiceImpl implements UserService {
             this.userRepository.save(user);
         });
 
+    }
+
+    private void addFavoriteTeams(UserEntityPageDto dto, List<TeamPageDto> allByIds) {
+        dto.getFavoriteTeams().addAll(new HashSet<>(allByIds));
+        this.updateAddFavoriteTeams(dto);
     }
 
     private void updateAddFavoritePlayers(UserEntityPageDto userEntityPageDto) {

@@ -14,13 +14,15 @@ public interface UserService {
 
     UserEntityPageDto getUserByUsername(String username);
 
-    void addFavoriteTeams(UserEntityPageDto user, List<TeamPageDto> allByIds);
+    void addTeamsToFavorites(List<Long> teamIds, UserEntityPageDto user);
 
     void addPlayersToFavorites(List<Long> playerIds, UserEntityPageDto user);
 
     void removeFavoriteTeams(UserEntityPageDto user, List<TeamPageDto> allByIds);
 
     void removeFavoritePlayers(UserEntityPageDto user, List<PlayerPageDto> allByIds);
+
+    List<TeamPageDto> getFavoriteTeams(List<TeamPageDto> teams, UserEntityPageDto user);
 
     void updateUsername(UserEditDto dto);
 
@@ -30,5 +32,5 @@ public interface UserService {
 
     boolean isUniqueUsername(String value);
 
-    List<PlayerPageDto> getFavoritesPlayers(List<PlayerPageDto> players, UserEntityPageDto user);
+    List<PlayerPageDto> getFavoritePlayers(List<PlayerPageDto> players, UserEntityPageDto user);
 }
