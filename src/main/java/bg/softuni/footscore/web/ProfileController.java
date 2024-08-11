@@ -52,10 +52,9 @@ public class ProfileController {
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
         UserEntityPageDto user = userService.getUserByUsername(username);
         List<DreamTeamPageDto> allDreamTeamsByUserId = this.dreamTeamService.getAllDreamTeamsByUserId(user.getId());
-        if (user != null) {
-            model.addAttribute("user", user);
-            model.addAttribute("dreamTeams", allDreamTeamsByUserId);
-        }
+
+        model.addAttribute("user", user);
+        model.addAttribute("dreamTeams", allDreamTeamsByUserId);
         return "profile";
     }
 
@@ -85,13 +84,8 @@ public class ProfileController {
 
         UserEntityPageDto user = this.userService.getUser();
 
-        if ("Teams".equals(filter)) {
-            List<TeamPageDto> teamsToRemove = this.teamService.findAllByIds(itemIds);
-            this.userService.removeFavoriteTeams(user, teamsToRemove);
-        } else {
-            List<PlayerPageDto> playersToRemove = this.playerService.getAllByIds(itemIds);
-            this.userService.removeFavoritePlayers(user, playersToRemove);
-        }
+        removeFavorites(filter, itemIds, user);
+
         model.addAttribute("selectedFilter", filter);
         return "redirect:/show-all";
     }
@@ -132,6 +126,16 @@ public class ProfileController {
 
         this.userService.updateUsername(dto);
         return "redirect:/logout";
+    }
+
+    private void removeFavorites(String filter, List<Long> itemIds, UserEntityPageDto user) {
+        if ("Teams".equals(filter)) {
+            List<TeamPageDto> teamsToRemove = this.teamService.findAllByIds(itemIds);
+            this.userService.removeFavoriteTeams(user, teamsToRemove);
+        } else {
+            List<PlayerPageDto> playersToRemove = this.playerService.getAllByIds(itemIds);
+            this.userService.removeFavoritePlayers(user, playersToRemove);
+        }
     }
 
     private String getAllFavorite(String filter, Model model, String template) {
