@@ -23,7 +23,7 @@ public interface UserService {
 
     List<TeamPageDto> getFavoriteTeams(List<TeamPageDto> teams, UserEntityPageDto user);
 
-    void updateUsername(UserEditDto dto);
+    void updateUsername(UserEditDto dto, String currentUsername);
 
     UserEntityPageDto getUser();
 

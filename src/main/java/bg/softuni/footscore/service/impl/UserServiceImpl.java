@@ -159,12 +159,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUsername(UserEditDto dto) {
+    public void updateUsername(UserEditDto dto, String currentUsername) {
         if (this.userRepository.findByUsername(dto.getUsername()).isPresent()) {
             throw new IllegalStateException("Username already exists");
         }
 
-        Optional<UserEntity> user = this.userRepository.findByUsername(getUser().getUsername());
+        Optional<UserEntity> user = this.userRepository.findByUsername(currentUsername);
 
         user.ifPresent(u -> {
             u.setUsername(dto.getUsername());

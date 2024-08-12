@@ -124,7 +124,7 @@ public class ProfileController {
             return "redirect:/profile/edit";
         }
 
-        this.userService.updateUsername(dto);
+        this.userService.updateUsername(dto, this.userService.getUser().getUsername());
         return "redirect:/login";
     }
 
