@@ -14,35 +14,46 @@
       th:method="post"
       th:object="${userPlayerData}"
       class="create-player-form">
-    <div class="create-player-form-group">
-        <label for="name">Name:</label>
-        <input th:field="*{name}" th:errorclass="is-invalid" id="name" type="text" name="name" required/>
+
+    <div class="create-player-container">
+        <div class="create-player-form-group">
+            <label for="name">Name:</label>
+            <input th:field="*{name}" th:errorclass="is-invalid" id="name" type="text" name="name" required/>
+        </div>
         <small th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
-               class="text-danger error-message"></small>
+               class="text-danger create-player-error-message"></small>
     </div>
 
-    <div class="create-player-form-group">
-        <label for="rating">Rating:</label>
-        <input th:field="*{rating}" th:errorclass="is-invalid" id="rating" type="text" name="rating" min="1" max="100"
-               step="1" required/>
+    <div class="create-player-container">
+        <div class="create-player-form-group">
+            <label for="rating">Rating:</label>
+            <input th:field="*{rating}" th:errorclass="is-invalid" id="rating" type="text" name="rating" min="1"
+                   max="100"
+                   step="1" required/>
+        </div>
         <small th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}"
-               class="text-danger error-message"></small>
+               class="text-danger create-player-error-message"></small>
     </div>
 
-    <div class="create-player-form-group">
-        <label for="age">Age:</label>
-        <input th:field="*{age}" th:errorclass="is-invalid" id="age" name="age" min="1" step="1" required/>
+    <div class="create-player-container">
+        <div class="create-player-form-group">
+            <label for="age">Age:</label>
+            <input th:field="*{age}" th:errorclass="is-invalid" id="age" name="age" min="1" step="1" required/>
+        </div>
         <small th:if="${#fields.hasErrors('age')}" th:errors="*{age}"
-               class="text-danger error-message"></small>
+               class="text-danger create-player-error-message"></small>
     </div>
 
-    <div class="create-player-form-group">
-        <label for="position-create">Position:</label>
-        <select th:field="*{position}" th:errorclass="is-invalid" id="position-create" name="position" required>
-            <option value="" disabled selected>Select a position</option>
-            <option th:each="position : ${positions}" th:value="${position}" th:text="${position}"></option>
-        </select>
-        <small th:if="${#fields.hasErrors('position')}" th:errors="*{position}" class="text-danger error-message"></small>
+    <div class="create-player-container">
+        <div class="create-player-form-group">
+            <label for="position-create">Position:</label>
+            <select th:field="*{position}" th:errorclass="is-invalid" id="position-create" name="position" required>
+                <option value="" disabled selected>Select a position</option>
+                <option th:each="position : ${positions}" th:value="${position}" th:text="${position}"></option>
+            </select>
+        </div>
+        <small th:if="${#fields.hasErrors('position')}" th:errors="*{position}"
+               class="text-danger create-player-error-message"></small>
     </div>
 
     <button type="submit">Create Player</button>

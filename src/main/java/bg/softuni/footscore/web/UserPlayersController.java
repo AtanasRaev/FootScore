@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.nio.file.AccessDeniedException;
-import java.util.Objects;
 
 @Controller
 public class UserPlayersController {
@@ -44,7 +43,7 @@ public class UserPlayersController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userPlayerData", bindingResult);
             redirectAttributes.addFlashAttribute("userPlayerData", userPlayerDto);
-            return "redirect:/my-player";
+            return "redirect:/create/my-player";
         }
 
         this.userPlayerService.createPlayer(userPlayerDto);
@@ -69,7 +68,7 @@ public class UserPlayersController {
         UserEntityPageDto user = this.userService.getUser();
         UserPlayerDto userPlayer = userPlayerService.getUserPlayerById(playerId);
 
-        if (!Objects.equals(user.getRole().getRole().toString(), "ADMIN") || user.getId() != userPlayer.getUserId()) {
+        if (user.getRole().getRole().toString().equals("USER") && user.getId() != userPlayer.getUserId()) {
             throw new AccessDeniedException("You do not have permission to access this page.");
         }
 

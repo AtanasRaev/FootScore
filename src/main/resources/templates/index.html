@@ -4,10 +4,10 @@
 <body>
 <header th:replace="fragments/commons::nav"></header>
 <section class="hero">
-    <div class="error-container">
+    <div class="container">
         <h2 class="hero-title">Foot Score</h2>
-        <p>Your ultimate source for football news, league updates, and community discussions.</p>
-        <a th:href="@{/leagues}" class="btn">View Leagues</a>
+        <p th:text="#{hero_description}">Your ultimate source for football news, league updates, and community discussions.</p>
+        <a th:href="@{/leagues}" class="btn" th:text="#{hero_button}">View Leagues</a>
     </div>
 </section>
 <footer th:replace="fragments/commons::footer"></footer>

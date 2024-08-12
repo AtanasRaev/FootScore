@@ -125,7 +125,7 @@ public class ProfileController {
         }
 
         this.userService.updateUsername(dto);
-        return "redirect:/logout";
+        return "redirect:/login";
     }
 
     private void removeFavorites(String filter, List<Long> itemIds, UserEntityPageDto user) {

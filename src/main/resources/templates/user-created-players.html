@@ -22,16 +22,16 @@
             <p class="team-name">Age: <span th:text="${player.age}"></span></p>
             <p class="team-name">Position: <span th:text="${player.position}"></span></p>
             <p class="team-name">Rating: <span th:text="${player.rating}"></span></p>
+            <form th:action="@{/edit/my-player/{id}(id=${player.id})}"
+                  method="get">
+                <input type="hidden" th:id="${player.id}" th:name="playerId" th:value="${player.id}">
+                <button type="submit">Edit</button>
+            </form>
             <form th:action="@{/my-player/{playerId}/delete(playerId=${player.id})}"
                   method="post">
                 <input type="hidden" name="_method" value="delete">
                 <input type="hidden" th:id="${player.id}" th:name="playerId" th:value="${player.id}">
                 <button type="submit">Delete</button>
-            </form>
-            <form th:action="@{/edit/my-player/{id}(id=${player.id})}"
-                  method="get">
-                <input type="hidden" th:id="${player.id}" th:name="playerId" th:value="${player.id}">
-                <button type="submit">Edit</button>
             </form>
         </div>
     </div>
