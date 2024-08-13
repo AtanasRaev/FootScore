@@ -1,6 +1,5 @@
 package bg.softuni.footscore.service;
 
-import bg.softuni.footscore.config.ApiConfig;
 import bg.softuni.footscore.model.dto.PlayerTeamSeasonPageDto;
 import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
@@ -33,16 +32,7 @@ public class PlayerServiceImplTest {
     private PlayerTeamSeasonService playerTeamSeasonService;
 
     @Mock
-    private SeasonService seasonService;
-
-    @Mock
-    private TeamService teamService;
-
-    @Mock
     private ModelMapper modelMapper;
-
-    @Mock
-    private ApiConfig apiConfig;
 
     @InjectMocks
     private PlayerServiceImpl playerService;

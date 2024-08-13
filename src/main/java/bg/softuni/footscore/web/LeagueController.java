@@ -95,7 +95,7 @@ public class LeagueController {
         List<LeaguePageDto> leagues = this.leagueService.getLeagueByIds(leagueIds);
 
         if (leagues == null || leagues.isEmpty()) {
-            return "redirect:/leagues/error";
+            return "redirect:/leagues";
         }
 
         this.leagueService.updateSelectedLeagues(leagues);

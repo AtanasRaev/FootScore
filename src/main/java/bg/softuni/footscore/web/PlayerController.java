@@ -59,7 +59,7 @@ public class PlayerController {
 
         TeamPageDto teamOptional = this.teamService.getTeamById(teamId);
         if (teamOptional == null) {
-            return "redirect:/team-error";
+            throw new EntityNotFoundException("Not found team");
         }
 
         List<SeasonPageDto> seasons = this.seasonService.getAllSeasons();

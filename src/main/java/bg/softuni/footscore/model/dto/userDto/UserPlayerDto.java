@@ -25,6 +25,15 @@ public class UserPlayerDto {
 
     private long userId;
 
+    public UserPlayerDto(long l, String name, long l1) {
+        this.id = l;
+        this.name = name;
+        this.userId = l1;
+    }
+
+    public UserPlayerDto() {
+    }
+
     public long getId() {
         return id;
     }

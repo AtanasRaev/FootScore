@@ -18,6 +18,11 @@ public class UserEntityPageDto {
     public UserEntityPageDto() {
     }
 
+    public UserEntityPageDto(long l, String user) {
+        this.id = l;
+        this.username = user;
+    }
+
 
     public String getUsername() {
         return username;

@@ -7,6 +7,7 @@ import bg.softuni.footscore.service.DreamTeamService;
 import bg.softuni.footscore.service.PlayerService;
 import bg.softuni.footscore.service.TeamStatisticsService;
 import bg.softuni.footscore.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -119,7 +120,7 @@ public class DreamTeamController {
         UserEntityPageDto user = this.userService.getUser();
 
         if (byId == null) {
-            return "redirect:/dream-team-detail-error";
+            throw new EntityNotFoundException("Not found team");
         }
 
         model.addAttribute("user", user);
