@@ -123,9 +123,7 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-
-    @Override
-    public ResponsePlayerApiDto getResponsePlayerApiDto(String query, Long id, Integer seasonYear, Integer page) {
+    private ResponsePlayerApiDto getResponsePlayerApiDto(String query, Long id, Integer seasonYear, Integer page) {
         if (query == null || query.isEmpty() || id == null || seasonYear == null || page == null) {
             throw new IllegalArgumentException("Invalid query/id/season year or page parameters");
         }
@@ -140,8 +138,7 @@ public class PlayerServiceImpl implements PlayerService {
                 .body(ResponsePlayerApiDto.class);
     }
 
-    @Override
-    public ResponsePlayerDetailsApiDto getResponsePlayerDetailsApiDto(String query, Long playerId) {
+    private ResponsePlayerDetailsApiDto getResponsePlayerDetailsApiDto(String query, Long playerId) {
         if (query == null || query.isEmpty() || playerId == null) {
             throw new IllegalArgumentException("Invalid query or id parameters");
         }

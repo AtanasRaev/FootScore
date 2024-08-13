@@ -95,9 +95,7 @@ public class TeamStatisticsServiceImpl implements TeamStatisticsService {
         }
     }
 
-
-    @Override
-    public ResponseTeamStatisticsSeason getResponse(long leagueApiId, long teamApiId, int seasonYear) {
+    private ResponseTeamStatisticsSeason getResponse(long leagueApiId, long teamApiId, int seasonYear) {
         String url = this.apiConfig.getUrl() + "teams/statistics?league=" + leagueApiId + "&season=" + seasonYear + "&team=" + teamApiId;
 
         return this.restClient

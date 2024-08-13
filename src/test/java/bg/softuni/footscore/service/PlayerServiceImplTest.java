@@ -1,7 +1,6 @@
 package bg.softuni.footscore.service;
 
 import bg.softuni.footscore.config.ApiConfig;
-import bg.softuni.footscore.config.RestConfig;
 import bg.softuni.footscore.model.dto.PlayerTeamSeasonPageDto;
 import bg.softuni.footscore.model.dto.SeasonPageDto;
 import bg.softuni.footscore.model.dto.playerDto.PlayerPageDto;
@@ -9,6 +8,7 @@ import bg.softuni.footscore.model.dto.teamDto.TeamPageDto;
 import bg.softuni.footscore.model.entity.Player;
 import bg.softuni.footscore.repository.PlayerRepository;
 import bg.softuni.footscore.service.impl.PlayerServiceImpl;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -41,9 +40,6 @@ public class PlayerServiceImplTest {
 
     @Mock
     private ModelMapper modelMapper;
-
-    @Mock
-    private RestConfig restConfig;
 
     @Mock
     private ApiConfig apiConfig;
@@ -75,7 +71,6 @@ public class PlayerServiceImplTest {
 
     }
 
-
     @Test
     @Transactional
     public void testResetIsSelected_NoPlayers() {
@@ -84,7 +79,6 @@ public class PlayerServiceImplTest {
         verify(playerRepository, never()).save(any(Player.class));
     }
 
-
     @Test
     public void testGetAllPlayersByPosition_NoSelectedPlayers() {
         when(playerService.getAllSelectedPlayers(true)).thenReturn(Collections.emptyList());
@@ -92,20 +86,11 @@ public class PlayerServiceImplTest {
         assertTrue(result.isEmpty());
     }
 
-
     @Test
     public void testGetPlayersByPosition_EmptyList() {
         List<PlayerPageDto> players = new ArrayList<>();
         List<PlayerPageDto> result = playerService.getPlayersByPosition("Forward", players);
         assertTrue(result.isEmpty(), "The result should be an empty list when input list is empty.");
-    }
-
-    @Test
-    public void testGetResponsePlayerApiDto_InvalidParams() {
-        assertThrows(IllegalArgumentException.class, () -> playerService.getResponsePlayerApiDto(null, 1L, 2024, 1));
-        assertThrows(IllegalArgumentException.class, () -> playerService.getResponsePlayerApiDto("%splayers", null, 2024, 1));
-        assertThrows(IllegalArgumentException.class, () -> playerService.getResponsePlayerApiDto("%splayers", 1L, null, 1));
-        assertThrows(IllegalArgumentException.class, () -> playerService.getResponsePlayerApiDto("%splayers", 1L, 2024, null));
     }
 
     @Test

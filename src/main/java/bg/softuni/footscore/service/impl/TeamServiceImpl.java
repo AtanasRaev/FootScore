@@ -102,9 +102,7 @@ public class TeamServiceImpl implements TeamService {
         }
     }
 
-
-    @Override
-    public ResponseTeamApiDto getResponse(Long leagueApiId, Integer seasonYear) {
+    private ResponseTeamApiDto getResponse(Long leagueApiId, Integer seasonYear) {
         String url = this.apiConfig.getUrl() + "teams?league=" + leagueApiId + "&season=" + seasonYear;
 
         return this.restClient
