@@ -7,6 +7,11 @@ public class TeamVenueDto {
     public TeamVenueDto() {
     }
 
+    public TeamVenueDto(TeamApiDto team, VenueApiDto venue) {
+        this.team = team;
+        this.venue = venue;
+    }
+
     public TeamApiDto getTeam() {
         return team;
     }

@@ -8,6 +8,13 @@ public class TeamApiDto {
     public TeamApiDto() {
     }
 
+    public TeamApiDto(String teamName, String teamLogo, long l) {
+        this.name = teamName;
+        this.logo = teamLogo;
+        this.id = l;
+    }
+
+
     public long getId() {
         return id;
     }

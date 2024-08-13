@@ -83,5 +83,4 @@ public class UserPlayerServiceImpl implements UserPlayerService {
                 .retrieve()
                 .toBodilessEntity();
     }
-
 }

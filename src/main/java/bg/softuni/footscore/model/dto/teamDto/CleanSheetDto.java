@@ -5,6 +5,16 @@ public class CleanSheetDto {
     private Integer away;
     private Integer total;
 
+
+    public CleanSheetDto(Integer home, Integer away, Integer total) {
+        this.home = home;
+        this.away = away;
+        this.total = total;
+    }
+
+    public CleanSheetDto() {
+    }
+
     public Integer getHome() { return home; }
     public void setHome(Integer home) { this.home = home; }
 

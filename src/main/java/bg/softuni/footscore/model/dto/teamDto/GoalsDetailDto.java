@@ -7,6 +7,15 @@ public class GoalsDetailDto {
     private AverageDto average;
     private Map<String, MinuteDto> minute;
 
+    public GoalsDetailDto(TotalDto total, AverageDto average, Map<String, MinuteDto> minute) {
+        this.total = total;
+        this.average = average;
+        this.minute = minute;
+    }
+
+    public GoalsDetailDto() {
+    }
+
     public TotalDto getTotal() { return total; }
     public void setTotal(TotalDto total) { this.total = total; }
 

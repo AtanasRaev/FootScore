@@ -55,6 +55,107 @@ public class UserServiceImplTest {
     }
 
     @Test
+    public void addTeamsToFavorites_shouldNotAddDuplicateTeams() {
+        UserEntityPageDto user = new UserEntityPageDto();
+        TeamPageDto existingTeam = new TeamPageDto();
+        existingTeam.setId(1L);
+        user.setFavoriteTeams(new HashSet<>(Collections.singletonList(existingTeam)));
+
+        TeamPageDto newTeam = new TeamPageDto();
+        newTeam.setId(1L);
+        List<TeamPageDto> teamsToAdd = Collections.singletonList(newTeam);
+
+        userService.addTeamsToFavorites(Collections.singletonList(1L), user);
+
+        assertEquals(1, user.getFavoriteTeams().size());
+        assertTrue(user.getFavoriteTeams().contains(existingTeam));
+    }
+
+    @Test
+    public void removeFavoriteTeams_shouldNotRemoveNonexistentTeams() {
+        UserEntityPageDto user = new UserEntityPageDto();
+        TeamPageDto existingTeam = new TeamPageDto();
+        existingTeam.setId(1L);
+        user.setFavoriteTeams(new HashSet<>(Collections.singletonList(existingTeam)));
+
+        TeamPageDto nonExistentTeam = new TeamPageDto();
+        nonExistentTeam.setId(2L);
+        List<TeamPageDto> teamsToRemove = Collections.singletonList(nonExistentTeam);
+
+        userService.removeFavoriteTeams(user, teamsToRemove);
+
+        assertEquals(1, user.getFavoriteTeams().size());
+        assertTrue(user.getFavoriteTeams().contains(existingTeam));
+    }
+
+    @Test
+    public void addPlayersToFavorites_shouldNotAddDuplicatePlayers() {
+        UserEntityPageDto user = new UserEntityPageDto();
+        PlayerPageDto existingPlayer = new PlayerPageDto();
+        existingPlayer.setId(1L);
+        user.setFavoritePlayers(new HashSet<>(Collections.singletonList(existingPlayer)));
+
+        PlayerPageDto newPlayer = new PlayerPageDto();
+        newPlayer.setId(1L);  // Same ID as the existing player
+        List<PlayerPageDto> playersToAdd = Collections.singletonList(newPlayer);
+
+        userService.addPlayersToFavorites(Collections.singletonList(1L), user);
+
+        assertEquals(1, user.getFavoritePlayers().size());
+        assertTrue(user.getFavoritePlayers().contains(existingPlayer));
+    }
+
+    @Test
+    public void removeFavoritePlayers_shouldNotRemoveNonexistentPlayers() {
+        UserEntityPageDto user = new UserEntityPageDto();
+        PlayerPageDto existingPlayer = new PlayerPageDto();
+        existingPlayer.setId(1L);
+        user.setFavoritePlayers(new HashSet<>(Collections.singletonList(existingPlayer)));
+
+        PlayerPageDto nonExistentPlayer = new PlayerPageDto();
+        nonExistentPlayer.setId(2L);
+        List<PlayerPageDto> playersToRemove = Collections.singletonList(nonExistentPlayer);
+
+        userService.removeFavoritePlayers(user, playersToRemove);
+
+        assertEquals(1, user.getFavoritePlayers().size());
+        assertTrue(user.getFavoritePlayers().contains(existingPlayer));
+    }
+
+    @Test
+    public void updateUsername_shouldThrowException_whenNewUsernameIsNotUnique() {
+        UserEditDto dto = new UserEditDto();
+        dto.setUsername("existingUsername");
+
+        when(userRepository.findByUsername("existingUsername")).thenReturn(Optional.of(new UserEntity()));
+
+        IllegalStateException thrown = assertThrows(IllegalStateException.class, () -> {
+            userService.updateUsername(dto, "currentUsername");
+        });
+
+        assertEquals("Username already exists", thrown.getMessage());
+    }
+
+    @Test
+    public void updateUsername_shouldHandleLogoutAfterSuccessfulUpdate() {
+        UserEditDto dto = new UserEditDto();
+        dto.setUsername("newUsername");
+
+        UserEntity existingUserEntity = new UserEntity();
+        existingUserEntity.setUsername("oldUsername");
+
+        when(userRepository.findByUsername("oldUsername")).thenReturn(Optional.of(existingUserEntity));
+        when(userRepository.findByUsername("newUsername")).thenReturn(Optional.empty());
+
+        userService.updateUsername(dto, "oldUsername");
+
+        assertEquals("newUsername", existingUserEntity.getUsername());
+        verify(userRepository).save(existingUserEntity);
+        verify(requestContextHolder).getRequest();
+        verify(requestContextHolder).getResponse();
+    }
+
+    @Test
     public void registerUser_shouldSaveUserWithAdminRole_whenNoUsersInRepository() {
         RegisterUserDto dto = new RegisterUserDto();
         dto.setUsername("testuser");

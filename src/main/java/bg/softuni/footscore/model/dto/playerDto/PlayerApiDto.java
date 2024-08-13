@@ -21,6 +21,18 @@ public class PlayerApiDto {
 
     private String photo;
 
+    public PlayerApiDto(long l, String firstname, String lastname, BirthPlayerApiDto date, String nationality, String height, String weight) {
+        this.id = l;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.name = firstname + " " + lastname;
+        this.birth = date;
+        this.nationality = nationality;
+        this.height = height;
+        this.weight = weight;
+
+    }
+
     public PlayerApiDto() {
     }
 

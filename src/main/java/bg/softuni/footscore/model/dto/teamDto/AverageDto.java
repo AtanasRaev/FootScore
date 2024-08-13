@@ -5,6 +5,15 @@ public class AverageDto {
     private String away;
     private String total;
 
+    public AverageDto(String home, String away, String total) {
+        this.home = home;
+        this.away = away;
+        this.total = total;
+    }
+
+    public AverageDto() {
+    }
+
     public String getHome() { return home; }
     public void setHome(String home) { this.home = home; }
 

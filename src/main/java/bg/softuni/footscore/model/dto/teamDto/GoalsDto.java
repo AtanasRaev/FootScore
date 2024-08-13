@@ -12,6 +12,11 @@ public class GoalsDto {
     public GoalsDto() {
     }
 
+    public GoalsDto(GoalsDetailDto forGoals, GoalsDetailDto against) {
+        this.forGoals = forGoals;
+        this.against = against;
+    }
+
     public GoalsDetailDto getForGoals() {
         return forGoals;
     }

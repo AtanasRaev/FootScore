@@ -144,7 +144,7 @@ public class Player {
         this.age = age;
     }
 
-    public Boolean getSelected() {
+    public Boolean isSelected() {
         return isSelected;
     }
 
@@ -220,11 +220,12 @@ public class Player {
         this.number = number;
     }
 
-    public Boolean getRetired() {
+    public Boolean isRetired() {
         return isRetired;
     }
 
     public void setRetired(Boolean retired) {
         isRetired = retired;
     }
+
 }

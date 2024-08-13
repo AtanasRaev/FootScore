@@ -14,12 +14,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.nio.file.AccessDeniedException;
 
 @Controller
-public class UserPlayersController {
+public class UserPlayerController {
     private final UserPlayerService userPlayerService;
     private final UserService userService;
     private static final String[] POSITIONS = {"Goalkeeper", "Defender", "Midfielder", "Attacker"};
 
-    public UserPlayersController(UserPlayerService userPlayerService, UserService userService) {
+    public UserPlayerController(UserPlayerService userPlayerService, UserService userService) {
         this.userPlayerService = userPlayerService;
         this.userService = userService;
     }

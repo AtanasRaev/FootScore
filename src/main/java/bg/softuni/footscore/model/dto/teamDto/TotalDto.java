@@ -8,6 +8,12 @@ public class TotalDto {
     public TotalDto() {
     }
 
+    public TotalDto(Integer home, Integer away, Integer total) {
+        this.home = home;
+        this.away = away;
+        this.total = total;
+    }
+
     public Integer getHome() { return home; }
     public void setHome(Integer home) { this.home = home; }
 

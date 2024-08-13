@@ -5,6 +5,8 @@ import bg.softuni.footscore.repository.RoleRepository;
 import bg.softuni.footscore.service.RoleService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
@@ -15,11 +17,13 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role getAdminRole() {
-        return this.roleRepository.findById(1L).isPresent() ? this.roleRepository.findById(1L).get() : null;
+        Optional<Role> role = this.roleRepository.findById(1L);
+        return role.orElse(null);
     }
 
     @Override
     public Role getUserRole() {
-        return this.roleRepository.findById(2L).isPresent() ? this.roleRepository.findById(2L).get() : null;
+        Optional<Role> role = this.roleRepository.findById(2L);
+        return role.orElse(null);
     }
 }

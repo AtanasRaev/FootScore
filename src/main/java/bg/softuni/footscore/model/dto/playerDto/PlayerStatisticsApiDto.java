@@ -10,6 +10,12 @@ public class PlayerStatisticsApiDto {
     public PlayerStatisticsApiDto() {
     }
 
+    public PlayerStatisticsApiDto(PlayerApiDto player, List<StatisticsApiDto> statistics) {
+        this.player = player;
+        this.statistics = statistics;
+    }
+
+
     public PlayerApiDto getPlayer() {
         return player;
     }

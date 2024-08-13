@@ -144,7 +144,7 @@ public class PlayerPageDto {
         this.number = number;
     }
 
-    public Boolean getSelected() {
+    public Boolean isSelected() {
         return isSelected;
     }
 

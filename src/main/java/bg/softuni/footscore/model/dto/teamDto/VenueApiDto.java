@@ -8,6 +8,12 @@ public class VenueApiDto {
     public VenueApiDto() {
     }
 
+    public VenueApiDto(String name, String city, Integer capacity) {
+        this.name = name;
+        this.city = city;
+        this.capacity = capacity;
+    }
+
     public String getName() {
         return name;
     }

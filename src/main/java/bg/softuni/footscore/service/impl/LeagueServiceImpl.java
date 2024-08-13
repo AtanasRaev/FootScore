@@ -1,5 +1,6 @@
 package bg.softuni.footscore.service.impl;
 
+import bg.softuni.footscore.model.dto.LeagueCountrySeasonsApiDto;
 import bg.softuni.footscore.model.dto.LeagueTeamSeasonPageDto;
 import bg.softuni.footscore.model.dto.ResponseCountryLeagueSeasonsApiDto;
 import bg.softuni.footscore.model.dto.leagueDto.LeagueAddDto;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LeagueServiceImpl implements LeagueService {
@@ -74,7 +76,7 @@ public class LeagueServiceImpl implements LeagueService {
             throw new LeagueNotFoundException("No leagues found for the specified country: " + countryName);
         }
 
-        List<LeaguePageDto> allSelectedLeagues = countryName.equals("All countries") || countryName.isEmpty() ?
+        List<LeaguePageDto> allSelectedLeagues = "All countries".equals(countryName) || countryName.isEmpty() ?
                 getAllSelectedLeaguesDto() :
                 getAllSelectedLeaguesByCountry(countryName, false);
         SelectedLeaguesDto selectedLeaguesDto = new SelectedLeaguesDto();
@@ -103,64 +105,47 @@ public class LeagueServiceImpl implements LeagueService {
             throw new EntityNotFoundException("Leagues not found");
         }
 
+        List<League> list = leagues.stream().map(leagueDto -> {
+            League league = this.modelMapper.map(leagueDto, League.class);
 
-        List<League> list = leagues.stream().map(league ->  {
-            League map = this.modelMapper.map(league, League.class);
-            Optional<Country> country = this.countryService.getCountry(league.getCountry().getName());
-            if (country.isPresent()) {
-                map.setCountry(country.get());
-            } else {
-                throw new EntityNotFoundException("Country not found");
-            }
-            map.setSelected(true);
-            return map;
+            Country country = countryService.getCountry(leagueDto.getCountry().getName())
+                    .orElseThrow(() -> new EntityNotFoundException("Country not found"));
+
+            league.setCountry(country);
+            league.setSelected(true);
+            return league;
         }).toList();
+
         this.leagueRepository.saveAll(list);
     }
 
-
     @Override
     @Transactional
-    public void saveApiLeagues(String name) {
-        ResponseCountryLeagueSeasonsApiDto response = this.seasonService.getResponse(name);
-
-        Optional<Country> optionalCountry = this.countryService.getCountry(name);
-
-        if (optionalCountry.isPresent()) {
-            Country country = optionalCountry.get();
-
-            List<League> leaguesToSave = new ArrayList<>();
-
-            response.getResponse().forEach(dto -> {
-                League league = new League(dto.getLeague().getName(),
-                        dto.getLeague().getLogo(),
-                        country,
-                        false,
-                        dto.getLeague().getId());
-
-                Optional<League> optional = this.leagueRepository.findByApiId(league.getApiId());
-
-                if (optional.isEmpty()) {
-                    leaguesToSave.add(league);
-                }
-            });
-
-            leaguesToSave.forEach(league -> {
-                Optional<League> optional = this.leagueRepository.findByApiId(league.getApiId());
-
-                optional.ifPresent(leaguesToSave::remove);
-            });
-
-            if (!leaguesToSave.isEmpty()) {
-                country.setLeagues(leaguesToSave);
-                this.leagueRepository.saveAll(leaguesToSave);
-            }
-
-        } else {
-            throw new EntityNotFoundException("Country not found: " + name);
+    public void saveApiLeagues(String countryName) {
+        ResponseCountryLeagueSeasonsApiDto responseDto = seasonService.getResponse(countryName);
+        if (responseDto == null || responseDto.getResponse() == null) {
+            throw new IllegalArgumentException("Response or leagues list is null");
         }
+
+        List<League> leagues = responseDto.getResponse().stream()
+                .map(this::convertToLeague)
+                .collect(Collectors.toList());
+
+        leagueRepository.saveAll(leagues);
     }
 
+    private League convertToLeague(LeagueCountrySeasonsApiDto responseDto) {
+        League league = new League();
+        league.setName(responseDto.getLeague().getName());
+        league.setLogo(responseDto.getLeague().getLogo());
+        league.setApiId(responseDto.getLeague().getId());
+
+        Country country = countryService.getCountry(responseDto.getCountry().getName())
+                .orElseThrow(() -> new EntityNotFoundException("Country not found: " + responseDto.getCountry().getName()));
+        league.setCountry(country);
+
+        return league;
+    }
 
     @Override
     public boolean isEmpty() {

@@ -39,7 +39,7 @@ public class TeamStatisticsServiceImpl implements TeamStatisticsService {
                                      SeasonService seasonService,
                                      ModelMapper modelMapper,
                                      ApiConfig apiConfig,
-                                     @Qualifier("genericRestClient")RestClient restClient,
+                                     @Qualifier("genericRestClient") RestClient restClient,
                                      LeagueService leagueService) {
         this.teamStatisticsRepository = teamStatisticsRepository;
         this.teamService = teamService;
@@ -109,9 +109,8 @@ public class TeamStatisticsServiceImpl implements TeamStatisticsService {
                 .body(ResponseTeamStatisticsSeason.class);
     }
 
-    @Override
     @Transactional
-    public Optional<TeamStatistics> getByTeamApiIdAndSeasonYearAndLeagueApiId(long teamApiId, int seasonYear, long leagueApiId) {
+    protected Optional<TeamStatistics> getByTeamApiIdAndSeasonYearAndLeagueApiId(long teamApiId, int seasonYear, long leagueApiId) {
         return this.teamStatisticsRepository.findByTeamApiIdAndSeasonYearAndLeagueApiId(teamApiId, seasonYear, leagueApiId);
     }
 
@@ -142,5 +141,4 @@ public class TeamStatisticsServiceImpl implements TeamStatisticsService {
         teamStatistic.setGoalsAgainstTotal(againstTotal.getTotal());
         teamStatistic.setGoalDifference(teamStatistic.getGoalsForTotal() - teamStatistic.getGoalsAgainstTotal());
     }
-
 }

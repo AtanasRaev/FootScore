@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class DreamTeamServiceImpl implements DreamTeamService {
@@ -59,8 +60,14 @@ public class DreamTeamServiceImpl implements DreamTeamService {
 
     @Override
     public void deleteTeam(Long teamId) {
-        DreamTeamPageDto byId = getById(teamId);
-        this.dreamTeamRepository.delete(this.modelMapper.map(byId, DreamTeam.class));
+        DreamTeamPageDto dreamTeamPageDto = getById(teamId);
+
+        if (dreamTeamPageDto != null) {
+            DreamTeam dreamTeam = modelMapper.map(dreamTeamPageDto, DreamTeam.class);
+            dreamTeamRepository.delete(dreamTeam);
+        } else {
+            throw new NoSuchElementException("DreamTeam not found with ID: " + teamId);
+        }
     }
 
     @Override

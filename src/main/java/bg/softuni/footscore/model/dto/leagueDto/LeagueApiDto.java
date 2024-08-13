@@ -9,6 +9,11 @@ public class LeagueApiDto {
     public LeagueApiDto() {
     }
 
+    public LeagueApiDto(long l, String league1) {
+        this.id = l;
+        this.name = league1;
+    }
+
     public String getName() {
         return name;
     }

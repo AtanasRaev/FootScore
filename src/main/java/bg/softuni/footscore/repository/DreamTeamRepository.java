@@ -10,6 +10,4 @@ import java.util.Optional;
 @Repository
 public interface DreamTeamRepository extends JpaRepository<DreamTeam, Long> {
     List<DreamTeam> findAllByUserId(Long userId);
-
-    Optional<DreamTeam> findByName(String teamName);
 }

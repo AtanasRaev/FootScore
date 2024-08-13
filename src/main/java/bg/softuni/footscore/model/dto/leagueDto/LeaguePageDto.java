@@ -2,6 +2,8 @@ package bg.softuni.footscore.model.dto.leagueDto;
 
 import bg.softuni.footscore.model.dto.countryDto.CountryApiDto;
 
+import java.util.Objects;
+
 public class LeaguePageDto {
     private long id;
     private String name;
@@ -59,5 +61,18 @@ public class LeaguePageDto {
 
     public void setApiId(long apiId) {
         this.apiId = apiId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LeaguePageDto that = (LeaguePageDto) o;
+        return getId() == that.getId() && isSelected() == that.isSelected() && getApiId() == that.getApiId() && Objects.equals(getName(), that.getName()) && Objects.equals(getLogo(), that.getLogo()) && Objects.equals(getCountry(), that.getCountry());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getLogo(), isSelected(), getApiId(), getCountry());
     }
 }
