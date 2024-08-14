@@ -9,17 +9,17 @@
 <header th:replace="fragments/commons::nav"></header>
 <body>
 <div class="teams-players-container">
-    <div class="user-dream-teams">
+    <div class="create-player-show-my">
         <div th:each="player : ${myPlayers}" class="team-box">
-            <h2 class="team-name">Player name: <span th:text="${player.name}"></span></h2>
-            <p class="team-name">Age: <span th:text="${player.age}"></span></p>
-            <p class="team-name">Position: <span th:text="${player.position}"></span></p>
-            <p class="team-name">Rating: <span th:text="${player.rating}"></span></p>
+            <h2 class="create-player-detail">Player name: <span th:text="${player.name}"></span></h2>
+            <p class="create-player-detail">Age: <span th:text="${player.age}"></span></p>
+            <p class="create-player-detail">Position: <span th:text="${player.position}"></span></p>
+            <p class="create-player-detail">Rating: <span th:text="${player.rating}"></span></p>
             <form th:if="${player.userId == user.id || user.role.id == 1}" th:action="@{/my-player/{playerId}/delete(playerId=${player.id})}"
                   method="post">
                 <input type="hidden" name="_method" value="delete">
                 <input type="hidden" th:id="${player.id}" th:name="playerId" th:value="${player.id}">
-                <button type="submit">Delete</button>
+                <button class="red remove-league-button" type="submit">Delete</button>
             </form>
         </div>
     </div>

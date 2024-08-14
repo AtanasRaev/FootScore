@@ -3,36 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dream Teams</title>
+    <title>My players</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <header th:replace="fragments/commons::nav"></header>
 <body>
 <div class="teams-players-container">
     <span th:if="${myPlayers.size() == 0}">You haven't created your player yet</span>
-    <div id="favorite-teams" class="favorites-list">
-        <a th:href="@{/create/my-player}" class="show-more">Create a player</a>
+    <div class="create-player-buttons">
+        <div id="favorite-teams" class="favorites-list">
+            <a th:href="@{/create/my-player}" class="show-more">Create a player</a>
+        </div>
+        <div class="favorites-list">
+            <a th:href="@{/all-created-players}" class="show-more">Show all players</a>
+        </div>
     </div>
-    <div class="favorites-list">
-        <a th:href="@{/all-created-players}" class="show-more">Show all players</a>
-    </div>
-    <div class="user-dream-teams">
+    <div class="create-player-show-my">
         <div th:each="player : ${myPlayers}" class="team-box">
-            <h2 class="team-name">Player name: <span th:text="${player.name}"></span></h2>
-            <p class="team-name">Age: <span th:text="${player.age}"></span></p>
-            <p class="team-name">Position: <span th:text="${player.position}"></span></p>
-            <p class="team-name">Rating: <span th:text="${player.rating}"></span></p>
-            <form th:action="@{/edit/my-player/{id}(id=${player.id})}"
-                  method="get">
-                <input type="hidden" th:id="${player.id}" th:name="playerId" th:value="${player.id}">
-                <button type="submit">Edit</button>
-            </form>
-            <form th:action="@{/my-player/{playerId}/delete(playerId=${player.id})}"
-                  method="post">
-                <input type="hidden" name="_method" value="delete">
-                <input type="hidden" th:id="${player.id}" th:name="playerId" th:value="${player.id}">
-                <button type="submit">Delete</button>
-            </form>
+            <h2 class="create-player-detail">Player name: <span th:text="${player.name}"></span></h2>
+            <p class="create-player-detail">Age: <span th:text="${player.age}"></span></p>
+            <p class="create-player-detail">Position: <span th:text="${player.position}"></span></p>
+            <p class="create-player-detail">Rating: <span th:text="${player.rating}"></span></p>
+            <div class="show-my-create-player-buttons">
+                <form th:action="@{/edit/my-player/{id}(id=${player.id})}"
+                      method="get">
+                    <input type="hidden" th:id="${player.id}" th:name="playerId" th:value="${player.id}">
+                    <button class="blue remove-league-button"  type="submit">Edit</button>
+                </form>
+                <form th:action="@{/my-player/{playerId}/delete(playerId=${player.id})}"
+                      method="post">
+                    <input type="hidden" name="_method" value="delete">
+                    <input type="hidden" th:id="${player.id}" th:name="playerId" th:value="${player.id}">
+                    <button class="red remove-league-button" type="submit">Delete</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>

@@ -1669,3 +1669,32 @@ button.red:hover {
     border-radius: 0.2em;
     margin-bottom: 1em;
 }
+
+.create-player-buttons {
+    display: flex;
+}
+
+.create-player-h1 {
+    margin: 100px auto;
+}
+
+.create-player-detail {
+    font-size: 21px;
+    color: #007bff;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.create-player-show-my {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.show-my-create-player-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
