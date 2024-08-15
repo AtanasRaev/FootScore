@@ -37,7 +37,6 @@ public class UserEntity {
     @OneToMany(mappedBy = "user")
     private List<DreamTeam> dreamTeams;
 
-
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Team> favoriteTeams;
 
